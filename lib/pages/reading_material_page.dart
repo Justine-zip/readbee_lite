@@ -31,6 +31,33 @@ class _ReadingMaterialPageState extends State<ReadingMaterialPage> {
                 Icon(Icons.filter_alt_rounded),
               ],
             ),
+            SizedBox(height: 10),
+            Expanded(
+              child: GridView.builder(
+                itemCount: 12,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.7,
+                ),
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      Text('Book $index', textAlign: TextAlign.center),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

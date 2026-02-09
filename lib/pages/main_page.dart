@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
+import 'package:readbee_lite/pages/profile_page.dart';
 import 'package:readbee_lite/pages/reading_material_page.dart';
 import 'package:readbee_lite/pages/record_page.dart';
 
@@ -54,16 +55,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
-              Center(
-                child: Text(
-                  'P R O F I L E',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber,
-                  ),
-                ),
-              ),
+              ProfilePage(),
             ],
           ),
           bottomNavigationBar: Padding(
