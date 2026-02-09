@@ -38,6 +38,7 @@ dependencies:
   http: ^1.6.0
   device_preview: ^1.2.0
   dotenv: ^4.2.0
+  page_animation_transition: ^1.0.0
 
 dev_dependencies:
   flutter_test:
