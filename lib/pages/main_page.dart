@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
+import 'package:readbee_lite/pages/reading_material_page.dart';
 import 'package:readbee_lite/pages/record_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -42,16 +43,7 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
               RecordPage(),
-              Center(
-                child: Text(
-                  'M A T E R I A L',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber,
-                  ),
-                ),
-              ),
+              ReadingMaterialPage(),
               Center(
                 child: Text(
                   'E V E N T',
