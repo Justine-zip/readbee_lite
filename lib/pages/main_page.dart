@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readbee_lite/pages/record_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -27,16 +28,7 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             ),
-            Center(
-              child: Text(
-                'R E C O R D',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amber,
-                ),
-              ),
-            ),
+            RecordPage(),
             Center(
               child: Text(
                 'M A T E R I A L',
