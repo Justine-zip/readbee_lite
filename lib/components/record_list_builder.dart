@@ -19,6 +19,7 @@ class RecordListBuilder extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(12.0),
             child: Card(
+              color: Colors.white,
               clipBehavior: Clip.antiAlias,
               elevation: 2,
               child: InkWell(
