@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/custom_textfield.dart';
+import 'package:readbee_lite/components/filter_sheet.dart';
 
 class ReadingMaterialPage extends StatefulWidget {
   const ReadingMaterialPage({super.key});
@@ -9,6 +10,7 @@ class ReadingMaterialPage extends StatefulWidget {
 }
 
 class _ReadingMaterialPageState extends State<ReadingMaterialPage> {
+  DraggableScrollableController controller = DraggableScrollableController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +30,19 @@ class _ReadingMaterialPageState extends State<ReadingMaterialPage> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 CustomTextfield(hint: 'Search...'),
-                Icon(Icons.filter_alt_rounded),
+                IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) {
+                        return FilterSheet();
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.filter_alt_rounded),
+                ),
               ],
             ),
             SizedBox(height: 10),
