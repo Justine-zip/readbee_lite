@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/profile_general_option.dart';
+import 'package:readbee_lite/providers/theme_provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -73,6 +75,14 @@ class ProfilePage extends StatelessWidget {
                     onTap: () {},
                     isToggle: true,
                     value: true,
+                  ),
+                  ProfileGeneralOption(
+                    title: 'Dark Mode',
+                    value: ref.watch(themeProvider) == ThemeMode.dark,
+                    onTap: () {
+                      ref.read(themeProvider.notifier).toggleTheme();
+                    },
+                    isToggle: true,
                   ),
                 ],
               ),

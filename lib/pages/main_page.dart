@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
         child: Stack(
           children: [
             Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.surface,
 
               body: const TabBarView(
                 children: [
@@ -66,14 +66,14 @@ class _MainPageState extends State<MainPage> {
               right: 30,
               left: 30,
               child: Material(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surfaceContainer,
                 elevation: 3,
                 borderRadius: BorderRadius.circular(12),
                 child: TabBar(
                   dividerColor: Colors.transparent,
                   labelColor: Colors.amber,
-                  unselectedLabelColor: Colors.black38,
-                  indicatorColor: Colors.white,
+                  unselectedLabelColor: Theme.of(context).colorScheme.secondary,
+                  indicatorColor: Theme.of(context).colorScheme.surface,
                   indicatorSize: TabBarIndicatorSize.label,
                   tabs: [
                     Tab(icon: Icon(Icons.home)),

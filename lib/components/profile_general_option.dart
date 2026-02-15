@@ -29,7 +29,12 @@ class ProfileGeneralOption extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               isToggle
-                  ? Switch(value: value, onChanged: (value) {})
+                  ? Switch(
+                    value: value,
+                    onChanged: (_) {
+                      if (onTap != null) onTap!();
+                    },
+                  )
                   : Icon(Icons.arrow_forward_ios_rounded),
             ],
           ),
