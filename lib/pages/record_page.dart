@@ -1,49 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/record_list_builder.dart';
+import 'package:readbee_lite/models/record_state.dart';
+import 'package:readbee_lite/providers/record_provider.dart';
 
-enum RecordStep { grade, section, language }
-
-class RecordPage extends StatefulWidget {
+class RecordPage extends ConsumerWidget {
   const RecordPage({super.key});
 
   @override
-  State<RecordPage> createState() => _RecordPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recordState = ref.watch(recordProvider);
+    final notifier = ref.read(recordProvider.notifier);
 
-class _RecordPageState extends State<RecordPage> {
-  RecordStep currentStep = RecordStep.grade;
-
-  int? selectedGrade;
-  int? selectedSection;
-
-  void goBack() {
-    setState(() {
-      if (currentStep == RecordStep.language) {
-        currentStep = RecordStep.section;
-      } else if (currentStep == RecordStep.section) {
-        currentStep = RecordStep.grade;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     String title;
     String listTitle;
 
-    switch (currentStep) {
+    switch (recordState.currentStep) {
       case RecordStep.grade:
         title = 'Grade Level';
         listTitle = 'Grade';
         break;
 
       case RecordStep.section:
-        title = 'Section (Grade $selectedGrade)';
+        title = 'Section (Grade ${recordState.selectedGrade})';
         listTitle = 'Section';
         break;
 
       case RecordStep.language:
-        title = 'Language (G$selectedGrade • S$selectedSection)';
+        title =
+            'Language (G${recordState.selectedGrade} • S${recordState.selectedSection})';
         listTitle = 'Language';
         break;
     }
@@ -78,10 +63,10 @@ class _RecordPageState extends State<RecordPage> {
                   width: 48,
                   height: 48,
                   child:
-                      currentStep != RecordStep.grade
+                      recordState.currentStep != RecordStep.grade
                           ? IconButton(
                             icon: const Icon(Icons.arrow_back),
-                            onPressed: goBack,
+                            onPressed: notifier.goBack,
                           )
                           : null,
                 ),
@@ -91,19 +76,17 @@ class _RecordPageState extends State<RecordPage> {
             RecordListBuilder(
               title: listTitle,
               onTap: (value) {
-                setState(() {
-                  if (currentStep == RecordStep.grade) {
-                    selectedGrade = value;
-                    currentStep = RecordStep.section;
-                  } else if (currentStep == RecordStep.section) {
-                    selectedSection = value;
-                    currentStep = RecordStep.language;
-                  } else {
-                    debugPrint(
-                      'Grade $selectedGrade | Section $selectedSection | Language $value',
-                    );
-                  }
-                });
+                if (recordState.currentStep == RecordStep.grade) {
+                  notifier.selectGrade(value);
+                } else if (recordState.currentStep == RecordStep.section) {
+                  notifier.selectSection(value);
+                } else {
+                  debugPrint(
+                    'Grade ${recordState.selectedGrade} | '
+                    'Section ${recordState.selectedSection} | '
+                    'Language $value',
+                  );
+                }
               },
             ),
           ],
