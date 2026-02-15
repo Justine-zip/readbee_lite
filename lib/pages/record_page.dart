@@ -1,52 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:page_animation_transition/animations/right_to_left_transition.dart';
-import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/record_list_builder.dart';
 
-class RecordPage extends StatelessWidget {
+enum RecordStep { grade, section, language }
+
+class RecordPage extends StatefulWidget {
   const RecordPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Class Record',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 60),
-            Text(
-              'Select Grade Level',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-            RecordListBuilder(
-              title: 'Grade',
-              onTap:
-                  (level) => Navigator.of(context).push(
-                    PageAnimationTransition(
-                      page: SectionRecordPage(grade: level),
-                      pageAnimationType: RightToLeftTransition(),
-                    ),
-                  ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  State<RecordPage> createState() => _RecordPageState();
 }
 
-class SectionRecordPage extends StatelessWidget {
-  final int grade;
-  const SectionRecordPage({super.key, required this.grade});
+class _RecordPageState extends State<RecordPage> {
+  RecordStep currentStep = RecordStep.grade;
+
+  int? selectedGrade;
+  int? selectedSection;
+
+  void goBack() {
+    setState(() {
+      if (currentStep == RecordStep.language) {
+        currentStep = RecordStep.section;
+      } else if (currentStep == RecordStep.section) {
+        currentStep = RecordStep.grade;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    String title;
+    String listTitle;
+
+    switch (currentStep) {
+      case RecordStep.grade:
+        title = 'Grade Level';
+        listTitle = 'Grade';
+        break;
+
+      case RecordStep.section:
+        title = 'Section (Grade $selectedGrade)';
+        listTitle = 'Section';
+        break;
+
+      case RecordStep.language:
+        title = 'Language (G$selectedGrade • S$selectedSection)';
+        listTitle = 'Language';
+        break;
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -54,65 +55,55 @@ class SectionRecordPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const SizedBox(height: 25),
+
+            const Text(
               'Class Record',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 60),
-            Text(
-              'Select Section (Grade $grade)',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-            RecordListBuilder(
-              title: 'Section',
-              onTap:
-                  (section) => Navigator.of(context).push(
-                    PageAnimationTransition(
-                      page: LanguageRecordPage(grade: grade, section: section),
-                      pageAnimationType: RightToLeftTransition(),
-                    ),
+
+            const SizedBox(height: 40),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
+                SizedBox(
+                  width: 48,
+                  height: 48,
+                  child:
+                      currentStep != RecordStep.grade
+                          ? IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: goBack,
+                          )
+                          : null,
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class LanguageRecordPage extends StatelessWidget {
-  final int grade;
-  final int section;
-  const LanguageRecordPage({
-    super.key,
-    required this.grade,
-    required this.section,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Class Record',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 60),
-            Text(
-              'Select Language (G$grade • S$section)',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
             RecordListBuilder(
-              title: 'Language',
-              onTap: (language) {
-                debugPrint(
-                  'Grade $grade | Section $section | Language $language',
-                );
+              title: listTitle,
+              onTap: (value) {
+                setState(() {
+                  if (currentStep == RecordStep.grade) {
+                    selectedGrade = value;
+                    currentStep = RecordStep.section;
+                  } else if (currentStep == RecordStep.section) {
+                    selectedSection = value;
+                    currentStep = RecordStep.language;
+                  } else {
+                    debugPrint(
+                      'Grade $selectedGrade | Section $selectedSection | Language $value',
+                    );
+                  }
+                });
               },
             ),
           ],

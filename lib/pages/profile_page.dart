@@ -13,6 +13,7 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 25),
             Text(
               'Profile',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

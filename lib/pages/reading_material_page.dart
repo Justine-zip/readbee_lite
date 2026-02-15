@@ -20,6 +20,7 @@ class _ReadingMaterialPageState extends State<ReadingMaterialPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 25),
             const Text(
               'Reading Materials',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
