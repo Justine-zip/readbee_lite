@@ -48,7 +48,7 @@ class ProfilePage extends ConsumerWidget {
                   padding: const EdgeInsets.all(24.0),
                   child: Text(
                     'R E A D B E E',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

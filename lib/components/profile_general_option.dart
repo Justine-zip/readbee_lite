@@ -16,7 +16,7 @@ class ProfileGeneralOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -30,6 +30,7 @@ class ProfileGeneralOption extends StatelessWidget {
               ),
               isToggle
                   ? Switch(
+                    focusColor: Theme.of(context).colorScheme.primary,
                     value: value,
                     onChanged: (_) {
                       if (onTap != null) onTap!();

@@ -6,6 +6,8 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       surface: Colors.white,
       surfaceContainer: Colors.white,
+      primary: Colors.amber,
+      tertiary: Colors.black,
       secondary: Colors.grey[400],
       seedColor: Colors.amber,
       brightness: Brightness.light,
@@ -17,6 +19,8 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       surface: Colors.grey[900],
       surfaceContainer: Colors.grey[800],
+      primary: Colors.amber,
+      tertiary: Colors.white,
       secondary: Colors.white,
       seedColor: Colors.amber,
       brightness: Brightness.dark,
@@ -29,6 +33,6 @@ class AppTheme {
 // Icon Map
 // surface = background
 // surfaceContainer = simple containers
-// primary = text
-// seconday = icon
-// 
+// primary = main
+// seconday = icons and such..
+// tertiary = text
