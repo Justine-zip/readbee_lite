@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/custom_circular_progress_indicator.dart';
 
 class RecordListBuilder extends StatelessWidget {
+  final int itemCount;
   final String title;
   final Function(int index)? onTap;
   const RecordListBuilder({
     super.key,
+    required this.itemCount,
     required this.title,
     required this.onTap,
   });
@@ -14,7 +16,7 @@ class RecordListBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        itemCount: 8,
+        itemCount: itemCount,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(12.0),

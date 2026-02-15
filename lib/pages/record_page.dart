@@ -12,21 +12,25 @@ class RecordPage extends ConsumerWidget {
     final recordState = ref.watch(recordProvider);
     final notifier = ref.read(recordProvider.notifier);
 
+    int itemCount;
     String title;
     String listTitle;
 
     switch (recordState.currentStep) {
       case RecordStep.grade:
+        itemCount = 6;
         title = 'Grade Level';
         listTitle = 'Grade';
         break;
 
       case RecordStep.section:
+        itemCount = 4;
         title = 'Section (Grade ${recordState.selectedGrade})';
         listTitle = 'Section';
         break;
 
       case RecordStep.language:
+        itemCount = 2;
         title =
             'Language (G${recordState.selectedGrade} • S${recordState.selectedSection})';
         listTitle = 'Language';
@@ -74,6 +78,7 @@ class RecordPage extends ConsumerWidget {
             ),
 
             RecordListBuilder(
+              itemCount: itemCount,
               title: listTitle,
               onTap: (value) {
                 if (recordState.currentStep == RecordStep.grade) {
@@ -89,6 +94,8 @@ class RecordPage extends ConsumerWidget {
                 }
               },
             ),
+
+            SizedBox(height: 50),
           ],
         ),
       ),
