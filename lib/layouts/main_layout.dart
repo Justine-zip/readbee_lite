@@ -47,7 +47,7 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
                     ),
                   ),
                   RecordPage(),
-                  ReadingMaterialPage(),
+                  MobileReadingMaterialPage(),
                   Center(
                     child: Text(
                       'E V E N T',
@@ -103,7 +103,7 @@ class TabletMainLayout extends StatefulWidget {
 class _TabletMainLayoutState extends State<TabletMainLayout> {
   int selectedIndex = 0;
 
-  final pages = const [ReadingMaterialPage(), ProfilePage()];
+  final pages = const [TabletReadingMaterialPage(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
