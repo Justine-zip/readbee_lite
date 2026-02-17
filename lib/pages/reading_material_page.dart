@@ -39,7 +39,7 @@ class _MobileReadingMaterialPageState extends State<MobileReadingMaterialPage> {
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       builder: (context) {
-                        return FilterSheet();
+                        return FilterSheet(textSize: 1, sheetSize: .4);
                       },
                     );
                   },
@@ -123,7 +123,7 @@ class _TabletReadingMaterialPageState extends State<TabletReadingMaterialPage> {
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       builder: (context) {
-                        return FilterSheet();
+                        return FilterSheet(textSize: 1.25, sheetSize: .45);
                       },
                     );
                   },

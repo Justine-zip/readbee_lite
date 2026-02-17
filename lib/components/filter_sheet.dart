@@ -2,19 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/custom_dropdown.dart';
 
 class FilterSheet extends StatelessWidget {
-  const FilterSheet({super.key});
+  final double sheetSize;
+  final double textSize;
+  const FilterSheet({
+    super.key,
+    required this.textSize,
+    required this.sheetSize,
+  });
 
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.4,
-      maxChildSize: 0.45,
+      initialChildSize: sheetSize,
+      maxChildSize: sheetSize * 1.1,
       expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surfaceContainer,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Padding(
@@ -24,7 +30,10 @@ class FilterSheet extends StatelessWidget {
               children: [
                 Text(
                   'Filter & Layout Settings',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 18 * textSize,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: 10),
                 Padding(
@@ -34,15 +43,21 @@ class FilterSheet extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Grade Level', style: TextStyle(fontSize: 16)),
+                          Text(
+                            'Grade Level',
+                            style: TextStyle(fontSize: 16 * textSize),
+                          ),
                           CustomDropdown(option: ['1', '2', '3']),
                         ],
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 15),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Language', style: TextStyle(fontSize: 16)),
+                          Text(
+                            'Language',
+                            style: TextStyle(fontSize: 16 * textSize),
+                          ),
                           CustomDropdown(option: ['Tagalog', 'English']),
                         ],
                       ),
@@ -54,7 +69,7 @@ class FilterSheet extends StatelessWidget {
                             'Reset Filter',
                             style: TextStyle(
                               color: Colors.amber,
-                              fontSize: 18,
+                              fontSize: 18 * textSize,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -67,7 +82,10 @@ class FilterSheet extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Grid Count', style: TextStyle(fontSize: 16)),
+                          Text(
+                            'Grid Count',
+                            style: TextStyle(fontSize: 16 * textSize),
+                          ),
                           SizedBox(
                             width: 150,
                             child: Slider(
