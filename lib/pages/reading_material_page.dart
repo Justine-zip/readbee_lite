@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/custom_textfield.dart';
 import 'package:readbee_lite/components/filter_sheet.dart';
+import 'package:readbee_lite/components/title_bar.dart';
 
 class MobileReadingMaterialPage extends StatefulWidget {
   const MobileReadingMaterialPage({super.key});
@@ -106,9 +107,10 @@ class _TabletReadingMaterialPageState extends State<TabletReadingMaterialPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 25),
-            const Text(
-              'Reading Materials',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            TitleBar(
+              title: 'Reading Materials',
+              description:
+                  'Select reading materials to assess students, ensuring accurate and organized evaluation of tjeir reading skills',
             ),
             const SizedBox(height: 30),
             Row(

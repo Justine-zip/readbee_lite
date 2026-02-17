@@ -6,7 +6,9 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       surface: Colors.white,
       surfaceContainer: Colors.white,
+      surfaceVariant: Colors.black,
       primary: Colors.amber,
+      inversePrimary: Colors.white,
       tertiary: Colors.black,
       secondary: Colors.grey[400],
       seedColor: Colors.amber,
@@ -19,7 +21,9 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       surface: Colors.grey[900],
       surfaceContainer: Colors.grey[800],
+      surfaceVariant: Colors.grey[800],
       primary: Colors.amber,
+      inversePrimary: Colors.grey[400],
       tertiary: Colors.white,
       secondary: Colors.white,
       seedColor: Colors.amber,
