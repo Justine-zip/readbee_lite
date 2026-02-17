@@ -5,12 +5,14 @@ class ProfileGeneralOption extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isToggle;
   final bool value;
+  final double size;
   const ProfileGeneralOption({
     super.key,
     required this.title,
     required this.onTap,
     this.isToggle = false,
     this.value = false,
+    required this.size,
   });
 
   @override
@@ -26,7 +28,7 @@ class ProfileGeneralOption extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: size, fontWeight: FontWeight.bold),
               ),
               isToggle
                   ? Switch(
