@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/custom_textfield.dart';
 import 'package:readbee_lite/components/filter_sheet.dart';
+import 'package:readbee_lite/components/reading_material_builder.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 
 class MobileReadingMaterialPage extends StatefulWidget {
@@ -102,7 +103,7 @@ class _TabletReadingMaterialPageState extends State<TabletReadingMaterialPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -134,37 +135,7 @@ class _TabletReadingMaterialPageState extends State<TabletReadingMaterialPage> {
               ],
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: GridView.builder(
-                itemCount: 12,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.7,
-                ),
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            debugPrint('Book $index');
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Text('Book $index', textAlign: TextAlign.center),
-                    ],
-                  );
-                },
-              ),
-            ),
+            ReadingMaterialBuilder(),
           ],
         ),
       ),
