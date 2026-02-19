@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 
@@ -79,39 +80,54 @@ class _ReadingMaterialDetailsPageState
                         height: MediaQuery.of(context).size.height * .675,
                         child: Padding(
                           padding: const EdgeInsets.all(24.0),
-                          child: ListView.builder(
-                            itemCount: widget.material[0].question.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.material[0].question[index],
-                                    style: TextStyle(fontSize: 22),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: widget.material[0].question.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-
                                       children: [
-                                        for (var key
-                                            in widget.material[0].key[index]
-                                                .asMap()
-                                                .entries)
-                                          Text(
-                                            "${String.fromCharCode(65 + key.key)}. ${key.value}",
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                            ),
+                                        Text(
+                                          widget.material[0].question[index],
+                                          style: TextStyle(fontSize: 22),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              for (var key
+                                                  in widget
+                                                      .material[0]
+                                                      .key[index]
+                                                      .asMap()
+                                                      .entries)
+                                                Text(
+                                                  "${String.fromCharCode(65 + key.key)}. ${key.value}",
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                            ],
                                           ),
+                                        ),
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
+                                    );
+                                  },
+                                ),
+                              ),
+
+                              CustomButton(
+                                onTap: () {
+                                  debugPrint('Tapped');
+                                },
+                                title: 'Proceed',
+                              ),
+                            ],
                           ),
                         ),
                       ),
