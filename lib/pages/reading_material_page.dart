@@ -150,25 +150,28 @@ class _TabletReadingMaterialPageState extends State<TabletReadingMaterialPage> {
                   'Select reading materials to assess students, ensuring accurate and organized evaluation of tjeir reading skills',
             ),
             const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                CustomTextfield(hint: 'Search...'),
-                IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return FilterSheet(textSize: 1.25, sheetSize: .45);
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.filter_alt_rounded),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  CustomTextfield(hint: 'Search...'),
+                  IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) {
+                          return FilterSheet(textSize: 1.25, sheetSize: .45);
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.filter_alt_rounded),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 10),
             ReadingMaterialBuilder(material: material),

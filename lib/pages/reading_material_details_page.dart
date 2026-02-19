@@ -118,6 +118,7 @@ class _ReadingMaterialDetailsPageState
                                       ],
                                     );
                                   },
+                                  padding: const EdgeInsets.only(bottom: 50),
                                 ),
                               ),
 
