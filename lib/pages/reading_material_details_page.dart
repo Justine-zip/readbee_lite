@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/title_bar.dart';
+import 'package:readbee_lite/models/reading_material.dart';
 
 class ReadingMaterialDetailsPage extends StatefulWidget {
-  final String title;
-  final String language;
-  final int wordLength;
-  const ReadingMaterialDetailsPage({
-    super.key,
-    required this.title,
-    required this.language,
-    required this.wordLength,
-  });
+  final List<ReadingMaterial> material;
+  const ReadingMaterialDetailsPage({super.key, required this.material});
 
   @override
   State<ReadingMaterialDetailsPage> createState() =>
@@ -22,14 +16,15 @@ class _ReadingMaterialDetailsPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.purple,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
             TitleBar(
-              title: widget.title,
-              description: 'Bilang ng mga salita: ${widget.wordLength}',
+              title: widget.material[0].title,
+              description:
+                  'Bilang ng mga salita: ${widget.material[0].wordLength}',
+              secondDescription: 'Language: ${widget.material[0].language}',
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -44,13 +39,28 @@ class _ReadingMaterialDetailsPageState
                         bottomLeft: Radius.circular(12),
                         topLeft: Radius.circular(12),
                       ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * .725,
-                        color: Colors.blue,
-                        child: Center(
-                          child: Text(
-                            widget.title,
-                            style: TextStyle(fontSize: 24),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * .675,
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  widget.material[0].title,
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Text(
+                                  widget.material[0].content,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -65,11 +75,45 @@ class _ReadingMaterialDetailsPageState
                         bottomRight: Radius.circular(12),
                         topRight: Radius.circular(12),
                       ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * .725,
-                        color: Colors.green,
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * .675,
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: ListView.builder(
+                            itemCount: widget.material[0].question.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.material[0].question[index],
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
 
-                        child: Text('Material Quiz'),
+                                      children: [
+                                        for (var key
+                                            in widget.material[0].key[index]
+                                                .asMap()
+                                                .entries)
+                                          Text(
+                                            "${String.fromCharCode(65 + key.key)}. ${key.value}",
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   ),

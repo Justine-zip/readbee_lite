@@ -3,7 +3,7 @@ class ReadingMaterial {
   final String content;
   final String language;
   final List<String> question;
-  final List<String> key;
+  final List<List<String>> key;
   final int wordLength;
   final int storyId;
   final int quizId;

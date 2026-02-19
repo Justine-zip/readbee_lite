@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 class TitleBar extends StatelessWidget {
   final String title;
   final String description;
-  const TitleBar({super.key, required this.title, required this.description});
+  final String secondDescription;
+  const TitleBar({
+    super.key,
+    required this.title,
+    required this.description,
+    this.secondDescription = '',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +38,18 @@ class TitleBar extends StatelessWidget {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: 18,
-                //fontWeight: FontWeight.bold,
               ),
             ),
+            if (secondDescription != '') ...[
+              SizedBox(height: 2),
+              Text(
+                secondDescription,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontSize: 18,
+                ),
+              ),
+            ],
           ],
         ),
       ),
