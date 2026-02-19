@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:page_animation_transition/animations/right_to_left_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
+import 'package:readbee_lite/pages/reading_material_details_page.dart';
 
 class ReadingMaterialBuilder extends StatelessWidget {
   ReadingMaterialBuilder({super.key});
@@ -40,6 +43,17 @@ class ReadingMaterialBuilder extends StatelessWidget {
                     onTap: () {
                       debugPrint('Book: ${title[index]}');
                       debugPrint('WordLength: ${title[index].length}');
+                      Navigator.push(
+                        context,
+                        PageAnimationTransition(
+                          page: ReadingMaterialDetailsPage(
+                            title: title[index],
+                            language: 'Tagalog',
+                            wordLength: title[index].length,
+                          ),
+                          pageAnimationType: RightToLeftTransition(),
+                        ),
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -49,7 +63,12 @@ class ReadingMaterialBuilder extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(title[index], textAlign: TextAlign.center),
+                Text(
+                  title[index],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22),
+                  maxLines: 1,
+                ),
               ],
             );
           },
