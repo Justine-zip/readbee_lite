@@ -1,16 +1,7 @@
-# readbee_lite
+readbee_lite
 
-A new Flutter project.
+readbee_lite is a mobile application designed to evaluate students' reading skills and improve their comprehension abilities.
 
-## Getting Started
+It aims to reduce students’ struggles in reading by providing structured assessments and engaging reading materials. The application also helps learners develop fluency and confidence in different languages.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+If you want, I can also make:
