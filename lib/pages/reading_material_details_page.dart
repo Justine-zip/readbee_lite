@@ -51,6 +51,8 @@ class _ReadingMaterialDetailsPageState
     Student(name: 'Paolo Bentir', lrn: '0397', sectionId: '3', studentId: '9'),
   ];
 
+  String sectionId = '1';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,105 +167,119 @@ class _ReadingMaterialDetailsPageState
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      final filteredStudents =
-                                          student
-                                              .where((s) => s.sectionId == '1')
-                                              .toList();
+                                      return StatefulBuilder(
+                                        builder: (context, setDialogState) {
+                                          final filteredStudents =
+                                              student
+                                                  .where(
+                                                    (s) =>
+                                                        s.sectionId ==
+                                                        sectionId,
+                                                  )
+                                                  .toList();
 
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                        ),
-                                        child: Container(
-                                          height:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.height *
-                                              .4,
-                                          width:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.width *
-                                              .4,
-                                          padding: const EdgeInsets.all(20),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 2,
-                                                child: Column(
-                                                  children: [
-                                                    const Text(
-                                                      "Section List",
-                                                      style: TextStyle(
-                                                        fontSize: 20,
-                                                      ),
+                                          return Dialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            child: Container(
+                                              height:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.height *
+                                                  .4,
+                                              width:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.width *
+                                                  .4,
+                                              padding: const EdgeInsets.all(20),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Column(
+                                                      children: [
+                                                        const Text(
+                                                          "Section List",
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Expanded(
+                                                          child: ListView.builder(
+                                                            itemCount:
+                                                                sections.length,
+                                                            itemBuilder: (
+                                                              context,
+                                                              index,
+                                                            ) {
+                                                              return InkWell(
+                                                                onTap: () {
+                                                                  setDialogState(() {
+                                                                    sectionId =
+                                                                        sections[index]
+                                                                            .sectionId;
+                                                                  });
+                                                                },
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    sections[index]
+                                                                        .section,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    SizedBox(height: 10),
-                                                    Expanded(
-                                                      child: ListView.builder(
-                                                        itemCount:
-                                                            sections.length,
-                                                        itemBuilder: (
-                                                          context,
-                                                          index,
-                                                        ) {
-                                                          return InkWell(
-                                                            onTap: () {},
-                                                            child: ListTile(
-                                                              title: Text(
-                                                                sections[index]
-                                                                    .section,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const VerticalDivider(
-                                                thickness: 4,
-                                                width: 20,
-                                              ),
-                                              Expanded(
-                                                flex: 4,
-                                                child: Column(
-                                                  children: [
-                                                    const Text(
-                                                      "Student List",
-                                                      style: TextStyle(
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 10),
+                                                  ),
 
-                                                    Expanded(
-                                                      child: ListView.builder(
-                                                        itemCount:
-                                                            filteredStudents
-                                                                .length,
-                                                        itemBuilder: (
-                                                          context,
-                                                          index,
-                                                        ) {
-                                                          return ListTile(
-                                                            title: Text(
-                                                              filteredStudents[index]
-                                                                  .name,
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
+                                                  const VerticalDivider(
+                                                    thickness: 4,
+                                                    width: 20,
+                                                  ),
+
+                                                  Expanded(
+                                                    flex: 4,
+                                                    child: Column(
+                                                      children: [
+                                                        const Text(
+                                                          "Student List",
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Expanded(
+                                                          child: ListView.builder(
+                                                            itemCount:
+                                                                filteredStudents
+                                                                    .length,
+                                                            itemBuilder: (
+                                                              context,
+                                                              index,
+                                                            ) {
+                                                              return ListTile(
+                                                                title: Text(
+                                                                  filteredStudents[index]
+                                                                      .name,
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
+                                            ),
+                                          );
+                                        },
                                       );
                                     },
                                   );
