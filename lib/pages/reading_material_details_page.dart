@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/reading_material.dart';
+import 'package:readbee_lite/models/section.dart';
+import 'package:readbee_lite/models/student.dart';
 
 class ReadingMaterialDetailsPage extends StatefulWidget {
   final List<ReadingMaterial> material;
@@ -14,6 +16,41 @@ class ReadingMaterialDetailsPage extends StatefulWidget {
 
 class _ReadingMaterialDetailsPageState
     extends State<ReadingMaterialDetailsPage> {
+  List<Section> sections = [
+    Section(section: 'Sampaguita', sectionId: '1'),
+    Section(section: 'Tulips', sectionId: '2'),
+    Section(section: 'Rosas', sectionId: '3'),
+    Section(section: 'Emerald', sectionId: '4'),
+    Section(section: 'Ilang-Ilang', sectionId: '5'),
+  ];
+
+  List<Student> student = [
+    Student(
+      name: 'Denmark Cabanhao',
+      lrn: '0121',
+      sectionId: '1',
+      studentId: '1',
+    ),
+    Student(name: 'Romeo Ezguera', lrn: '0740', sectionId: '1', studentId: '2'),
+    Student(name: 'Kori Sanchez', lrn: '0321', sectionId: '1', studentId: '3'),
+    Student(name: 'Bill Fraud', lrn: '0353', sectionId: '2', studentId: '4'),
+    Student(
+      name: 'Juan Dela Cruz',
+      lrn: '0586',
+      sectionId: '2',
+      studentId: '5',
+    ),
+    Student(name: 'Ezra Ramirez', lrn: '0835', sectionId: '3', studentId: '6'),
+    Student(name: 'Tanya Suami', lrn: '0035', sectionId: '3', studentId: '7'),
+    Student(
+      name: 'Ralph Angsioco',
+      lrn: '0655',
+      sectionId: '3',
+      studentId: '8',
+    ),
+    Student(name: 'Paolo Bentir', lrn: '0397', sectionId: '3', studentId: '9'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +165,11 @@ class _ReadingMaterialDetailsPageState
                                   showDialog(
                                     context: context,
                                     builder: (context) {
+                                      final filteredStudents =
+                                          student
+                                              .where((s) => s.sectionId == '1')
+                                              .toList();
+
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
@@ -150,11 +192,36 @@ class _ReadingMaterialDetailsPageState
                                             children: [
                                               Expanded(
                                                 flex: 2,
-                                                child: const Text(
-                                                  "Section List",
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                  ),
+                                                child: Column(
+                                                  children: [
+                                                    const Text(
+                                                      "Section List",
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    Expanded(
+                                                      child: ListView.builder(
+                                                        itemCount:
+                                                            sections.length,
+                                                        itemBuilder: (
+                                                          context,
+                                                          index,
+                                                        ) {
+                                                          return InkWell(
+                                                            onTap: () {},
+                                                            child: ListTile(
+                                                              title: Text(
+                                                                sections[index]
+                                                                    .section,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                               const VerticalDivider(
@@ -163,11 +230,35 @@ class _ReadingMaterialDetailsPageState
                                               ),
                                               Expanded(
                                                 flex: 4,
-                                                child: const Text(
-                                                  "Student List",
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                  ),
+                                                child: Column(
+                                                  children: [
+                                                    const Text(
+                                                      "Student List",
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10),
+
+                                                    Expanded(
+                                                      child: ListView.builder(
+                                                        itemCount:
+                                                            filteredStudents
+                                                                .length,
+                                                        itemBuilder: (
+                                                          context,
+                                                          index,
+                                                        ) {
+                                                          return ListTile(
+                                                            title: Text(
+                                                              filteredStudents[index]
+                                                                  .name,
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ],

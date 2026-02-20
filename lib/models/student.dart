@@ -1,8 +1,8 @@
 class Student {
   final String name;
   final String lrn;
-  final String sex;
-  final int age;
+  final String? sex;
+  final int? age;
   final String? phone;
   final String? email;
   final String studentId;
@@ -12,8 +12,8 @@ class Student {
   Student({
     required this.name,
     required this.lrn,
-    required this.sex,
-    required this.age,
+    this.sex,
+    this.age,
     this.phone,
     this.email,
     required this.sectionId,
