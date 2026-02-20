@@ -125,6 +125,57 @@ class _ReadingMaterialDetailsPageState
                               CustomButton(
                                 onTap: () {
                                   debugPrint('Tapped');
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                        ),
+                                        child: Container(
+                                          height:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height *
+                                              .4,
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              .4,
+                                          padding: const EdgeInsets.all(20),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: const Text(
+                                                  "Section List",
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                              const VerticalDivider(
+                                                thickness: 4,
+                                                width: 20,
+                                              ),
+                                              Expanded(
+                                                flex: 4,
+                                                child: const Text(
+                                                  "Student List",
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
                                 },
                                 title: 'Proceed',
                               ),
