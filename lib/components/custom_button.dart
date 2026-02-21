@@ -13,18 +13,28 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDisabled = onTap == null;
+
     return Material(
+      color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: isDisabled ? null : onTap,
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           width: size ?? double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.symmetric(vertical: 14),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.amber,
+            color: isDisabled ? Colors.grey.shade400 : Colors.amber,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Text(title, style: const TextStyle(fontSize: 18)),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              color: isDisabled ? Colors.grey.shade700 : Colors.black,
+            ),
+          ),
         ),
       ),
     );
