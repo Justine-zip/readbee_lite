@@ -28,7 +28,7 @@ class EvaluationNotifier extends Notifier<EvaluationState> {
   void selectSection(String sectionId) {
     state = EvaluationState(
       selectedSectionId: sectionId,
-      selectedStudent: null,
+      selectedStudent: null, // reset student
     );
   }
 

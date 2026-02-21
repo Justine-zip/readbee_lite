@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_animation_transition/animations/right_to_left_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/models/student.dart';
+import 'package:readbee_lite/pages/digital_reading_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 
 class ReadingMaterialDetailsPage extends StatefulWidget {
@@ -292,7 +295,17 @@ class EvaluationListDialog extends ConsumerWidget {
                     onTap:
                         state.selectedStudent == null
                             ? null
-                            : notifier.evaluate,
+                            : () {
+                              notifier.evaluate();
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                PageAnimationTransition(
+                                  page: DigitalReadingPage(),
+                                  pageAnimationType: RightToLeftTransition(),
+                                ),
+                              );
+                            },
                     title: 'Evaluate',
                     size: 150,
                   ),
