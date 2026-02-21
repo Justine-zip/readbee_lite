@@ -6,7 +6,7 @@ final readingMaterialProvider = Provider<List<ReadingMaterial>>((ref) {
     ReadingMaterial(
       title: 'Ang Aso sa Lungga',
       content:
-          'May isang asong  gutom  na gutom  na  naglalakadsa  kalsada. Habang naglalakad, ibinubulong  niya sa  sarilina kailangan niyang  makakita  ng isang lunggang puno ngpagkain.  Nang  makakita  siya  ng  lungga  sa  dulo  ngkalsada,  agad  siyang  pumasok  dito.  Kumain  siyahanggang  mabusog. Pero kahit busog na siya, kumain parin at  inubos ang  lahat  ng pagkain  sa  loob ng  lungga. Sakanyang  kabusugan,  halos  pumutok  ang  malaki  niyangtiyan. Nang lalabas na lamang siya, napansin niyang hindina  siya  magkasya  sa  labasan.  Sumigaw  siya  upanghumingi  ng  tulong.  Dumating  ang  isa  pang  aso  atnalaman  ang  nangyari.  Bago  ito  umalis, nagwika  siya  sakasamang  aso,  "Hintayin  mo  na  long  umimpis  ang  tiyanmo."',
+          'May isang asong  gutom  na gutom  na  naglalakad sa  kalsada. Habang naglalakad, ibinubulong  niya sa  sarili na kailangan niyang  makakita  ng isang lunggang puno ngpagkain.  Nang  makakita  siya  ng  lungga  sa  dulo  ng kalsada,  agad  siyang  pumasok  dito.  Kumain  siyahanggang  mabusog. Pero kahit busog na siya, kumain parin at  inubos ang  lahat  ng pagkain  sa  loob ng  lungga. Sa kanyang  kabusugan,  halos  pumutok  ang  malaki  niyang tiyan. Nang lalabas na lamang siya, napansin niyang hindi na  siya  magkasya  sa  labasan.  Sumigaw  siya  upang humingi  ng  tulong.  Dumating  ang  isa  pang  aso  at nalaman  ang  nangyari.  Bago  ito  umalis, nagwika  siya  sa kasamang  aso,  "Hintayin  mo  na  long  umimpis  ang  tiyan mo."',
       language: 'Tagalog',
       question: [
         'Saan  nangyari  ang  kuwento?',
