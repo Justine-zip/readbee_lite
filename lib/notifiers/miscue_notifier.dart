@@ -25,6 +25,7 @@ class MiscueNotifier extends Notifier<List<Miscue>> {
         else
           state[i],
     ];
+    debugPrint('Miscue/ ${state[index].name}: ${state[index].count}');
   }
 
   void reset() {

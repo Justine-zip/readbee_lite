@@ -102,9 +102,6 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                     return GestureDetector(
                       onTap: () {
                         ref.read(miscueProvider.notifier).increment(index);
-                        debugPrint(
-                          'Miscue/ ${miscues[index].name}: ${miscues[index].count}',
-                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(
