@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
+import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 
 class DigitalReadingPage extends ConsumerStatefulWidget {
@@ -14,6 +16,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
   @override
   Widget build(BuildContext context) {
     final material = ref.watch(readingMaterialProvider);
+    final miscues = ref.watch(miscueProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
@@ -89,26 +92,34 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                   padding: const EdgeInsets.all(8),
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
+                    crossAxisCount: 4,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                     childAspectRatio: 3,
                   ),
-                  itemCount: 10,
+                  itemCount: miscues.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: Colors.blue,
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Miscue',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    return GestureDetector(
+                      onTap: () {
+                        ref.read(miscueProvider.notifier).increment(index);
+                        debugPrint(
+                          'Miscue/ ${miscues[index].name}: ${miscues[index].count}',
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.blue,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          miscues[index].name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     );
@@ -139,10 +150,19 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
               icon: Icons.restart_alt_rounded,
               radius: 30,
               color: Colors.amber,
-              onTap: () {},
+              onTap: () {
+                ref.read(miscueProvider.notifier).reset();
+              },
               iconSize: 18,
               iconColor: Colors.white,
             ),
+          ),
+
+          //Proceed Button
+          Positioned(
+            bottom: 50,
+            right: 50,
+            child: CustomButton(onTap: () {}, title: 'Proceed', size: 150),
           ),
         ],
       ),
