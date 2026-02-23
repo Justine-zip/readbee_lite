@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_animation_transition/animations/right_to_left_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
+import 'package:readbee_lite/pages/digitral_comprehension_page.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
@@ -44,7 +47,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
 
               //Score Counter
               Text(
-                '0',
+                '${miscues[7].count}',
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
@@ -212,7 +215,19 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
           Positioned(
             bottom: 50,
             right: 50,
-            child: CustomButton(onTap: () {}, title: 'Proceed', size: 150),
+            child: CustomButton(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageAnimationTransition(
+                    page: DigitralComprehensionPage(),
+                    pageAnimationType: RightToLeftTransition(),
+                  ),
+                );
+              },
+              title: 'Proceed',
+              size: 150,
+            ),
           ),
         ],
       ),
