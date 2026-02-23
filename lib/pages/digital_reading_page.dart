@@ -4,6 +4,7 @@ import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/word_color_provider.dart';
 
 class DigitalReadingPage extends ConsumerStatefulWidget {
   const DigitalReadingPage({super.key});
@@ -17,6 +18,11 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
   Widget build(BuildContext context) {
     final material = ref.watch(readingMaterialProvider);
     final miscues = ref.watch(miscueProvider);
+
+    final wordState = ref.watch(wordColorProvider);
+
+    final titleWords = material[0].title.split(' ');
+    final contentWords = material[0].content.split(' ');
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
@@ -61,18 +67,58 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              material[0].title,
-                              style: TextStyle(
-                                fontSize: 34,
-                                fontWeight: FontWeight.bold,
+                            // Text(
+                            //   material[0].title,
+                            //   style: TextStyle(
+                            //     fontSize: 34,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                children: List.generate(titleWords.length, (
+                                  index,
+                                ) {
+                                  return TextSpan(
+                                    text: '${titleWords[index]} ',
+                                    style: TextStyle(
+                                      fontSize: 34,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          wordState.wordColors[index] ??
+                                          Colors.black,
+                                    ),
+                                  );
+                                }),
                               ),
                             ),
                             SizedBox(height: 20),
-                            Text(
-                              material[0].content,
+                            // Text(
+                            //   material[0].content,
+                            //   textAlign: TextAlign.center,
+                            //   style: TextStyle(fontSize: 30),
+                            // ),
+                            RichText(
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 30),
+                              text: TextSpan(
+                                children: List.generate(contentWords.length, (
+                                  index,
+                                ) {
+                                  final contentIndex =
+                                      titleWords.length + index;
+
+                                  return TextSpan(
+                                    text: '${contentWords[index]} ',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color:
+                                          wordState.wordColors[contentIndex] ??
+                                          Colors.black,
+                                    ),
+                                  );
+                                }),
+                              ),
                             ),
                           ],
                         ),
@@ -101,7 +147,13 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+                        final miscue = miscues[index];
+
                         ref.read(miscueProvider.notifier).increment(index);
+
+                        ref
+                            .read(wordColorProvider.notifier)
+                            .applyColor(miscue.color);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -149,6 +201,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
               color: Colors.amber,
               onTap: () {
                 ref.read(miscueProvider.notifier).reset();
+                ref.read(wordColorProvider.notifier).reset();
               },
               iconSize: 18,
               iconColor: Colors.white,

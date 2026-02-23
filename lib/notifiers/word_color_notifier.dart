@@ -1,23 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/providers/reading_material_provider.dart';
 
-class WordColorNotifier extends Notifier<List<Color?>> {
+class WordColorState {
+  final int currentIndex;
+  final List<Color?> wordColors;
+
+  WordColorState({required this.currentIndex, required this.wordColors});
+
+  WordColorState copyWith({int? currentIndex, List<Color?>? wordColors}) {
+    return WordColorState(
+      currentIndex: currentIndex ?? this.currentIndex,
+      wordColors: wordColors ?? this.wordColors,
+    );
+  }
+}
+
+class WordColorNotifier extends Notifier<WordColorState> {
   @override
-  List<Color?> build() => [];
+  WordColorState build() {
+    final material = ref.read(readingMaterialProvider);
 
-  void initialize(String content) {
-    final words = content.split(" ");
-    state = List.generate(words.length, (_) => null);
+    final fullText = '${material[0].title} ${material[0].content}';
+
+    final words = fullText.split(' ');
+
+    return WordColorState(
+      currentIndex: 0,
+      wordColors: List.generate(words.length, (_) => null),
+    );
   }
 
-  void colorWord(int index, Color color) {
-    state = [
-      for (int i = 0; i < state.length; i++)
-        if (i == index) color else state[i],
-    ];
+  void applyColor(Color color) {
+    if (state.currentIndex >= state.wordColors.length) return;
+
+    final updatedColors = [...state.wordColors];
+    updatedColors[state.currentIndex] = color;
+
+    state = state.copyWith(
+      wordColors: updatedColors,
+      currentIndex: state.currentIndex + 1,
+    );
   }
 
   void reset() {
-    state = List.generate(state.length, (_) => null);
+    state = state.copyWith(
+      currentIndex: 0,
+      wordColors: List.generate(state.wordColors.length, (_) => null),
+    );
   }
 }
