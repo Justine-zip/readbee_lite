@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 
 class DigitralComprehensionPage extends ConsumerStatefulWidget {
@@ -15,6 +16,18 @@ class _DigitralComprehensionPageState
   @override
   Widget build(BuildContext context) {
     final question = ref.watch(readingMaterialProvider);
+    final material = ref.watch(readingMaterialProvider);
+    final compState = ref.watch(comprehensionProvider);
+    final compNotifier = ref.read(comprehensionProvider.notifier);
+
+    final currentIndex = compState.currentQuestionIndex;
+    final totalQuestions = material[0].question.length;
+
+    if (compState.isFinished) {
+      Future.microtask(() {
+        debugPrint('Answer: ${compState.selectedAnswers}');
+      });
+    }
     return Scaffold(
       body: Column(
         children: [
@@ -24,7 +37,9 @@ class _DigitralComprehensionPageState
           SizedBox(
             height: 40,
             width: MediaQuery.of(context).size.width * .7,
-            child: LinearProgressIndicator(value: .3),
+            child: LinearProgressIndicator(
+              value: (currentIndex + 1) / totalQuestions,
+            ),
           ),
 
           SizedBox(height: 30),
@@ -40,7 +55,7 @@ class _DigitralComprehensionPageState
                   padding: const EdgeInsets.all(24.0),
                   child: Center(
                     child: Text(
-                      question[0].question[4],
+                      question[0].question[currentIndex],
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 42),
                     ),
@@ -58,7 +73,7 @@ class _DigitralComprehensionPageState
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: question[0].key[0].length,
+                itemCount: question[0].key[currentIndex].length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -67,12 +82,17 @@ class _DigitralComprehensionPageState
                       child: Card(
                         elevation: 3,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            compNotifier.selectAnswer(
+                              totalQuestions: totalQuestions,
+                              answer: material[0].key[currentIndex][index],
+                            );
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Center(
                               child: Text(
-                                question[0].key[0][index],
+                                question[0].key[currentIndex][index],
                                 style: TextStyle(fontSize: 28),
                               ),
                             ),
