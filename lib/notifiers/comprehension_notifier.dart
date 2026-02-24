@@ -49,6 +49,23 @@ class ComprehensionNotifier extends StateNotifier<ComprehensionState> {
     }
   }
 
+  void undoAnswer() {
+    final currentIndex = state.currentQuestionIndex;
+
+    if (currentIndex > 0) {
+      final updatedAnswers = Map<int, String>.from(state.selectedAnswers);
+
+      // Remove the previous question's answer
+      updatedAnswers.remove(currentIndex - 1);
+
+      state = state.copyWith(
+        selectedAnswers: updatedAnswers,
+        currentQuestionIndex: currentIndex - 1,
+        isFinished: false,
+      );
+    }
+  }
+
   void reset() {
     state = ComprehensionState(
       currentQuestionIndex: 0,

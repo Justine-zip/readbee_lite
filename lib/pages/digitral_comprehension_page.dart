@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 
@@ -92,8 +93,9 @@ class _DigitralComprehensionPageState
                             padding: const EdgeInsets.all(12.0),
                             child: Center(
                               child: Text(
+                                textAlign: TextAlign.center,
                                 question[0].key[currentIndex][index],
-                                style: TextStyle(fontSize: 28),
+                                style: TextStyle(fontSize: 24),
                               ),
                             ),
                           ),
@@ -102,6 +104,21 @@ class _DigitralComprehensionPageState
                     ),
                   );
                 },
+              ),
+            ),
+          ),
+
+          SizedBox(height: 50),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: CustomButton(
+                onTap: () {
+                  ref.read(comprehensionProvider.notifier).undoAnswer();
+                },
+                title: 'Back',
+                size: 150,
               ),
             ),
           ),
