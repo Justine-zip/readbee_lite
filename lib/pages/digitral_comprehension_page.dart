@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/custom_button.dart';
+import 'package:readbee_lite/components/prompt_box.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 
@@ -27,6 +28,18 @@ class _DigitralComprehensionPageState
     if (compState.isFinished) {
       Future.microtask(() {
         debugPrint('Answer: ${compState.selectedAnswers}');
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (_) {
+              return PromptBox(
+                title: 'Submit Assessment',
+                subtitle: 'Are you sure you want to submit?',
+                onConfirm: () {},
+              );
+            },
+          );
+        }
       });
     }
     return Stack(
