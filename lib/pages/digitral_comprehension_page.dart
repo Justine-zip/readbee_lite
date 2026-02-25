@@ -29,101 +29,104 @@ class _DigitralComprehensionPageState
         debugPrint('Answer: ${compState.selectedAnswers}');
       });
     }
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: 30),
+    return Stack(
+      children: [
+        Scaffold(
+          body: Column(
+            children: [
+              SizedBox(height: 30),
 
-          //Progress Indicator
-          SizedBox(
-            height: 40,
-            width: MediaQuery.of(context).size.width * .7,
-            child: LinearProgressIndicator(
-              value: (currentIndex + 1) / totalQuestions,
-            ),
-          ),
+              //Progress Indicator
+              SizedBox(
+                height: 40,
+                width: MediaQuery.of(context).size.width * .7,
+                child: LinearProgressIndicator(
+                  borderRadius: BorderRadius.circular(12),
+                  value: (currentIndex + 1) / totalQuestions,
+                ),
+              ),
 
-          SizedBox(height: 30),
+              SizedBox(height: 30),
 
-          //Questions
-          Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * .8,
-              height: MediaQuery.of(context).size.height * .3,
-              child: Card(
-                elevation: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Center(
-                    child: Text(
-                      question[0].question[currentIndex],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 42),
+              //Questions
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * .8,
+                  height: MediaQuery.of(context).size.height * .3,
+                  child: Card(
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Center(
+                        child: Text(
+                          question[0].question[currentIndex],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 42),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(height: 50),
+              SizedBox(height: 50),
 
-          //Choices
-          SizedBox(
-            height: 220,
-            child: Center(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: question[0].key[currentIndex].length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 220,
-                      child: Card(
-                        elevation: 3,
-                        child: InkWell(
-                          onTap: () {
-                            compNotifier.selectAnswer(
-                              totalQuestions: totalQuestions,
-                              answer: material[0].key[currentIndex][index],
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Center(
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                question[0].key[currentIndex][index],
-                                style: TextStyle(fontSize: 24),
+              //Choices
+              SizedBox(
+                height: 220,
+                child: Center(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: question[0].key[currentIndex].length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 220,
+                          child: Card(
+                            elevation: 3,
+                            child: InkWell(
+                              onTap: () {
+                                compNotifier.selectAnswer(
+                                  totalQuestions: totalQuestions,
+                                  answer: material[0].key[currentIndex][index],
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Center(
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    question[0].key[currentIndex][index],
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          SizedBox(height: 50),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: CustomButton(
-                onTap: () {
-                  ref.read(comprehensionProvider.notifier).undoAnswer();
-                },
-                title: 'Back',
-                size: 150,
-              ),
-            ),
+              SizedBox(height: 50),
+            ],
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 50,
+          right: 50,
+          child: CustomButton(
+            onTap: () {
+              ref.read(comprehensionProvider.notifier).undoAnswer();
+            },
+            title: 'Back',
+            size: 150,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/pages/digital_reading_score_page.dart';
-import 'package:readbee_lite/pages/digitral_comprehension_page.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
