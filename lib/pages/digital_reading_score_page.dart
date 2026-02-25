@@ -75,7 +75,7 @@ class _DigitalReadingScorePageState
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: miscues.length,
+                          itemCount: miscues.length - 1,
                           itemBuilder: (context, index) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +111,7 @@ class _DigitalReadingScorePageState
                             CustomReadingScoreRow(
                               title: 'Number of Words in the Passage',
                               value:
-                                  '${totalWords(material[0].content.split(' '))}',
+                                  '${totalWords(material[0].content.split(' ') + material[0].title.split(' '))}',
                             ),
                             CustomReadingScoreRow(
                               title: 'Reading Level',

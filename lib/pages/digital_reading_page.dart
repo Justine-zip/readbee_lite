@@ -134,50 +134,53 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
               Spacer(),
 
               // Miscue Digital Buttons
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 220.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(8),
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 3,
-                  ),
-                  itemCount: miscues.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        final miscue = miscues[index];
-
-                        ref.read(miscueProvider.notifier).increment(index);
-
-                        ref
-                            .read(wordColorProvider.notifier)
-                            .applyColor(miscue.color);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color: Colors.blue,
+              if (!wordState.isFinished) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 220.0),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(8),
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          childAspectRatio: 3,
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          miscues[index].name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    itemCount: miscues.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          final miscue = miscues[index];
+
+                          ref.read(miscueProvider.notifier).increment(index);
+
+                          ref
+                              .read(wordColorProvider.notifier)
+                              .applyColor(miscue.color);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.blue,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            miscues[index].name,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
+              ],
 
               SizedBox(height: 30),
             ],
@@ -212,23 +215,24 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
           ),
 
           //Proceed Button
-          Positioned(
-            bottom: 50,
-            right: 50,
-            child: CustomButton(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  PageAnimationTransition(
-                    page: DigitalReadingScorePage(),
-                    pageAnimationType: RightToLeftTransition(),
-                  ),
-                );
-              },
-              title: 'Proceed',
-              size: 150,
+          if (wordState.isFinished)
+            Positioned(
+              bottom: 50,
+              right: 50,
+              child: CustomButton(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageAnimationTransition(
+                      page: DigitalReadingScorePage(),
+                      pageAnimationType: RightToLeftTransition(),
+                    ),
+                  );
+                },
+                title: 'Proceed',
+                size: 150,
+              ),
             ),
-          ),
         ],
       ),
     );
