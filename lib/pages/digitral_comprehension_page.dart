@@ -103,7 +103,7 @@ class _DigitralComprehensionPageState
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: question[0].key[currentIndex].length,
+                    itemCount: question[0].choice[currentIndex].length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -115,7 +115,8 @@ class _DigitralComprehensionPageState
                               onTap: () {
                                 compNotifier.selectAnswer(
                                   totalQuestions: totalQuestions,
-                                  answer: material[0].key[currentIndex][index],
+                                  answer:
+                                      material[0].choice[currentIndex][index],
                                 );
                               },
                               child: Padding(
@@ -123,7 +124,7 @@ class _DigitralComprehensionPageState
                                 child: Center(
                                   child: Text(
                                     textAlign: TextAlign.center,
-                                    question[0].key[currentIndex][index],
+                                    question[0].choice[currentIndex][index],
                                     style: TextStyle(fontSize: 24),
                                   ),
                                 ),

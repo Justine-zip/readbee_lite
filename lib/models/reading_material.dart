@@ -3,7 +3,8 @@ class ReadingMaterial {
   final String content;
   final String language;
   final List<String> question;
-  final List<List<String>> key;
+  final List<List<String>> choice;
+  final List<int> key;
   final int wordLength;
   final int storyId;
   final int quizId;
@@ -13,6 +14,7 @@ class ReadingMaterial {
     required this.content,
     required this.language,
     required this.question,
+    required this.choice,
     required this.key,
     required this.wordLength,
     required this.storyId,
@@ -25,6 +27,7 @@ class ReadingMaterial {
       content: json['content'],
       language: json['language'],
       question: json['question'],
+      choice: json['choice'],
       key: json['key'],
       wordLength: json['wordLength'],
       storyId: json['storyId'],

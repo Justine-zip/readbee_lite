@@ -5,8 +5,10 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/title_bar.dart';
-import 'package:readbee_lite/pages/digitral_comprehension_page.dart';
+import 'package:readbee_lite/pages/reading_material_page.dart';
+import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/word_color_provider.dart';
 
 class DigitalComprehensionScorePage extends ConsumerStatefulWidget {
   const DigitalComprehensionScorePage({super.key});
@@ -106,15 +108,71 @@ class _DigitalComprehensionScorePageState
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              for (var key
-                                                  in material[0].key[index]
+                                              for (var choice
+                                                  in material[0].choice[index]
                                                       .asMap()
                                                       .entries)
-                                                Text(
-                                                  "${String.fromCharCode(65 + key.key)}. ${key.value}",
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                  ),
+                                                Consumer(
+                                                  builder: (context, ref, _) {
+                                                    final state = ref.watch(
+                                                      wordColorComprehensionProvider,
+                                                    );
+                                                    final answer = ref.watch(
+                                                      comprehensionProvider,
+                                                    );
+
+                                                    final correctAnswer =
+                                                        state.key[index];
+                                                    final studentAnswerValue =
+                                                        answer
+                                                            .selectedAnswers[index];
+
+                                                    final currentChoiceValue =
+                                                        choice.value;
+
+                                                    Color textColor =
+                                                        Colors.black;
+
+                                                    if (studentAnswerValue !=
+                                                        null) {
+                                                      if (studentAnswerValue ==
+                                                          material[0]
+                                                              .choice[index][correctAnswer]) {
+                                                        if (currentChoiceValue ==
+                                                            material[0]
+                                                                .choice[index][correctAnswer]) {
+                                                          textColor =
+                                                              Colors.green;
+                                                        }
+                                                      } else {
+                                                        if (currentChoiceValue ==
+                                                            material[0]
+                                                                .choice[index][correctAnswer]) {
+                                                          textColor =
+                                                              Colors.green;
+                                                        }
+                                                        if (currentChoiceValue ==
+                                                            studentAnswerValue) {
+                                                          textColor =
+                                                              Colors.red;
+                                                        }
+                                                      }
+                                                    }
+
+                                                    return Padding(
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            vertical: 4,
+                                                          ),
+                                                      child: Text(
+                                                        "${String.fromCharCode(65 + choice.key)}. $currentChoiceValue",
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: textColor,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                             ],
                                           ),
@@ -136,19 +194,51 @@ class _DigitalComprehensionScorePageState
             ],
           ),
         ),
+
         //Proceed Button
         Positioned(
           bottom: 50,
           right: 50,
           child: CustomButton(
             onTap: () {
-              Navigator.push(
-                context,
-                PageAnimationTransition(
-                  page: DigitralComprehensionPage(),
-                  pageAnimationType: RightToLeftTransition(),
-                ),
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: Container(
+                      width: 400,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                          child: Text(
+                            'Congratulations for finishing the evaluation!',
+                            style: const TextStyle(fontSize: 22),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               );
+
+              if (mounted) {
+                Future.delayed(const Duration(seconds: 3), () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    PageAnimationTransition(
+                      page: TabletReadingMaterialPage(),
+                      pageAnimationType: RightToLeftTransition(),
+                    ),
+                  );
+                });
+              }
             },
             title: 'Proceed',
             size: 200,

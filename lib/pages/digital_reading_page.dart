@@ -22,7 +22,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
     final material = ref.watch(readingMaterialProvider);
     final miscues = ref.watch(miscueProvider);
 
-    final wordState = ref.watch(wordColorProvider);
+    final wordState = ref.watch(wordColorMaterialProvider);
 
     final titleWords = material[0].title.split(' ');
     final contentWords = material[0].content.split(' ');
@@ -157,7 +157,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                           ref.read(miscueProvider.notifier).increment(index);
 
                           ref
-                              .read(wordColorProvider.notifier)
+                              .read(wordColorMaterialProvider.notifier)
                               .applyColor(miscue.color);
                         },
                         child: Container(
@@ -207,7 +207,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
               color: Colors.amber,
               onTap: () {
                 ref.read(miscueProvider.notifier).reset();
-                ref.read(wordColorProvider.notifier).reset();
+                ref.read(wordColorMaterialProvider.notifier).reset();
               },
               iconSize: 18,
               iconColor: Colors.white,

@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 
-class WordColorState {
+class WordColorMaterialState {
   final int currentIndex;
   final List<Color?> wordColors;
   final bool isFinished;
 
-  WordColorState({
+  WordColorMaterialState({
     required this.currentIndex,
     required this.wordColors,
     required this.isFinished,
   });
 
-  WordColorState copyWith({
+  WordColorMaterialState copyWith({
     int? currentIndex,
     List<Color?>? wordColors,
     bool? isFinished,
   }) {
-    return WordColorState(
+    return WordColorMaterialState(
       currentIndex: currentIndex ?? this.currentIndex,
       wordColors: wordColors ?? this.wordColors,
       isFinished: isFinished ?? this.isFinished,
@@ -26,16 +26,16 @@ class WordColorState {
   }
 }
 
-class WordColorNotifier extends Notifier<WordColorState> {
+class WordColorMaterialNotifier extends Notifier<WordColorMaterialState> {
   @override
-  WordColorState build() {
+  WordColorMaterialState build() {
     final material = ref.read(readingMaterialProvider);
 
     final fullText = '${material[0].title} ${material[0].content}';
 
     final words = fullText.split(' ');
 
-    return WordColorState(
+    return WordColorMaterialState(
       currentIndex: 0,
       wordColors: List.generate(words.length, (_) => null),
       isFinished: false,

@@ -109,14 +109,14 @@ class _ReadingMaterialDetailsPageState
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              for (var key
+                                              for (var choice
                                                   in widget
                                                       .material[0]
-                                                      .key[index]
+                                                      .choice[index]
                                                       .asMap()
                                                       .entries)
                                                 Text(
-                                                  "${String.fromCharCode(65 + key.key)}. ${key.value}",
+                                                  "${String.fromCharCode(65 + choice.key)}. ${choice.value}",
                                                   style: const TextStyle(
                                                     fontSize: 18,
                                                   ),

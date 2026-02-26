@@ -10,20 +10,20 @@ final readingMaterialProvider = Provider<List<ReadingMaterial>>((ref) {
           'May isang asong gutom na gutom na naglalakad sa kalsada. Habang naglalakad, ibinubulong niya sa sarili na kailangan niyang makakita ng isang lunggang puno ngpagkain.',
       language: 'Tagalog',
       question: [
-        'Saan  nangyari  ang  kuwento?',
+        'Saan nangyari ang kuwento?',
         'Ano ang hinahanap ng aso?',
         'Anong ugali ang ipinakita ng aso?',
         'Bakit hindi makalabas ang aso so lungga?',
         'Bakit kayo hindi siya natulungan ng isa pang aso?',
       ],
-      key: [
+      choice: [
         ['bukid', 'gubat', 'kalsada', 'lansangan'],
         ['makakain', 'makakasama', 'mapapasyalan', 'matutulugan'],
         ['madamot', 'matakaw', 'masipag', 'mayabang'],
         [
           'may harang ang labasan',
-          'may bitbit pa siyang  pagkain',
-          'lubos no  marami  ang  kinain niya',
+          'may bitbit pa siyang pagkain',
+          'lubos no marami ang kinain niya',
           'mali ang paraan ng paglabas niya',
         ],
         [
@@ -33,6 +33,7 @@ final readingMaterialProvider = Provider<List<ReadingMaterial>>((ref) {
           'hindi rin ito makakalabas sa lungga',
         ],
       ],
+      key: [2, 0, 1, 2, 1],
       wordLength: 47,
       storyId: 1,
       quizId: 1,
