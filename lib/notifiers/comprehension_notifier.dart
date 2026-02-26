@@ -73,4 +73,8 @@ class ComprehensionNotifier extends StateNotifier<ComprehensionState> {
       isFinished: false,
     );
   }
+
+  void resetFinished() {
+    state = state.copyWith(isFinished: false);
+  }
 }

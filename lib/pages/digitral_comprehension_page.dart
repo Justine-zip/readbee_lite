@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_animation_transition/animations/right_to_left_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
+import 'package:readbee_lite/pages/digital_comprehension_score_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 
@@ -35,7 +38,17 @@ class _DigitralComprehensionPageState
               return PromptBox(
                 title: 'Submit Assessment',
                 subtitle: 'Are you sure you want to submit?',
-                onConfirm: () {},
+                onConfirm: () {
+                  Navigator.pop(context);
+                  ref.read(comprehensionProvider.notifier).resetFinished();
+                  Navigator.push(
+                    context,
+                    PageAnimationTransition(
+                      page: DigitalComprehensionScorePage(),
+                      pageAnimationType: RightToLeftTransition(),
+                    ),
+                  );
+                },
               );
             },
           );
