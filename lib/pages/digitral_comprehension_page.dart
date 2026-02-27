@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
+import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
 import 'package:readbee_lite/pages/digital_comprehension_score_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
@@ -18,6 +19,7 @@ class DigitralComprehensionPage extends ConsumerStatefulWidget {
 
 class _DigitralComprehensionPageState
     extends ConsumerState<DigitralComprehensionPage> {
+  bool showDIalog = false;
   @override
   Widget build(BuildContext context) {
     final question = ref.watch(readingMaterialProvider);
@@ -33,26 +35,33 @@ class _DigitralComprehensionPageState
       next,
     ) {
       if (next == true) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder:
-              (_) => PromptBox(
-                title: 'Submit Assessment',
-                subtitle: 'Are you sure you want to submit?',
-                onConfirm: () {
-                  Navigator.pop(context);
-                  ref.read(comprehensionProvider.notifier).resetFinished();
-                  Navigator.push(
-                    context,
-                    PageAnimationTransition(
-                      page: DigitalComprehensionScorePage(),
-                      pageAnimationType: RightToLeftTransition(),
-                    ),
-                  );
-                },
-              ),
-        );
+        if (!showDIalog) {
+          showDIalog = !showDIalog;
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder:
+                (_) => PromptBox(
+                  title: 'Submit Assessment',
+                  subtitle: 'Are you sure you want to submit?',
+                  onCancel: () {
+                    showDIalog = false;
+                    Navigator.pop(context);
+                  },
+                  onConfirm: () {
+                    Navigator.pop(context);
+                    ref.read(comprehensionProvider.notifier).resetFinished();
+                    Navigator.push(
+                      context,
+                      PageAnimationTransition(
+                        page: DigitalComprehensionScorePage(),
+                        pageAnimationType: RightToLeftTransition(),
+                      ),
+                    );
+                  },
+                ),
+          );
+        }
       }
     });
     return Stack(
@@ -62,13 +71,23 @@ class _DigitralComprehensionPageState
             children: [
               SizedBox(height: 30),
 
+              PageTitle(title: 'Digital Comprehension'),
+
+              SizedBox(height: 20),
+
               //Progress Indicator
-              SizedBox(
-                height: 40,
-                width: MediaQuery.of(context).size.width * .7,
-                child: LinearProgressIndicator(
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
                   borderRadius: BorderRadius.circular(12),
-                  value: (currentIndex + 1) / totalQuestions,
+                ),
+                child: SizedBox(
+                  height: 30,
+                  width: MediaQuery.of(context).size.width * .7,
+                  child: LinearProgressIndicator(
+                    borderRadius: BorderRadius.circular(12),
+                    value: (currentIndex + 1) / totalQuestions,
+                  ),
                 ),
               ),
 

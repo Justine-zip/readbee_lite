@@ -5,6 +5,7 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_reading_score_row.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
+import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/utils/digital_reading_score.dart';
 import 'package:readbee_lite/pages/digitral_comprehension_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
@@ -33,6 +34,7 @@ class _DigitalReadingScorePageState
             child: Column(
               children: [
                 SizedBox(height: 30),
+                PageTitle(title: 'Digital Reading Score'),
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: MaterialTitleBar(

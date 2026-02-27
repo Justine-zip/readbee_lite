@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
+import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 import 'package:readbee_lite/models/section.dart';
@@ -26,15 +27,21 @@ class _ReadingMaterialDetailsPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            TitleBar(
-              title: widget.material[0].title,
-              description:
-                  'Bilang ng mga salita: ${widget.material[0].wordLength}',
-              secondDescription: 'Language: ${widget.material[0].language}',
+            SizedBox(height: 30),
+
+            PageTitle(title: 'Reading Material'),
+
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: TitleBar(
+                title: widget.material[0].title,
+                description:
+                    'Bilang ng mga salita: ${widget.material[0].wordLength}',
+                secondDescription: 'Language: ${widget.material[0].language}',
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -204,6 +211,7 @@ class EvaluationListDialog extends ConsumerWidget {
     final filteredStudents = notifier.filteredStudents(student);
 
     return Dialog(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: SizedBox(
         height: MediaQuery.of(context).size.height * .5,

@@ -5,12 +5,14 @@ class PromptBox extends StatelessWidget {
   final String title;
   final String? subtitle;
   final VoidCallback? onConfirm;
+  final VoidCallback? onCancel;
 
   const PromptBox({
     super.key,
     required this.title,
     this.subtitle,
     this.onConfirm,
+    this.onCancel,
   });
 
   @override
@@ -37,11 +39,7 @@ class PromptBox extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomButton(
-                    onTap: () => Navigator.pop(context),
-                    title: 'Not Yet',
-                    size: 150,
-                  ),
+                  CustomButton(onTap: onCancel, title: 'Not Yet', size: 150),
                   SizedBox(width: 10),
                   CustomButton(onTap: onConfirm, title: 'Submit', size: 150),
                 ],

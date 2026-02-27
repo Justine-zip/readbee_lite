@@ -5,6 +5,7 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
+import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/pages/reading_material_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
@@ -28,173 +29,178 @@ class _DigitalComprehensionScorePageState
     return Stack(
       children: [
         Scaffold(
-          body: Column(
-            children: [
-              SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: MaterialTitleBar(
-                  name:
-                      'Name: ${eval.selectedStudent?.name ?? 'None selected'}',
-                  gradeSection: 'Grade & Section: ${eval.selectedSection}',
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+
+                PageTitle(title: 'Digital Comprehension'),
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: MaterialTitleBar(
+                    name:
+                        'Name: ${eval.selectedStudent?.name ?? 'None selected'}',
+                    gradeSection: 'Grade & Section: ${eval.selectedSection}',
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ComprehensionScoreBox(
-                                value: '3',
-                                subtitle: 'No. of Correct Answer',
-                              ),
-                              ComprehensionScoreBox(
-                                value: '2',
-                                subtitle: 'No. of Wrong Answer',
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ComprehensionScoreBox(
-                                value: 'Instructional',
-                                subtitle: 'Comprehension Level',
-                              ),
-                              ComprehensionScoreBox(
-                                value: '60%',
-                                subtitle: 'Comprehension Rate',
-                              ),
-                            ],
-                          ),
-                        ],
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ComprehensionScoreBox(
+                                  value: '3',
+                                  subtitle: 'No. of Correct Answer',
+                                ),
+                                ComprehensionScoreBox(
+                                  value: '2',
+                                  subtitle: 'No. of Wrong Answer',
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ComprehensionScoreBox(
+                                  value: 'Instructional',
+                                  subtitle: 'Comprehension Level',
+                                ),
+                                ComprehensionScoreBox(
+                                  value: '60%',
+                                  subtitle: 'Comprehension Rate',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Material(
-                      elevation: 3,
-                      clipBehavior: Clip.antiAlias,
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(12),
-                        topRight: Radius.circular(12),
-                      ),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * .675,
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  itemCount: material[0].question.length,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          material[0].question[index],
-                                          style: TextStyle(fontSize: 26),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              for (var choice
-                                                  in material[0].choice[index]
-                                                      .asMap()
-                                                      .entries)
-                                                Consumer(
-                                                  builder: (context, ref, _) {
-                                                    final state = ref.watch(
-                                                      wordColorComprehensionProvider,
-                                                    );
-                                                    final answer = ref.watch(
-                                                      comprehensionProvider,
-                                                    );
+                    Expanded(
+                      flex: 5,
+                      child: Material(
+                        elevation: 3,
+                        clipBehavior: Clip.antiAlias,
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * .675,
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: material[0].question.length,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            material[0].question[index],
+                                            style: TextStyle(fontSize: 26),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                for (var choice
+                                                    in material[0].choice[index]
+                                                        .asMap()
+                                                        .entries)
+                                                  Consumer(
+                                                    builder: (context, ref, _) {
+                                                      final state = ref.watch(
+                                                        wordColorComprehensionProvider,
+                                                      );
+                                                      final answer = ref.watch(
+                                                        comprehensionProvider,
+                                                      );
 
-                                                    final correctAnswer =
-                                                        state.key[index];
-                                                    final studentAnswerValue =
-                                                        answer
-                                                            .selectedAnswers[index];
+                                                      final correctAnswer =
+                                                          state.key[index];
+                                                      final studentAnswerValue =
+                                                          answer
+                                                              .selectedAnswers[index];
 
-                                                    final currentChoiceValue =
-                                                        choice.value;
+                                                      final currentChoiceValue =
+                                                          choice.value;
 
-                                                    Color textColor =
-                                                        Colors.black;
+                                                      Color textColor =
+                                                          Colors.black;
 
-                                                    if (studentAnswerValue !=
-                                                        null) {
-                                                      if (studentAnswerValue ==
-                                                          material[0]
-                                                              .choice[index][correctAnswer]) {
-                                                        if (currentChoiceValue ==
+                                                      if (studentAnswerValue !=
+                                                          null) {
+                                                        if (studentAnswerValue ==
                                                             material[0]
                                                                 .choice[index][correctAnswer]) {
-                                                          textColor =
-                                                              Colors.green;
-                                                        }
-                                                      } else {
-                                                        if (currentChoiceValue ==
-                                                            material[0]
-                                                                .choice[index][correctAnswer]) {
-                                                          textColor =
-                                                              Colors.green;
-                                                        }
-                                                        if (currentChoiceValue ==
-                                                            studentAnswerValue) {
-                                                          textColor =
-                                                              Colors.red;
+                                                          if (currentChoiceValue ==
+                                                              material[0]
+                                                                  .choice[index][correctAnswer]) {
+                                                            textColor =
+                                                                Colors.green;
+                                                          }
+                                                        } else {
+                                                          if (currentChoiceValue ==
+                                                              material[0]
+                                                                  .choice[index][correctAnswer]) {
+                                                            textColor =
+                                                                Colors.green;
+                                                          }
+                                                          if (currentChoiceValue ==
+                                                              studentAnswerValue) {
+                                                            textColor =
+                                                                Colors.red;
+                                                          }
                                                         }
                                                       }
-                                                    }
 
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                            vertical: 4,
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              vertical: 4,
+                                                            ),
+                                                        child: Text(
+                                                          "${String.fromCharCode(65 + choice.key)}. $currentChoiceValue",
+                                                          style: TextStyle(
+                                                            fontSize: 22,
+                                                            color: textColor,
                                                           ),
-                                                      child: Text(
-                                                        "${String.fromCharCode(65 + choice.key)}. $currentChoiceValue",
-                                                        style: TextStyle(
-                                                          fontSize: 22,
-                                                          color: textColor,
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                            ],
+                                                      );
+                                                    },
+                                                  ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                  padding: const EdgeInsets.only(bottom: 50),
+                                        ],
+                                      );
+                                    },
+                                    padding: const EdgeInsets.only(bottom: 50),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+                SizedBox(height: 60),
+              ],
+            ),
           ),
         ),
 

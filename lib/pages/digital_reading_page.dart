@@ -4,6 +4,7 @@ import 'package:page_animation_transition/animations/right_to_left_transition.da
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
+import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/pages/digital_reading_score_page.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
@@ -32,7 +33,9 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
         children: [
           Column(
             children: [
-              SizedBox(height: 40),
+              SizedBox(height: 30),
+
+              PageTitle(title: 'Digital Reading'),
 
               //Timer
               Text(
@@ -61,7 +64,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                 child: Material(
                   elevation: 3,
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * .5,
+                    height: MediaQuery.of(context).size.height * .45,
                     width: MediaQuery.of(context).size.width * .75,
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
