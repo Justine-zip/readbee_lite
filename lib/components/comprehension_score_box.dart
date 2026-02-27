@@ -14,8 +14,8 @@ class ComprehensionScoreBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: size ?? 200,
-      width: size ?? 200,
+      height: size ?? 240,
+      width: size ?? 240,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(

@@ -70,13 +70,6 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Text(
-                            //   material[0].title,
-                            //   style: TextStyle(
-                            //     fontSize: 34,
-                            //     fontWeight: FontWeight.bold,
-                            //   ),
-                            // ),
                             RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(

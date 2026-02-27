@@ -4,9 +4,10 @@ import 'package:page_animation_transition/animations/right_to_left_transition.da
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_button.dart';
-import 'package:readbee_lite/components/title_bar.dart';
+import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/pages/reading_material_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
+import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
 
@@ -22,6 +23,7 @@ class _DigitalComprehensionScorePageState
     extends ConsumerState<DigitalComprehensionScorePage> {
   @override
   Widget build(BuildContext context) {
+    final eval = ref.watch(evaluationProvider);
     final material = ref.watch(readingMaterialProvider);
     return Stack(
       children: [
@@ -31,16 +33,17 @@ class _DigitalComprehensionScorePageState
               SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: TitleBar(
-                  title: 'Student Name Sample',
-                  description: 'description',
+                child: MaterialTitleBar(
+                  name:
+                      'Name: ${eval.selectedStudent?.name ?? 'None selected'}',
+                  gradeSection: 'Grade & Section: ${eval.selectedSection}',
                 ),
               ),
               SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Column(
@@ -100,7 +103,7 @@ class _DigitalComprehensionScorePageState
                                       children: [
                                         Text(
                                           material[0].question[index],
-                                          style: TextStyle(fontSize: 22),
+                                          style: TextStyle(fontSize: 26),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(12.0),
@@ -167,7 +170,7 @@ class _DigitalComprehensionScorePageState
                                                       child: Text(
                                                         "${String.fromCharCode(65 + choice.key)}. $currentChoiceValue",
                                                         style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 22,
                                                           color: textColor,
                                                         ),
                                                       ),
@@ -203,6 +206,7 @@ class _DigitalComprehensionScorePageState
             onTap: () {
               showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder: (context) {
                   return Dialog(
                     child: Container(

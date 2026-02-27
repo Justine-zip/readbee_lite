@@ -4,18 +4,32 @@ import 'package:readbee_lite/components/custom_textfield.dart';
 import 'package:readbee_lite/components/filter_sheet.dart';
 import 'package:readbee_lite/components/reading_material_builder.dart';
 import 'package:readbee_lite/components/title_bar.dart';
+import 'package:readbee_lite/providers/comprehension_provider.dart';
+import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/word_color_provider.dart';
 
-class MobileReadingMaterialPage extends StatefulWidget {
+class MobileReadingMaterialPage extends ConsumerStatefulWidget {
   const MobileReadingMaterialPage({super.key});
 
   @override
-  State<MobileReadingMaterialPage> createState() =>
+  ConsumerState<MobileReadingMaterialPage> createState() =>
       _MobileReadingMaterialPageState();
 }
 
-class _MobileReadingMaterialPageState extends State<MobileReadingMaterialPage> {
+class _MobileReadingMaterialPageState
+    extends ConsumerState<MobileReadingMaterialPage> {
   DraggableScrollableController controller = DraggableScrollableController();
+  @override
+  void initState() {
+    super.initState();
+    ref.read(evaluationProvider.notifier).reset();
+    ref.read(wordColorMaterialProvider.notifier).reset();
+    ref.read(miscueProvider.notifier).reset();
+    ref.read(comprehensionProvider.notifier).reset();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +115,18 @@ class TabletReadingMaterialPage extends ConsumerStatefulWidget {
 class _TabletReadingMaterialPageState
     extends ConsumerState<TabletReadingMaterialPage> {
   DraggableScrollableController controller = DraggableScrollableController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.invalidate(evaluationProvider);
+      ref.invalidate(wordColorMaterialProvider);
+      ref.invalidate(miscueProvider);
+      ref.invalidate(comprehensionProvider);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

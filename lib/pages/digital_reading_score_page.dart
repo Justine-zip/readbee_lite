@@ -4,9 +4,10 @@ import 'package:page_animation_transition/animations/right_to_left_transition.da
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_reading_score_row.dart';
-import 'package:readbee_lite/components/title_bar.dart';
+import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/core/utils/digital_reading_score.dart';
 import 'package:readbee_lite/pages/digitral_comprehension_page.dart';
+import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 
@@ -22,6 +23,7 @@ class _DigitalReadingScorePageState
     extends ConsumerState<DigitalReadingScorePage> {
   @override
   Widget build(BuildContext context) {
+    final eval = ref.watch(evaluationProvider);
     final miscues = ref.watch(miscueProvider);
     final material = ref.watch(readingMaterialProvider);
     return Stack(
@@ -33,9 +35,10 @@ class _DigitalReadingScorePageState
                 SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.all(24.0),
-                  child: TitleBar(
-                    title: 'Student Name Sample',
-                    description: 'description',
+                  child: MaterialTitleBar(
+                    name:
+                        'Name: ${eval.selectedStudent?.name ?? 'None selected'}',
+                    gradeSection: 'Grade & Section: ${eval.selectedSection}',
                   ),
                 ),
                 SizedBox(height: 30),

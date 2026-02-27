@@ -239,7 +239,10 @@ class EvaluationListDialog extends ConsumerWidget {
                                   ),
                                   title: Text(section.section),
                                   onTap: () {
-                                    notifier.selectSection(section.sectionId);
+                                    notifier.selectSection(
+                                      section.sectionId,
+                                      section.section,
+                                    );
                                   },
                                 );
                               },

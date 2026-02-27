@@ -28,14 +28,16 @@ class _DigitralComprehensionPageState
     final currentIndex = compState.currentQuestionIndex;
     final totalQuestions = material[0].question.length;
 
-    if (compState.isFinished) {
-      Future.microtask(() {
-        debugPrint('Answer: ${compState.selectedAnswers}');
-        if (mounted) {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return PromptBox(
+    ref.listen(comprehensionProvider.select((s) => s.isFinished), (
+      previous,
+      next,
+    ) {
+      if (next == true) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder:
+              (_) => PromptBox(
                 title: 'Submit Assessment',
                 subtitle: 'Are you sure you want to submit?',
                 onConfirm: () {
@@ -49,12 +51,10 @@ class _DigitralComprehensionPageState
                     ),
                   );
                 },
-              );
-            },
-          );
-        }
-      });
-    }
+              ),
+        );
+      }
+    });
     return Stack(
       children: [
         Scaffold(

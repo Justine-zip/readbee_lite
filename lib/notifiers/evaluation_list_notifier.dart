@@ -4,16 +4,23 @@ import 'package:readbee_lite/models/student.dart';
 
 class EvaluationState {
   final String? selectedSectionId;
+  final String? selectedSection;
   final Student? selectedStudent;
 
-  const EvaluationState({this.selectedSectionId, this.selectedStudent});
+  const EvaluationState({
+    this.selectedSectionId,
+    this.selectedSection,
+    this.selectedStudent,
+  });
 
   EvaluationState copyWith({
     String? selectedSectionId,
+    String? selectedSection,
     Student? selectedStudent,
   }) {
     return EvaluationState(
       selectedSectionId: selectedSectionId ?? this.selectedSectionId,
+      selectedSection: selectedSection ?? this.selectedSection,
       selectedStudent: selectedStudent,
     );
   }
@@ -25,10 +32,11 @@ class EvaluationNotifier extends Notifier<EvaluationState> {
     return const EvaluationState();
   }
 
-  void selectSection(String sectionId) {
+  void selectSection(String sectionId, String section) {
     state = EvaluationState(
       selectedSectionId: sectionId,
-      selectedStudent: null, // reset student
+      selectedSection: section,
+      selectedStudent: null,
     );
   }
 
@@ -47,5 +55,9 @@ class EvaluationNotifier extends Notifier<EvaluationState> {
     if (state.selectedStudent != null) {
       debugPrint("Evaluating: ${state.selectedStudent!.name}");
     }
+  }
+
+  void reset() {
+    state = const EvaluationState();
   }
 }
