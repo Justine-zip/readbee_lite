@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 
 class WordColorComprehensionState {
   final List<int> key;
@@ -25,10 +25,10 @@ class WordColorComprehensionNotifier
     extends Notifier<WordColorComprehensionState> {
   @override
   WordColorComprehensionState build() {
-    final material = ref.read(readingMaterialProvider);
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
 
     return WordColorComprehensionState(
-      key: material[0].key,
+      key: selectedMaterial!.key,
       selectedAnswers: {},
     );
   }

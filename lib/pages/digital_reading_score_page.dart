@@ -10,7 +10,7 @@ import 'package:readbee_lite/core/utils/digital_reading_score.dart';
 import 'package:readbee_lite/pages/digitral_comprehension_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
-import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 
 class DigitalReadingScorePage extends ConsumerStatefulWidget {
   const DigitalReadingScorePage({super.key});
@@ -26,7 +26,11 @@ class _DigitalReadingScorePageState
   Widget build(BuildContext context) {
     final eval = ref.watch(evaluationProvider);
     final miscues = ref.watch(miscueProvider);
-    final material = ref.watch(readingMaterialProvider);
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
+
+    if (selectedMaterial == null) {
+      return const CircularProgressIndicator();
+    }
     return Stack(
       children: [
         Scaffold(
@@ -116,22 +120,22 @@ class _DigitalReadingScorePageState
                             CustomReadingScoreRow(
                               title: 'Number of Words in the Passage',
                               value:
-                                  '${totalWords(material[0].content.split(' ') + material[0].title.split(' '))}',
+                                  '${totalWords(selectedMaterial.content.split(' ') + selectedMaterial.title.split(' '))}',
                             ),
                             CustomReadingScoreRow(
                               title: 'Reading Level',
                               value:
-                                  '${totalWords(material[0].content.split(' '))}',
+                                  '${totalWords(selectedMaterial.content.split(' '))}',
                             ),
                             CustomReadingScoreRow(
                               title: 'Word per Minute',
                               value:
-                                  '${totalWords(material[0].content.split(' '))}',
+                                  '${totalWords(selectedMaterial.content.split(' '))}',
                             ),
                             CustomReadingScoreRow(
                               title: 'Reading Speed',
                               value:
-                                  '${totalWords(material[0].content.split(' '))}',
+                                  '${totalWords(selectedMaterial.content.split(' '))}',
                             ),
                             CustomReadingScoreRow(
                               title: 'Number of Correct Words',

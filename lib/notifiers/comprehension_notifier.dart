@@ -55,7 +55,6 @@ class ComprehensionNotifier extends StateNotifier<ComprehensionState> {
     if (currentIndex > 0) {
       final updatedAnswers = Map<int, String>.from(state.selectedAnswers);
 
-      // Remove the previous question's answer
       updatedAnswers.remove(currentIndex - 1);
 
       state = state.copyWith(

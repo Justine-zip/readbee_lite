@@ -6,10 +6,11 @@ import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
+import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
 import 'package:readbee_lite/pages/reading_material_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
-import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
 
 class DigitalComprehensionScorePage extends ConsumerStatefulWidget {
@@ -24,8 +25,29 @@ class _DigitalComprehensionScorePageState
     extends ConsumerState<DigitalComprehensionScorePage> {
   @override
   Widget build(BuildContext context) {
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
+    if (selectedMaterial == null) {
+      return const CircularProgressIndicator();
+    }
     final eval = ref.watch(evaluationProvider);
-    final material = ref.watch(readingMaterialProvider);
+
+    final compState = ref.watch(comprehensionProvider);
+    final answerKey = ref.watch(wordColorComprehensionProvider).key;
+
+    final totalQuestions = selectedMaterial.question.length;
+
+    final correct = totalCorrect(
+      selectedAnswers: compState.selectedAnswers,
+      choices: selectedMaterial.choice,
+      answerKey: answerKey,
+    );
+
+    final wrong = totalWrong(
+      totalQuestions: totalQuestions,
+      totalCorrect: correct,
+    );
+
+    final rate = comprehensionRate(totalQuestions, correct);
     return Stack(
       children: [
         Scaffold(
@@ -56,11 +78,11 @@ class _DigitalComprehensionScorePageState
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ComprehensionScoreBox(
-                                  value: '3',
+                                  value: '$correct',
                                   subtitle: 'No. of Correct Answer',
                                 ),
                                 ComprehensionScoreBox(
-                                  value: '2',
+                                  value: '$wrong',
                                   subtitle: 'No. of Wrong Answer',
                                 ),
                               ],
@@ -73,7 +95,7 @@ class _DigitalComprehensionScorePageState
                                   subtitle: 'Comprehension Level',
                                 ),
                                 ComprehensionScoreBox(
-                                  value: '60%',
+                                  value: '${rate.toStringAsFixed(0)}%',
                                   subtitle: 'Comprehension Rate',
                                 ),
                               ],
@@ -99,14 +121,14 @@ class _DigitalComprehensionScorePageState
                               children: [
                                 Expanded(
                                   child: ListView.builder(
-                                    itemCount: material[0].question.length,
+                                    itemCount: selectedMaterial.question.length,
                                     itemBuilder: (context, index) {
                                       return Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            material[0].question[index],
+                                            selectedMaterial.question[index],
                                             style: TextStyle(fontSize: 26),
                                           ),
                                           Padding(
@@ -116,7 +138,8 @@ class _DigitalComprehensionScorePageState
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 for (var choice
-                                                    in material[0].choice[index]
+                                                    in selectedMaterial
+                                                        .choice[index]
                                                         .asMap()
                                                         .entries)
                                                   Consumer(
@@ -143,17 +166,17 @@ class _DigitalComprehensionScorePageState
                                                       if (studentAnswerValue !=
                                                           null) {
                                                         if (studentAnswerValue ==
-                                                            material[0]
+                                                            selectedMaterial
                                                                 .choice[index][correctAnswer]) {
                                                           if (currentChoiceValue ==
-                                                              material[0]
+                                                              selectedMaterial
                                                                   .choice[index][correctAnswer]) {
                                                             textColor =
                                                                 Colors.green;
                                                           }
                                                         } else {
                                                           if (currentChoiceValue ==
-                                                              material[0]
+                                                              selectedMaterial
                                                                   .choice[index][correctAnswer]) {
                                                             textColor =
                                                                 Colors.green;

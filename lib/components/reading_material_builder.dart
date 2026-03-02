@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 import 'package:readbee_lite/pages/reading_material_details_page.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 
-class ReadingMaterialBuilder extends StatelessWidget {
+class ReadingMaterialBuilder extends ConsumerWidget {
   final List<ReadingMaterial> material;
   const ReadingMaterialBuilder({super.key, required this.material});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 12),
@@ -28,15 +30,17 @@ class ReadingMaterialBuilder extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      debugPrint('Book: ${material[0].title}');
-                      debugPrint('WordLength: ${material[0].wordLength}');
+                      ref.read(selectedMaterialProvider.notifier).state =
+                          material[index];
+                      debugPrint('Book: ${material[index].title}');
+                      debugPrint('WordLength: ${material[index].wordLength}');
                       debugPrint(
-                        'questionLength: ${material[0].question.length}',
+                        'questionLength: ${material[index].question.length}',
                       );
                       Navigator.push(
                         context,
                         PageAnimationTransition(
-                          page: ReadingMaterialDetailsPage(material: material),
+                          page: ReadingMaterialDetailsPage(),
                           pageAnimationType: RightToLeftTransition(),
                         ),
                       );
@@ -50,7 +54,7 @@ class ReadingMaterialBuilder extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  material[0].title,
+                  material[index].title,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 22),
                   maxLines: 1,

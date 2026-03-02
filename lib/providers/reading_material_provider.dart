@@ -5,7 +5,6 @@ final readingMaterialProvider = Provider<List<ReadingMaterial>>((ref) {
   return [
     ReadingMaterial(
       title: 'Ang Aso sa Lungga',
-      //content: 'May isang asong gutom na gutom na naglalakad sa kalsada. Habang naglalakad, ibinubulong niya sa sarili na kailangan niyang makakita ng isang lunggang puno ng pagkain. Nang makakita siya ng lungga sa dulo ng kalsada, agad siyang pumasok dito. Kumain siya hanggang mabusog. Pero kahit busog na siya, kumain parin at inubos ang lahat ng pagkain sa loob ng lungga. Sa kanyang kabusugan, halos pumutok ang malaki niyang tiyan. Nang lalabas na lamang siya, napansin niyang hindi na siya magkasya sa labasan. Sumigaw siya upang humingi ng tulong. Dumating ang isa pang aso at nalaman ang nangyari. Bago ito umalis, nagwika siya sa kasamang aso, "Hintayin mo na long umimpis ang tiyan mo."',
       content: 'May isang asong gutom na gutom na naglalakad sa kalsada.',
       language: 'Tagalog',
       question: [
@@ -36,6 +35,29 @@ final readingMaterialProvider = Provider<List<ReadingMaterial>>((ref) {
       wordLength: 47,
       storyId: 1,
       quizId: 1,
+    ),
+    ReadingMaterial(
+      title: 'Ang Loro ni Lolo Kiko',
+      content: 'May loro si Lolo Kiko. Nagsasalita ang loro ni Lolo.',
+      language: 'Tagalog',
+      question: [
+        'Ano ang alaga ni Lolo Kiko? (Literal)',
+        'Ano ang paborito ng alaga ni Lolo? (Literal)',
+        'Ano kaya ang naramdaman ni Lolo nang mawala ang loro? (Paghinuha)',
+        'Saan kaya naganap ang kuwento? (Paghinuha)',
+        'Ano ang isa pang magandang pamagat sa kuwento? (Pagsusuri)',
+      ],
+      choice: [
+        ['aso', 'loro', 'pusa'],
+        ['makalipad sa puno', 'makatikim ng keso', 'makausap si Lolo Kiko'],
+        ['masaya', 'malungkot', 'nagalit'],
+        ['bahay', 'gubat', 'paaralan'],
+        ['Si Lolo Kiko', 'Ang Loro sa Puno', 'Ang Alagang Loro'],
+      ],
+      key: [1, 1, 1, 0, 2],
+      wordLength: 29,
+      storyId: 2,
+      quizId: 2,
     ),
   ];
 });

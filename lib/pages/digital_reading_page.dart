@@ -7,7 +7,7 @@ import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/pages/digital_reading_score_page.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
-import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
 
 class DigitalReadingPage extends ConsumerStatefulWidget {
@@ -20,13 +20,16 @@ class DigitalReadingPage extends ConsumerStatefulWidget {
 class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
   @override
   Widget build(BuildContext context) {
-    final material = ref.watch(readingMaterialProvider);
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
+    if (selectedMaterial == null) {
+      return const CircularProgressIndicator();
+    }
     final miscues = ref.watch(miscueProvider);
 
     final wordState = ref.watch(wordColorMaterialProvider);
 
-    final titleWords = material[0].title.split(' ');
-    final contentWords = material[0].content.split(' ');
+    final titleWords = selectedMaterial.title.split(' ');
+    final contentWords = selectedMaterial.content.split(' ');
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
@@ -93,11 +96,6 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                               ),
                             ),
                             SizedBox(height: 20),
-                            // Text(
-                            //   material[0].content,
-                            //   textAlign: TextAlign.center,
-                            //   style: TextStyle(fontSize: 30),
-                            // ),
                             RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(

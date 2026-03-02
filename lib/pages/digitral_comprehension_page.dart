@@ -7,7 +7,7 @@ import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
 import 'package:readbee_lite/pages/digital_comprehension_score_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
-import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 
 class DigitralComprehensionPage extends ConsumerStatefulWidget {
   const DigitralComprehensionPage({super.key});
@@ -22,13 +22,15 @@ class _DigitralComprehensionPageState
   bool showDIalog = false;
   @override
   Widget build(BuildContext context) {
-    final question = ref.watch(readingMaterialProvider);
-    final material = ref.watch(readingMaterialProvider);
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
+    if (selectedMaterial == null) {
+      return const CircularProgressIndicator();
+    }
     final compState = ref.watch(comprehensionProvider);
     final compNotifier = ref.read(comprehensionProvider.notifier);
 
     final currentIndex = compState.currentQuestionIndex;
-    final totalQuestions = material[0].question.length;
+    final totalQuestions = selectedMaterial.question.length;
 
     ref.listen(comprehensionProvider.select((s) => s.isFinished), (
       previous,
@@ -104,7 +106,7 @@ class _DigitralComprehensionPageState
                       padding: const EdgeInsets.all(24.0),
                       child: Center(
                         child: Text(
-                          question[0].question[currentIndex],
+                          selectedMaterial.question[currentIndex],
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 42),
                         ),
@@ -122,7 +124,7 @@ class _DigitralComprehensionPageState
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: question[0].choice[currentIndex].length,
+                    itemCount: selectedMaterial.choice[currentIndex].length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -135,7 +137,8 @@ class _DigitralComprehensionPageState
                                 compNotifier.selectAnswer(
                                   totalQuestions: totalQuestions,
                                   answer:
-                                      material[0].choice[currentIndex][index],
+                                      selectedMaterial
+                                          .choice[currentIndex][index],
                                 );
                               },
                               child: Padding(
@@ -143,7 +146,8 @@ class _DigitralComprehensionPageState
                                 child: Center(
                                   child: Text(
                                     textAlign: TextAlign.center,
-                                    question[0].choice[currentIndex][index],
+                                    selectedMaterial
+                                        .choice[currentIndex][index],
                                     style: TextStyle(fontSize: 24),
                                   ),
                                 ),

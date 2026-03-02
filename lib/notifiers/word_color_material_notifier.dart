@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 
 class WordColorMaterialState {
   final int currentIndex;
@@ -29,9 +29,9 @@ class WordColorMaterialState {
 class WordColorMaterialNotifier extends Notifier<WordColorMaterialState> {
   @override
   WordColorMaterialState build() {
-    final material = ref.read(readingMaterialProvider);
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
 
-    final fullText = '${material[0].title} ${material[0].content}';
+    final fullText = '${selectedMaterial?.title} ${selectedMaterial?.content}';
 
     final words = fullText.split(' ');
 

@@ -5,27 +5,27 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/title_bar.dart';
-import 'package:readbee_lite/models/reading_material.dart';
 import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/pages/digital_reading_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 
-class ReadingMaterialDetailsPage extends StatefulWidget {
-  final List<ReadingMaterial> material;
-  const ReadingMaterialDetailsPage({super.key, required this.material});
+class ReadingMaterialDetailsPage extends ConsumerStatefulWidget {
+  const ReadingMaterialDetailsPage({super.key});
 
   @override
-  State<ReadingMaterialDetailsPage> createState() =>
+  ConsumerState<ReadingMaterialDetailsPage> createState() =>
       _ReadingMaterialDetailsPageState();
 }
 
 class _ReadingMaterialDetailsPageState
-    extends State<ReadingMaterialDetailsPage> {
+    extends ConsumerState<ReadingMaterialDetailsPage> {
   String sectionId = '1';
 
   @override
   Widget build(BuildContext context) {
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -37,10 +37,10 @@ class _ReadingMaterialDetailsPageState
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: TitleBar(
-                title: widget.material[0].title,
+                title: selectedMaterial!.title,
                 description:
-                    'Bilang ng mga salita: ${widget.material[0].wordLength}',
-                secondDescription: 'Language: ${widget.material[0].language}',
+                    'Bilang ng mga salita: ${selectedMaterial.wordLength}',
+                secondDescription: 'Language: ${selectedMaterial.language}',
               ),
             ),
             Padding(
@@ -64,7 +64,7 @@ class _ReadingMaterialDetailsPageState
                             child: Column(
                               children: [
                                 Text(
-                                  widget.material[0].title,
+                                  selectedMaterial.title,
                                   style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
@@ -72,7 +72,7 @@ class _ReadingMaterialDetailsPageState
                                 ),
                                 SizedBox(height: 20),
                                 Text(
-                                  widget.material[0].content,
+                                  selectedMaterial.content,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: 24),
                                 ),
@@ -100,14 +100,14 @@ class _ReadingMaterialDetailsPageState
                             children: [
                               Expanded(
                                 child: ListView.builder(
-                                  itemCount: widget.material[0].question.length,
+                                  itemCount: selectedMaterial.question.length,
                                   itemBuilder: (context, index) {
                                     return Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          widget.material[0].question[index],
+                                          selectedMaterial.question[index],
                                           style: TextStyle(fontSize: 22),
                                         ),
                                         Padding(
@@ -117,8 +117,7 @@ class _ReadingMaterialDetailsPageState
                                                 CrossAxisAlignment.start,
                                             children: [
                                               for (var choice
-                                                  in widget
-                                                      .material[0]
+                                                  in selectedMaterial
                                                       .choice[index]
                                                       .asMap()
                                                       .entries)
