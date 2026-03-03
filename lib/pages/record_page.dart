@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/record_list_builder.dart';
-import 'package:readbee_lite/models/record_state.dart';
+import 'package:readbee_lite/notifiers/record_notifier.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
 class RecordPage extends ConsumerWidget {
