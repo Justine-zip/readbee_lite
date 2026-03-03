@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_animation_transition/animations/right_to_left_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/models/student.dart';
+import 'package:readbee_lite/pages/record_details_page.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
 class StudentListDialog extends ConsumerWidget {
-  final Function()? onTap;
-  StudentListDialog({super.key, this.onTap});
+  StudentListDialog({super.key});
 
   final List<Student> student = [
     Student(
@@ -90,7 +92,15 @@ class StudentListDialog extends ConsumerWidget {
                   child: CustomButton(
                     onTap:
                         (ref.watch(recordProvider).selectedStudent != null)
-                            ? () {}
+                            ? () {
+                              Navigator.push(
+                                context,
+                                PageAnimationTransition(
+                                  page: const RecordDetailsPage(),
+                                  pageAnimationType: RightToLeftTransition(),
+                                ),
+                              );
+                            }
                             : null,
 
                     title: 'Evaluate',

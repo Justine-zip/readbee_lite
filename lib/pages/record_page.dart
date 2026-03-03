@@ -72,13 +72,6 @@ class RecordPage extends ConsumerWidget {
                       return StudentListDialog();
                     },
                   );
-                  // Navigator.push(
-                  //   context,
-                  //   PageAnimationTransition(
-                  //     page: const RecordDetailsPage(),
-                  //     pageAnimationType: RightToLeftTransition(),
-                  //   ),
-                  // );
                 }
               },
             ),

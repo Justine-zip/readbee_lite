@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/components/custom_story_container.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
 class RecordDetailsPage extends ConsumerStatefulWidget {
@@ -48,6 +49,42 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                   ),
                 ),
               ],
+            ),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        children: [
+                          Text('Story', style: TextStyle(fontSize: 40)),
+                          SizedBox(height: 30),
+                          CustomStoryContainer(title: 'Ang Loro ni Lolo Kiko'),
+                          CustomStoryContainer(title: 'Ang Ibong Adarna'),
+                          CustomStoryContainer(title: 'Ang Aso sa Lungga'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  VerticalDivider(thickness: 8),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Story Evaluation',
+                            style: TextStyle(fontSize: 40),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
