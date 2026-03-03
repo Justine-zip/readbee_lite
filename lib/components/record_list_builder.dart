@@ -1,42 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/custom_circular_progress_indicator.dart';
+import 'package:readbee_lite/notifiers/record_notifier.dart';
+import 'package:readbee_lite/providers/record_provider.dart';
+import 'package:readbee_lite/providers/section_provider.dart';
 
-class RecordListBuilder extends StatelessWidget {
-  final String title;
-  final Function(int index)? onTap;
+class RecordListBuilder extends ConsumerWidget {
+  final int itemCount;
+  final List<String> title;
+  final Function(dynamic index)? onTap;
   const RecordListBuilder({
     super.key,
+    required this.itemCount,
     required this.title,
     required this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sections = ref.watch(sectionProvider);
+    final recordState = ref.watch(recordProvider);
     return Expanded(
       child: ListView.builder(
-        itemCount: 8,
+        itemCount: itemCount,
         itemBuilder: (context, index) {
+          final value =
+              recordState.currentStep == RecordStep.section
+                  ? sections[index].section
+                  : title[index];
+
           return Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
             child: Card(
               color: Colors.white,
               clipBehavior: Clip.antiAlias,
               elevation: 2,
               child: InkWell(
-                onTap: () => onTap?.call(index),
+                onTap: () {
+                  onTap?.call(value);
+                },
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(28.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '$title $index',
-                        style: TextStyle(
-                          fontSize: 18,
+                        value,
+                        style: const TextStyle(
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      CustomCircularProgressIndicator(value: .4),
+                      const CustomCircularProgressIndicator(value: .6),
                     ],
                   ),
                 ),
@@ -44,6 +59,7 @@ class RecordListBuilder extends StatelessWidget {
             ),
           );
         },
+        padding: EdgeInsets.only(bottom: 100),
       ),
     );
   }
