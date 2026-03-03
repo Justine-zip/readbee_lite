@@ -18,7 +18,7 @@ class RecordPage extends ConsumerWidget {
     final itemCount = listValue.length;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

@@ -32,7 +32,7 @@ class RecordListBuilder extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
             child: Card(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surfaceContainer,
               clipBehavior: Clip.antiAlias,
               elevation: 2,
               child: InkWell(

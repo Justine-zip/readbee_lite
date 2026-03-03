@@ -15,7 +15,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
   Widget build(BuildContext context) {
     final record = ref.watch(recordProvider);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
