@@ -11,12 +11,21 @@ class CustomCircularProgressIndicator extends StatelessWidget {
       children: [
         Center(
           child: SizedBox(
-            width: 50,
-            height: 50,
-            child: CircularProgressIndicator(color: Colors.amber, value: value),
+            width: 70,
+            height: 70,
+            child: CircularProgressIndicator(
+              color: Colors.amber,
+              value: value,
+              strokeWidth: 5,
+            ),
           ),
         ),
-        Center(child: Text('${(value * 100).toInt()}%')),
+        Center(
+          child: Text(
+            '${(value * 100).toInt()}%',
+            style: TextStyle(fontSize: 22),
+          ),
+        ),
       ],
     );
   }

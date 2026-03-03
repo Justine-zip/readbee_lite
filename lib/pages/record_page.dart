@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_animation_transition/animations/right_to_left_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/record_list_builder.dart';
 import 'package:readbee_lite/notifiers/record_notifier.dart';
+import 'package:readbee_lite/pages/record_details_page.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
 class RecordPage extends ConsumerWidget {
@@ -12,30 +15,9 @@ class RecordPage extends ConsumerWidget {
     final recordState = ref.watch(recordProvider);
     final notifier = ref.read(recordProvider.notifier);
 
-    int itemCount;
-    String title;
-    String listTitle;
-
-    switch (recordState.currentStep) {
-      case RecordStep.grade:
-        itemCount = 6;
-        title = 'Grade Level';
-        listTitle = 'Grade';
-        break;
-
-      case RecordStep.section:
-        itemCount = 4;
-        title = 'Section (Grade ${recordState.selectedGrade})';
-        listTitle = 'Section';
-        break;
-
-      case RecordStep.language:
-        itemCount = 2;
-        title =
-            'Language (G${recordState.selectedGrade} • S${recordState.selectedSection})';
-        listTitle = 'Language';
-        break;
-    }
+    final listValue = notifier.currentOptions;
+    final title = notifier.currentTitle;
+    final itemCount = listValue.length;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -79,17 +61,19 @@ class RecordPage extends ConsumerWidget {
 
             RecordListBuilder(
               itemCount: itemCount,
-              title: listTitle,
+              title: listValue,
               onTap: (value) {
-                if (recordState.currentStep == RecordStep.grade) {
-                  notifier.selectGrade(value);
-                } else if (recordState.currentStep == RecordStep.section) {
-                  notifier.selectSection(value);
-                } else {
-                  debugPrint(
-                    'Grade ${recordState.selectedGrade} | '
-                    'Section ${recordState.selectedSection} | '
-                    'Language $value',
+                final shouldNavigate = notifier.handleSelection(
+                  value.toString(),
+                );
+
+                if (shouldNavigate) {
+                  Navigator.push(
+                    context,
+                    PageAnimationTransition(
+                      page: const RecordDetailsPage(),
+                      pageAnimationType: RightToLeftTransition(),
+                    ),
                   );
                 }
               },
