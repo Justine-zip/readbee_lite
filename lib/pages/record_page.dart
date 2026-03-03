@@ -94,8 +94,6 @@ class RecordPage extends ConsumerWidget {
                 }
               },
             ),
-
-            SizedBox(height: 50),
           ],
         ),
       ),

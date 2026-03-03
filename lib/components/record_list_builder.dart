@@ -46,6 +46,7 @@ class RecordListBuilder extends StatelessWidget {
             ),
           );
         },
+        padding: EdgeInsets.only(bottom: 100),
       ),
     );
   }
