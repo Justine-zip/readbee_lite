@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/providers/section_provider.dart';
 
 enum RecordStep { grade, section, language }
@@ -8,12 +9,15 @@ class RecordState {
   final String? selectedGrade;
   final String? selectedSection;
   final String? selectedLanguage;
+  //final String? selectedStudent;
+  final Student? selectedStudent;
 
   const RecordState({
     this.currentStep = RecordStep.grade,
     this.selectedGrade,
     this.selectedSection,
     this.selectedLanguage,
+    this.selectedStudent,
   });
 
   RecordState copyWith({
@@ -21,12 +25,14 @@ class RecordState {
     String? selectedGrade,
     String? selectedSection,
     String? selectedLanguage,
+    Student? selectedStudent,
   }) {
     return RecordState(
       currentStep: currentStep ?? this.currentStep,
       selectedGrade: selectedGrade ?? this.selectedGrade,
       selectedSection: selectedSection ?? this.selectedSection,
       selectedLanguage: selectedLanguage ?? this.selectedLanguage,
+      selectedStudent: selectedStudent ?? this.selectedStudent,
     );
   }
 }
@@ -53,6 +59,10 @@ class RecordNotifier extends Notifier<RecordState> {
 
   void selectedLanguage(String language) {
     state = state.copyWith(selectedLanguage: language);
+  }
+
+  void selectedStudent(Student student) {
+    state = state.copyWith(selectedStudent: student);
   }
 
   void goBack() {

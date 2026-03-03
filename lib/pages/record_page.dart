@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_animation_transition/animations/right_to_left_transition.dart';
-import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/record_list_builder.dart';
+import 'package:readbee_lite/components/student_list_dialog.dart';
 import 'package:readbee_lite/notifiers/record_notifier.dart';
-import 'package:readbee_lite/pages/record_details_page.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
 class RecordPage extends ConsumerWidget {
@@ -68,13 +66,19 @@ class RecordPage extends ConsumerWidget {
                 );
 
                 if (shouldNavigate) {
-                  Navigator.push(
-                    context,
-                    PageAnimationTransition(
-                      page: const RecordDetailsPage(),
-                      pageAnimationType: RightToLeftTransition(),
-                    ),
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return StudentListDialog();
+                    },
                   );
+                  // Navigator.push(
+                  //   context,
+                  //   PageAnimationTransition(
+                  //     page: const RecordDetailsPage(),
+                  //     pageAnimationType: RightToLeftTransition(),
+                  //   ),
+                  // );
                 }
               },
             ),
