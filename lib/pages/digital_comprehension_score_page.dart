@@ -7,6 +7,7 @@ import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
+import 'package:readbee_lite/layouts/main_layout.dart';
 import 'package:readbee_lite/pages/reading_material_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
@@ -266,7 +267,7 @@ class _DigitalComprehensionScorePageState
                   Navigator.push(
                     context,
                     PageAnimationTransition(
-                      page: TabletReadingMaterialPage(),
+                      page: TabletMainLayout(initialIndex: 2),
                       pageAnimationType: RightToLeftTransition(),
                     ),
                   );
