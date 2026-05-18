@@ -89,7 +89,9 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                                       fontWeight: FontWeight.bold,
                                       color:
                                           wordState.wordColors[index] ??
-                                          Colors.black,
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.tertiary,
                                     ),
                                   );
                                 }),
@@ -111,7 +113,9 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                                       fontSize: 30,
                                       color:
                                           wordState.wordColors[contentIndex] ??
-                                          Colors.black,
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.tertiary,
                                     ),
                                   );
                                 }),

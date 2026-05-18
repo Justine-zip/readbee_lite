@@ -1,3 +1,9 @@
+String comprehensionLevel(int score) {
+  return (score >= 4
+      ? 'Independent'
+      : (score >= 2 ? 'Instructional' : 'Frustration'));
+}
+
 double comprehensionRate(int total, int score) {
   return (score / total) * 100;
 }

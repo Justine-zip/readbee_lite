@@ -8,7 +8,6 @@ import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
-import 'package:readbee_lite/pages/reading_material_page.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
@@ -49,6 +48,7 @@ class _DigitalComprehensionScorePageState
     );
 
     final rate = comprehensionRate(totalQuestions, correct);
+    final level = comprehensionLevel(correct);
     return Stack(
       children: [
         Scaffold(
@@ -92,7 +92,7 @@ class _DigitalComprehensionScorePageState
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ComprehensionScoreBox(
-                                  value: 'Instructional',
+                                  value: level,
                                   subtitle: 'Comprehension Level',
                                 ),
                                 ComprehensionScoreBox(

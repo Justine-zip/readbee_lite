@@ -124,18 +124,23 @@ class _DigitalReadingScorePageState
                             ),
                             CustomReadingScoreRow(
                               title: 'Reading Level',
-                              value:
-                                  '${totalWords(selectedMaterial.content.split(' '))}',
+                              value: readingLevel(
+                                miscues[7].count,
+                                totalWords(
+                                  selectedMaterial.content.split(' ') +
+                                      selectedMaterial.title.split(' '),
+                                ),
+                              ),
                             ),
                             CustomReadingScoreRow(
                               title: 'Word per Minute',
                               value:
-                                  '${totalWords(selectedMaterial.content.split(' '))}',
+                                  '${wordPerMinute(50, totalWords(selectedMaterial.content.split(' ') + selectedMaterial.title.split(' ')))}',
                             ),
                             CustomReadingScoreRow(
                               title: 'Reading Speed',
                               value:
-                                  '${totalWords(selectedMaterial.content.split(' '))}',
+                                  '${classifyReadingSpeed(wordPerMinute(50, totalWords(selectedMaterial.content.split(' ') + selectedMaterial.title.split(' '))))}',
                             ),
                             CustomReadingScoreRow(
                               title: 'Number of Correct Words',
