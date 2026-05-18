@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
-import 'package:readbee_lite/pages/profile_page.dart';
-import 'package:readbee_lite/pages/reading_material_page.dart';
-import 'package:readbee_lite/pages/record_page.dart';
+import 'package:readbee_lite/pages/event/event_page.dart';
+import 'package:readbee_lite/pages/profile/profile_page.dart';
+import 'package:readbee_lite/pages/reading_material/reading_material_page.dart';
+import 'package:readbee_lite/pages/record/record_page.dart';
 
 class MobileMainLayout extends StatefulWidget {
   const MobileMainLayout({super.key});
@@ -140,16 +141,7 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
                   ),
                   RecordPage(),
                   TabletReadingMaterialPage(),
-                  Center(
-                    child: Text(
-                      'E V E N T',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.amber,
-                      ),
-                    ),
-                  ),
+                  EventPage(),
                   TabletProfilePage(),
                 ],
               ),

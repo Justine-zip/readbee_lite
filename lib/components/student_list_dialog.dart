@@ -4,7 +4,7 @@ import 'package:page_animation_transition/animations/right_to_left_transition.da
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/models/student.dart';
-import 'package:readbee_lite/pages/record_details_page.dart';
+import 'package:readbee_lite/pages/record/record_details_page.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
 class StudentListDialog extends ConsumerWidget {

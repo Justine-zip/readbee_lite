@@ -7,7 +7,7 @@ import 'package:readbee_lite/components/custom_reading_score_row.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/utils/digital_reading_score.dart';
-import 'package:readbee_lite/pages/digitral_comprehension_page.dart';
+import 'package:readbee_lite/pages/reading_material/digitral_comprehension_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';

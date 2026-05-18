@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/models/reading_material.dart';
-import 'package:readbee_lite/pages/reading_material_details_page.dart';
+import 'package:readbee_lite/pages/reading_material/reading_material_details_page.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 
 class ReadingMaterialBuilder extends ConsumerWidget {

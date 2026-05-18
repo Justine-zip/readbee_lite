@@ -7,7 +7,7 @@ import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/models/student.dart';
-import 'package:readbee_lite/pages/digital_reading_page.dart';
+import 'package:readbee_lite/pages/reading_material/digital_reading_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 
