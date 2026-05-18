@@ -19,8 +19,56 @@ class DigitralComprehensionPage extends ConsumerStatefulWidget {
 
 class _DigitralComprehensionPageState
     extends ConsumerState<DigitralComprehensionPage> {
-  bool showDIalog = false;
+  bool isDialogShowing = false;
+
   @override
+  void initState() {
+    super.initState();
+
+    ref.listenManual(comprehensionProvider.select((s) => s.isFinished), (
+      previous,
+      next,
+    ) {
+      if (next == true && !isDialogShowing) {
+        isDialogShowing = true;
+
+        Future.microtask(() {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder:
+                (_) => PromptBox(
+                  title: 'Submit Assessment',
+                  subtitle: 'Are you sure you want to submit?',
+                  onCancel: () {
+                    isDialogShowing = false;
+
+                    Navigator.pop(context);
+
+                    ref.read(comprehensionProvider.notifier).resetFinished();
+                  },
+                  onConfirm: () {
+                    isDialogShowing = false;
+
+                    Navigator.pop(context);
+
+                    ref.read(comprehensionProvider.notifier).resetFinished();
+
+                    Navigator.push(
+                      context,
+                      PageAnimationTransition(
+                        page: DigitalComprehensionScorePage(),
+                        pageAnimationType: RightToLeftTransition(),
+                      ),
+                    );
+                  },
+                ),
+          );
+        });
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
     final selectedMaterial = ref.watch(selectedMaterialProvider);
     if (selectedMaterial == null) {
@@ -32,40 +80,6 @@ class _DigitralComprehensionPageState
     final currentIndex = compState.currentQuestionIndex;
     final totalQuestions = selectedMaterial.question.length;
 
-    ref.listen(comprehensionProvider.select((s) => s.isFinished), (
-      previous,
-      next,
-    ) {
-      if (next == true) {
-        if (!showDIalog) {
-          showDIalog = !showDIalog;
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder:
-                (_) => PromptBox(
-                  title: 'Submit Assessment',
-                  subtitle: 'Are you sure you want to submit?',
-                  onCancel: () {
-                    showDIalog = false;
-                    Navigator.pop(context);
-                  },
-                  onConfirm: () {
-                    Navigator.pop(context);
-                    ref.read(comprehensionProvider.notifier).resetFinished();
-                    Navigator.push(
-                      context,
-                      PageAnimationTransition(
-                        page: DigitalComprehensionScorePage(),
-                        pageAnimationType: RightToLeftTransition(),
-                      ),
-                    );
-                  },
-                ),
-          );
-        }
-      }
-    });
     return Stack(
       children: [
         Scaffold(

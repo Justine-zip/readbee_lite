@@ -49,236 +49,252 @@ class _DigitalComprehensionScorePageState
 
     final rate = comprehensionRate(totalQuestions, correct);
     final level = comprehensionLevel(correct);
-    return Stack(
-      children: [
-        Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 30),
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        ref.read(comprehensionProvider.notifier).resetFinished();
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 30),
 
-                PageTitle(title: 'Digital Comprehension'),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: MaterialTitleBar(
-                    name:
-                        'Name: ${eval.selectedStudent?.name ?? 'None selected'}',
-                    gradeSection: 'Grade & Section: ${eval.selectedSection}',
+                  PageTitle(title: 'Digital Comprehension'),
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: MaterialTitleBar(
+                      name:
+                          'Name: ${eval.selectedStudent?.name ?? 'None selected'}',
+                      gradeSection: 'Grade & Section: ${eval.selectedSection}',
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ComprehensionScoreBox(
-                                  value: '$correct',
-                                  subtitle: 'No. of Correct Answer',
-                                ),
-                                ComprehensionScoreBox(
-                                  value: '$wrong',
-                                  subtitle: 'No. of Wrong Answer',
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ComprehensionScoreBox(
-                                  value: level,
-                                  subtitle: 'Comprehension Level',
-                                ),
-                                ComprehensionScoreBox(
-                                  value: '${rate.toStringAsFixed(0)}%',
-                                  subtitle: 'Comprehension Rate',
-                                ),
-                              ],
-                            ),
-                          ],
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ComprehensionScoreBox(
+                                    value: '$correct',
+                                    subtitle: 'No. of Correct Answer',
+                                  ),
+                                  ComprehensionScoreBox(
+                                    value: '$wrong',
+                                    subtitle: 'No. of Wrong Answer',
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ComprehensionScoreBox(
+                                    value: level,
+                                    subtitle: 'Comprehension Level',
+                                  ),
+                                  ComprehensionScoreBox(
+                                    value: '${rate.toStringAsFixed(0)}%',
+                                    subtitle: 'Comprehension Rate',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: Material(
-                        elevation: 3,
-                        clipBehavior: Clip.antiAlias,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                        ),
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * .675,
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: selectedMaterial.question.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            selectedMaterial.question[index],
-                                            style: TextStyle(fontSize: 26),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                for (var choice
-                                                    in selectedMaterial
-                                                        .choice[index]
-                                                        .asMap()
-                                                        .entries)
-                                                  Consumer(
-                                                    builder: (context, ref, _) {
-                                                      final state = ref.watch(
-                                                        wordColorComprehensionProvider,
-                                                      );
-                                                      final answer = ref.watch(
-                                                        comprehensionProvider,
-                                                      );
+                      Expanded(
+                        flex: 5,
+                        child: Material(
+                          elevation: 3,
+                          clipBehavior: Clip.antiAlias,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * .675,
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount:
+                                          selectedMaterial.question.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              selectedMaterial.question[index],
+                                              style: TextStyle(fontSize: 26),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(
+                                                12.0,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  for (var choice
+                                                      in selectedMaterial
+                                                          .choice[index]
+                                                          .asMap()
+                                                          .entries)
+                                                    Consumer(
+                                                      builder: (
+                                                        context,
+                                                        ref,
+                                                        _,
+                                                      ) {
+                                                        final state = ref.watch(
+                                                          wordColorComprehensionProvider,
+                                                        );
+                                                        final answer = ref.watch(
+                                                          comprehensionProvider,
+                                                        );
 
-                                                      final correctAnswer =
-                                                          state.key[index];
-                                                      final studentAnswerValue =
-                                                          answer
-                                                              .selectedAnswers[index];
+                                                        final correctAnswer =
+                                                            state.key[index];
+                                                        final studentAnswerValue =
+                                                            answer
+                                                                .selectedAnswers[index];
 
-                                                      final currentChoiceValue =
-                                                          choice.value;
+                                                        final currentChoiceValue =
+                                                            choice.value;
 
-                                                      Color textColor =
-                                                          Colors.black;
+                                                        Color textColor =
+                                                            Colors.black;
 
-                                                      if (studentAnswerValue !=
-                                                          null) {
-                                                        if (studentAnswerValue ==
-                                                            selectedMaterial
-                                                                .choice[index][correctAnswer]) {
-                                                          if (currentChoiceValue ==
+                                                        if (studentAnswerValue !=
+                                                            null) {
+                                                          if (studentAnswerValue ==
                                                               selectedMaterial
                                                                   .choice[index][correctAnswer]) {
-                                                            textColor =
-                                                                Colors.green;
-                                                          }
-                                                        } else {
-                                                          if (currentChoiceValue ==
-                                                              selectedMaterial
-                                                                  .choice[index][correctAnswer]) {
-                                                            textColor =
-                                                                Colors.green;
-                                                          }
-                                                          if (currentChoiceValue ==
-                                                              studentAnswerValue) {
-                                                            textColor =
-                                                                Colors.red;
+                                                            if (currentChoiceValue ==
+                                                                selectedMaterial
+                                                                    .choice[index][correctAnswer]) {
+                                                              textColor =
+                                                                  Colors.green;
+                                                            }
+                                                          } else {
+                                                            if (currentChoiceValue ==
+                                                                selectedMaterial
+                                                                    .choice[index][correctAnswer]) {
+                                                              textColor =
+                                                                  Colors.green;
+                                                            }
+                                                            if (currentChoiceValue ==
+                                                                studentAnswerValue) {
+                                                              textColor =
+                                                                  Colors.red;
+                                                            }
                                                           }
                                                         }
-                                                      }
 
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              vertical: 4,
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                vertical: 4,
+                                                              ),
+                                                          child: Text(
+                                                            "${String.fromCharCode(65 + choice.key)}. $currentChoiceValue",
+                                                            style: TextStyle(
+                                                              fontSize: 22,
+                                                              color: textColor,
                                                             ),
-                                                        child: Text(
-                                                          "${String.fromCharCode(65 + choice.key)}. $currentChoiceValue",
-                                                          style: TextStyle(
-                                                            fontSize: 22,
-                                                            color: textColor,
                                                           ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                              ],
+                                                        );
+                                                      },
+                                                    ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                    padding: const EdgeInsets.only(bottom: 50),
+                                          ],
+                                        );
+                                      },
+                                      padding: const EdgeInsets.only(
+                                        bottom: 50,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 60),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 60),
+                ],
+              ),
             ),
           ),
-        ),
 
-        //Proceed Button
-        Positioned(
-          bottom: 50,
-          right: 50,
-          child: CustomButton(
-            onTap: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) {
-                  return Dialog(
-                    child: Container(
-                      width: 400,
-                      height: 250,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainer,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Center(
-                          child: Text(
-                            'Congratulations for finishing the evaluation!',
-                            style: const TextStyle(fontSize: 22),
-                            textAlign: TextAlign.center,
+          //Proceed Button
+          Positioned(
+            bottom: 50,
+            right: 50,
+            child: CustomButton(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return Dialog(
+                      child: Container(
+                        width: 400,
+                        height: 250,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(
+                            child: Text(
+                              'Congratulations for finishing the evaluation!',
+                              style: const TextStyle(fontSize: 22),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              );
+                    );
+                  },
+                );
 
-              if (mounted) {
-                Future.delayed(const Duration(seconds: 3), () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    PageAnimationTransition(
-                      page: TabletMainLayout(initialIndex: 2),
-                      pageAnimationType: RightToLeftTransition(),
-                    ),
-                  );
-                });
-              }
-            },
-            title: 'Proceed',
-            size: 200,
+                if (mounted) {
+                  Future.delayed(const Duration(seconds: 3), () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      PageAnimationTransition(
+                        page: TabletMainLayout(initialIndex: 2),
+                        pageAnimationType: RightToLeftTransition(),
+                      ),
+                    );
+                  });
+                }
+              },
+              title: 'Proceed',
+              size: 200,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
