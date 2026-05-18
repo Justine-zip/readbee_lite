@@ -6,7 +6,7 @@ class Section {
   final String? schoolId;
   final String? yearId;
 
-  const Section({
+  Section({
     required this.section,
     required this.sectionId,
     this.teacherId,

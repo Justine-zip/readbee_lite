@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TitleBar extends StatelessWidget {
-  final String title;
-  final String description;
-  final String secondDescription;
-  const TitleBar({
+class MaterialTitleBar extends StatelessWidget {
+  final String name;
+  final String gradeSection;
+  final String teacher;
+  const MaterialTitleBar({
     super.key,
-    required this.title,
-    required this.description,
-    this.secondDescription = '',
+    required this.name,
+    required this.gradeSection,
+    this.teacher = '',
   });
 
   @override
@@ -20,33 +20,32 @@ class TitleBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              name,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
+                fontSize: 22,
               ),
             ),
             SizedBox(height: 8),
             Text(
-              description,
+              gradeSection,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 18,
+                fontSize: 22,
               ),
             ),
-            if (secondDescription != '') ...[
+            if (teacher != '') ...[
               SizedBox(height: 2),
               Text(
-                secondDescription,
+                teacher,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  fontSize: 18,
+                  fontSize: 22,
                 ),
               ),
             ],

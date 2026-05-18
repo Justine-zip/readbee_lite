@@ -94,7 +94,9 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
 }
 
 class TabletMainLayout extends StatefulWidget {
-  const TabletMainLayout({super.key});
+  final int? initialIndex;
+
+  const TabletMainLayout({super.key, this.initialIndex = 0});
 
   @override
   State<TabletMainLayout> createState() => _TabletMainLayoutState();
@@ -118,6 +120,7 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
       },
       child: DefaultTabController(
         length: 5,
+        initialIndex: widget.initialIndex ?? 0,
         child: Stack(
           children: [
             Scaffold(
@@ -185,36 +188,4 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
       ),
     );
   }
-  // int selectedIndex = 0;
-
-  // final pages = const [TabletReadingMaterialPage(), ProfilePage()];
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   debugPrint('Layout: Tablet');
-
-  //   return Scaffold(
-  //     body: Row(
-  //       children: [
-  //         NavigationRail(
-  //           selectedIndex: selectedIndex,
-  //           onDestinationSelected:
-  //               (index) => setState(() => selectedIndex = index),
-  //           labelType: NavigationRailLabelType.all,
-  //           destinations: const [
-  //             NavigationRailDestination(
-  //               icon: Icon(Icons.book),
-  //               label: Text("Books"),
-  //             ),
-  //             NavigationRailDestination(
-  //               icon: Icon(Icons.person),
-  //               label: Text("Profile"),
-  //             ),
-  //           ],
-  //         ),
-  //         Expanded(child: pages[selectedIndex]),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
