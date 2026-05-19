@@ -29,9 +29,35 @@ class _EventPageState extends ConsumerState<EventPage> {
               width: MediaQuery.of(context).size.width * .8,
               child: TableCalendar(
                 calendarStyle: CalendarStyle(
-                  defaultDecoration: BoxDecoration(color: Colors.amber[300]),
+                  todayTextStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                  ),
+
                   defaultTextStyle: TextStyle(
                     color: Theme.of(context).colorScheme.surfaceVariant,
+                  ),
+
+                  // NORMAL DAYS
+                  defaultDecoration: BoxDecoration(
+                    color: Colors.amber[300],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+
+                  // TODAY
+                  todayDecoration: BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+
+                  // SELECTED DAY
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+
+                  selectedTextStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 selectedDayPredicate: (day) {
