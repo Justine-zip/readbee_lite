@@ -13,7 +13,8 @@ class EventPage extends ConsumerStatefulWidget {
 class _EventPageState extends ConsumerState<EventPage> {
   @override
   Widget build(BuildContext context) {
-    final daySelector = ref.watch(selectedDay);
+    final selected = ref.watch(selectedDay);
+    final focused = ref.watch(focusedDayProvider);
 
     return Scaffold(
       body: Column(
@@ -28,12 +29,28 @@ class _EventPageState extends ConsumerState<EventPage> {
               ),
               width: MediaQuery.of(context).size.width * .8,
               child: TableCalendar(
+                calendarBuilders: CalendarBuilders(
+                  outsideBuilder: (context, day, focusedDay) {
+                    return const SizedBox.shrink();
+                  },
+                ),
+
+                headerStyle: HeaderStyle(formatButtonVisible: false),
                 calendarStyle: CalendarStyle(
                   todayTextStyle: TextStyle(
                     color: Theme.of(context).colorScheme.surfaceVariant,
                   ),
 
                   defaultTextStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                  ),
+
+                  weekendDecoration: BoxDecoration(
+                    color: Colors.amber[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+
+                  weekendTextStyle: TextStyle(
                     color: Theme.of(context).colorScheme.surfaceVariant,
                   ),
 
@@ -61,16 +78,21 @@ class _EventPageState extends ConsumerState<EventPage> {
                   ),
                 ),
                 selectedDayPredicate: (day) {
-                  return isSameDay(daySelector, day);
+                  return isSameDay(selected, day);
                 },
 
                 onDaySelected: (pickedDay, focusedDay) {
                   ref.read(selectedDay.notifier).state = pickedDay;
+                  ref.read(focusedDayProvider.notifier).state = focusedDay;
+                },
+
+                onPageChanged: (focusedDay) {
+                  ref.read(focusedDayProvider.notifier).state = focusedDay;
                 },
 
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: daySelector,
+                focusedDay: focused,
               ),
             ),
           ),
