@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:readbee_lite/providers/calendar_event_provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventPage extends ConsumerWidget {
   const EventPage({super.key});
