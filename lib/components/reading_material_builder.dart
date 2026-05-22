@@ -33,17 +33,17 @@ class ReadingMaterialBuilder extends ConsumerWidget {
                       ref.read(selectedMaterialProvider.notifier).state =
                           material[index];
                       debugPrint('Book: ${material[index].title}');
-                      debugPrint('WordLength: ${material[index].wordLength}');
-                      debugPrint(
-                        'questionLength: ${material[index].question.length}',
-                      );
-                      Navigator.push(
-                        context,
-                        PageAnimationTransition(
-                          page: ReadingMaterialDetailsPage(),
-                          pageAnimationType: RightToLeftTransition(),
-                        ),
-                      );
+                      debugPrint('WordLength: ${material[index].wordCount}');
+                      // debugPrint(
+                      //   'questionLength: ${material[index].question.length}',
+                      // );
+                      // Navigator.push(
+                      //   context,
+                      //   PageAnimationTransition(
+                      //     page: ReadingMaterialDetailsPage(),
+                      //     pageAnimationType: RightToLeftTransition(),
+                      //   ),
+                      // );
                     },
                     child: Container(
                       decoration: BoxDecoration(

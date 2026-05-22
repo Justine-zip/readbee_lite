@@ -1,63 +1,61 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 
-final readingMaterialProvider = Provider<List<ReadingMaterial>>((ref) {
-  return [
-    ReadingMaterial(
-      title: 'Ang Aso sa Lungga',
-      content: 'May isang asong gutom na gutom na naglalakad sa kalsada.',
-      language: 'Tagalog',
-      question: [
-        'Saan nangyari ang kuwento?',
-        'Ano ang hinahanap ng aso?',
-        'Anong ugali ang ipinakita ng aso?',
-        'Bakit hindi makalabas ang aso so lungga?',
-        'Bakit kayo hindi siya natulungan ng isa pang aso?',
-      ],
-      choice: [
-        ['bukid', 'gubat', 'kalsada', 'lansangan'],
-        ['makakain', 'makakasama', 'mapapasyalan', 'matutulugan'],
-        ['madamot', 'matakaw', 'masipag', 'mayabang'],
-        [
-          'may harang ang labasan',
-          'may bitbit pa siyang pagkain',
-          'lubos no marami ang kinain niya',
-          'mali ang paraan ng paglabas niya',
-        ],
-        [
-          'natakot sa kanya ang aso',
-          'para matuto siya sa pangyayari',
-          'nainggit sa kanya ang isa pang aso',
-          'hindi rin ito makakalabas sa lungga',
-        ],
-      ],
-      key: [2, 0, 1, 2, 1],
-      wordLength: 47,
-      storyId: 1,
-      quizId: 1,
-    ),
-    ReadingMaterial(
-      title: 'Ang Loro ni Lolo Kiko',
-      content: 'May loro si Lolo Kiko. Nagsasalita ang loro ni Lolo.',
-      language: 'Tagalog',
-      question: [
-        'Ano ang alaga ni Lolo Kiko? (Literal)',
-        'Ano ang paborito ng alaga ni Lolo? (Literal)',
-        'Ano kaya ang naramdaman ni Lolo nang mawala ang loro? (Paghinuha)',
-        'Saan kaya naganap ang kuwento? (Paghinuha)',
-        'Ano ang isa pang magandang pamagat sa kuwento? (Pagsusuri)',
-      ],
-      choice: [
-        ['aso', 'loro', 'pusa'],
-        ['makalipad sa puno', 'makatikim ng keso', 'makausap si Lolo Kiko'],
-        ['masaya', 'malungkot', 'nagalit'],
-        ['bahay', 'gubat', 'paaralan'],
-        ['Si Lolo Kiko', 'Ang Loro sa Puno', 'Ang Alagang Loro'],
-      ],
-      key: [1, 1, 1, 0, 2],
-      wordLength: 29,
-      storyId: 2,
-      quizId: 2,
-    ),
-  ];
+final readingMaterialProvider = FutureProvider<List<ReadingMaterial>>((
+  ref,
+) async {
+  final supabase = Supabase.instance.client;
+
+  final response = await supabase.from('reading_materials').select('''
+        *,
+        stories (
+          content,
+          language,
+          word_count
+        ),
+        quizzes (
+          quiz_questions (
+            question_text,
+            choices,
+            correct_answer
+          )
+        )
+      ''');
+
+  return response.map<ReadingMaterial>((json) {
+    final story = json['stories'];
+    final quiz = json['quizzes'];
+    final questions = quiz?['quiz_questions'] as List? ?? [];
+
+    return ReadingMaterial(
+      // reading_materials
+      materialId: json['material_id'] ?? '',
+
+      title: json['title'] ?? '',
+
+      description: json['description'],
+
+      coverImage: json['cover_image'] ?? '',
+
+      wordCount: json['word_count'],
+
+      gradeLevelId: json['grade_level_id'].toString(),
+
+      uploadedBy: json['uploaded_by'].toString(),
+
+      approvedBy: json['approved_by'].toString(),
+
+      status: json['status'] ?? 'draft',
+
+      schoolId: json['school_id'].toString(),
+
+      language: story?['language'] ?? json['language'] ?? '',
+
+      storyId: json['story_id'] ?? '',
+
+      // quizzes
+      quizId: json['quiz_id'] ?? '',
+    );
+  }).toList();
 });

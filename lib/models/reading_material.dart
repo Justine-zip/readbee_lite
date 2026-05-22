@@ -1,37 +1,49 @@
 class ReadingMaterial {
+  final String materialId;
   final String title;
-  final String content;
+  final String description;
+  final String coverImage;
   final String language;
-  final List<String> question;
-  final List<List<String>> choice;
-  final List<int> key;
-  final int wordLength;
-  final int storyId;
-  final int quizId;
+  final int wordCount;
+  final String gradeLevelId;
+  final String storyId;
+  final String quizId;
+  final String uploadedBy;
+  final String approvedBy;
+  final String status;
+  final String schoolId;
 
   ReadingMaterial({
+    required this.materialId,
     required this.title,
-    required this.content,
+    required this.description,
+    required this.coverImage,
     required this.language,
-    required this.question,
-    required this.choice,
-    required this.key,
-    required this.wordLength,
+    required this.wordCount,
+    required this.gradeLevelId,
     required this.storyId,
     required this.quizId,
+    required this.uploadedBy,
+    required this.approvedBy,
+    required this.status,
+    required this.schoolId,
   });
 
   factory ReadingMaterial.fromMap(Map<String, dynamic> json) {
     return ReadingMaterial(
+      materialId: json['material_id'],
       title: json['title'],
-      content: json['content'],
+      description: json['description'],
+      coverImage: json['cover_image'] ?? '',
       language: json['language'],
-      question: json['question'],
-      choice: json['choice'],
-      key: json['key'],
-      wordLength: json['wordLength'],
-      storyId: json['storyId'],
-      quizId: json['quizId'],
+      wordCount: json['word_count'],
+      gradeLevelId: json['grade_level_id'],
+      storyId: json['story_id'],
+      quizId: json['quiz_id'],
+      uploadedBy: json['uploaded_by'],
+      approvedBy: json['approved_by'],
+      status: json['status'],
+      schoolId: json['school_id'],
     );
   }
 }

@@ -25,7 +25,7 @@ class _MobileReadingMaterialPageState
   void initState() {
     super.initState();
     ref.read(evaluationProvider.notifier).reset();
-    ref.read(wordColorMaterialProvider.notifier).reset();
+    // ref.read(wordColorMaterialProvider.notifier).reset();
     ref.read(miscueProvider.notifier).reset();
     ref.read(comprehensionProvider.notifier).reset();
   }
@@ -122,7 +122,7 @@ class _TabletReadingMaterialPageState
 
     Future.microtask(() {
       ref.invalidate(evaluationProvider);
-      ref.invalidate(wordColorMaterialProvider);
+      // ref.invalidate(wordColorMaterialProvider);
       ref.invalidate(miscueProvider);
       ref.invalidate(comprehensionProvider);
     });
@@ -169,7 +169,15 @@ class _TabletReadingMaterialPageState
               ),
             ),
             const SizedBox(height: 10),
-            ReadingMaterialBuilder(material: material),
+            material.when(
+              loading: () => Center(child: CircularProgressIndicator()),
+              data: (data) {
+                return ReadingMaterialBuilder(material: data);
+              },
+              error:
+                  (error, stackTrace) => Center(child: Text(error.toString())),
+            ),
+            // ReadingMaterialBuilder(material: material),
           ],
         ),
       ),
