@@ -25,8 +25,6 @@ final readingMaterialProvider = FutureProvider<List<ReadingMaterial>>((
 
   return response.map<ReadingMaterial>((json) {
     final story = json['stories'];
-    final quiz = json['quizzes'];
-    final questions = quiz?['quiz_questions'] as List? ?? [];
 
     return ReadingMaterial(
       // reading_materials

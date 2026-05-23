@@ -36,16 +36,20 @@ class ReadingMaterialBuilder extends ConsumerWidget {
                     onTap: () {
                       ref.read(selectedMaterialProvider.notifier).state = item;
 
+                      debugPrint('MaterialId: ${item.materialId}');
                       debugPrint('Book: ${item.title}');
+                      debugPrint('Description: ${item.description}');
+                      debugPrint('Language: ${item.language}');
                       debugPrint('WordLength: ${item.wordCount}');
+                      debugPrint('StoryId: ${item.storyId}');
 
-                      // Navigator.push(
-                      //   context,
-                      //   PageAnimationTransition(
-                      //     page: ReadingMaterialDetailsPage(),
-                      //     pageAnimationType: RightToLeftTransition(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        PageAnimationTransition(
+                          page: ReadingMaterialDetailsPage(),
+                          pageAnimationType: RightToLeftTransition(),
+                        ),
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
