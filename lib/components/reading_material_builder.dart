@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
@@ -25,18 +27,18 @@ class ReadingMaterialBuilder extends ConsumerWidget {
           ),
           padding: const EdgeInsets.only(bottom: 150),
           itemBuilder: (context, index) {
+            final item = material[index];
+
             return Column(
               children: [
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      ref.read(selectedMaterialProvider.notifier).state =
-                          material[index];
-                      debugPrint('Book: ${material[index].title}');
-                      debugPrint('WordLength: ${material[index].wordCount}');
-                      // debugPrint(
-                      //   'questionLength: ${material[index].question.length}',
-                      // );
+                      ref.read(selectedMaterialProvider.notifier).state = item;
+
+                      debugPrint('Book: ${item.title}');
+                      debugPrint('WordLength: ${item.wordCount}');
+
                       // Navigator.push(
                       //   context,
                       //   PageAnimationTransition(
@@ -49,15 +51,25 @@ class ReadingMaterialBuilder extends ConsumerWidget {
                       decoration: BoxDecoration(
                         border: Border.all(),
                         borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: MemoryImage(
+                            base64Decode(item.coverImage.split(',').last),
+                          ),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
                 ),
+
+                const SizedBox(height: 8),
+
                 Text(
-                  material[index].title,
+                  item.title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 22),
+                  style: const TextStyle(fontSize: 22),
                   maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             );
