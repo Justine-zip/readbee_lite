@@ -342,13 +342,13 @@ class EvaluationListDialog extends ConsumerWidget {
                             : () {
                               notifier.evaluate();
                               Navigator.pop(context);
-                              // Navigator.push(
-                              //   context,
-                              //   PageAnimationTransition(
-                              //     page: DigitalReadingPage(),
-                              //     pageAnimationType: RightToLeftTransition(),
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                PageAnimationTransition(
+                                  page: DigitalReadingPage(),
+                                  pageAnimationType: RightToLeftTransition(),
+                                ),
+                              );
                             },
                     title: 'Evaluate',
                     size: 150,

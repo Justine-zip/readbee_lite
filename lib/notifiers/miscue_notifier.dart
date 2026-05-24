@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/models/miscue.dart';
 
-class MiscueNotifier extends Notifier<List<Miscue>> {
+class MiscueNotifier extends AutoDisposeNotifier<List<Miscue>> {
   @override
   List<Miscue> build() {
     return [

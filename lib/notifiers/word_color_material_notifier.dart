@@ -1,66 +1,92 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:readbee_lite/providers/selected_material_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/providers/story_provider.dart';
 
-// class WordColorMaterialState {
-//   final int currentIndex;
-//   final List<Color?> wordColors;
-//   final bool isFinished;
+class WordColorMaterialState {
+  final int currentIndex;
+  final List<Color?> wordColors;
+  final bool isFinished;
 
-//   WordColorMaterialState({
-//     required this.currentIndex,
-//     required this.wordColors,
-//     required this.isFinished,
-//   });
+  WordColorMaterialState({
+    required this.currentIndex,
+    required this.wordColors,
+    required this.isFinished,
+  });
 
-//   WordColorMaterialState copyWith({
-//     int? currentIndex,
-//     List<Color?>? wordColors,
-//     bool? isFinished,
-//   }) {
-//     return WordColorMaterialState(
-//       currentIndex: currentIndex ?? this.currentIndex,
-//       wordColors: wordColors ?? this.wordColors,
-//       isFinished: isFinished ?? this.isFinished,
-//     );
-//   }
-// }
+  WordColorMaterialState copyWith({
+    int? currentIndex,
+    List<Color?>? wordColors,
+    bool? isFinished,
+  }) {
+    return WordColorMaterialState(
+      currentIndex: currentIndex ?? this.currentIndex,
+      wordColors: wordColors ?? this.wordColors,
+      isFinished: isFinished ?? this.isFinished,
+    );
+  }
+}
 
-// class WordColorMaterialNotifier extends Notifier<WordColorMaterialState> {
-//   @override
-//   WordColorMaterialState build() {
-//     final selectedMaterial = ref.watch(selectedMaterialProvider);
+class WordColorMaterialNotifier
+    extends AutoDisposeNotifier<WordColorMaterialState> {
+  @override
+  WordColorMaterialState build() {
+    final storyAsync = ref.watch(storyProvider);
 
-//     final fullText = '${selectedMaterial?.title} ${selectedMaterial?.content}';
+    return storyAsync.when(
+      data: (story) {
+        if (story == null) {
+          return WordColorMaterialState(
+            currentIndex: 0,
+            wordColors: [],
+            isFinished: false,
+          );
+        }
 
-//     final words = fullText.split(' ');
+        final fullText = '${story.title} ${story.content}';
+        final words = fullText.split(RegExp(r'\s+'));
 
-//     return WordColorMaterialState(
-//       currentIndex: 0,
-//       wordColors: List.generate(words.length, (_) => null),
-//       isFinished: false,
-//     );
-//   }
+        return WordColorMaterialState(
+          currentIndex: 0,
+          wordColors: List.generate(words.length, (_) => null),
+          isFinished: false,
+        );
+      },
 
-//   void applyColor(Color color) {
-//     final updatedColors = [...state.wordColors];
-//     updatedColors[state.currentIndex] = color;
+      loading:
+          () => WordColorMaterialState(
+            currentIndex: 0,
+            wordColors: [],
+            isFinished: false,
+          ),
 
-//     final nextIndex = state.currentIndex + 1;
-//     final finished = nextIndex >= state.wordColors.length;
+      error:
+          (_, __) => WordColorMaterialState(
+            currentIndex: 0,
+            wordColors: [],
+            isFinished: false,
+          ),
+    );
+  }
 
-//     state = state.copyWith(
-//       wordColors: updatedColors,
-//       currentIndex: nextIndex,
-//       isFinished: finished,
-//     );
-//   }
+  void applyColor(Color color) {
+    final updatedColors = [...state.wordColors];
+    updatedColors[state.currentIndex] = color;
 
-//   void reset() {
-//     state = state.copyWith(
-//       currentIndex: 0,
-//       wordColors: List.generate(state.wordColors.length, (_) => null),
-//       isFinished: false,
-//     );
-//   }
-// }
+    final nextIndex = state.currentIndex + 1;
+    final finished = nextIndex >= state.wordColors.length;
+
+    state = state.copyWith(
+      wordColors: updatedColors,
+      currentIndex: nextIndex,
+      isFinished: finished,
+    );
+  }
+
+  void reset() {
+    state = state.copyWith(
+      currentIndex: 0,
+      wordColors: List.generate(state.wordColors.length, (_) => null),
+      isFinished: false,
+    );
+  }
+}
