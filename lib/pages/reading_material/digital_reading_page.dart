@@ -9,6 +9,7 @@ import 'package:readbee_lite/pages/reading_material/digital_reading_score_page.d
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/providers/timer_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
 
 class DigitalReadingPage extends ConsumerStatefulWidget {
@@ -31,6 +32,11 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
 
     final wordState = ref.watch(wordColorMaterialProvider);
 
+    final seconds = ref.watch(timerProvider);
+
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final secs = (seconds % 60).toString().padLeft(2, '0');
+
     return storyAsync.when(
       data: (story) {
         if (story == null) {
@@ -51,8 +57,8 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
 
                   //Timer
                   Text(
-                    '00:00',
-                    style: TextStyle(
+                    '$minutes:$secs',
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
@@ -167,6 +173,14 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                             onTap: () {
                               final miscue = miscues[index];
 
+                              final started = ref.read(timerStartedProvider);
+
+                              if (!started) {
+                                ref.read(timerStartedProvider.notifier).state =
+                                    true;
+                                ref.read(timerProvider.notifier).start();
+                              }
+
                               ref
                                   .read(miscueProvider.notifier)
                                   .increment(index);
@@ -223,6 +237,9 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                   onTap: () {
                     ref.read(miscueProvider.notifier).reset();
                     ref.read(wordColorMaterialProvider.notifier).reset();
+
+                    ref.read(timerProvider.notifier).reset();
+                    ref.read(timerStartedProvider.notifier).state = false;
                   },
                   iconSize: 18,
                   iconColor: Colors.white,

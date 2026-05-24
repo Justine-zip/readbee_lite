@@ -10,7 +10,6 @@ import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/pages/reading_material/digital_reading_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
 
 class ReadingMaterialDetailsPage extends ConsumerStatefulWidget {

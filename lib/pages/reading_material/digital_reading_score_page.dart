@@ -12,6 +12,7 @@ import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/providers/timer_provider.dart';
 
 class DigitalReadingScorePage extends ConsumerStatefulWidget {
   const DigitalReadingScorePage({super.key});
@@ -147,13 +148,17 @@ class _DigitalReadingScorePageState
                                 CustomReadingScoreRow(
                                   title: 'Word per Minute',
                                   value:
-                                      '${wordPerMinute(50, totalWords(story.content.split(RegExp(r'\s+')) + story.title.split(RegExp(r'\s+'))))}',
+                                      '${wordPerMinute(ref.read(timerProvider.notifier).elapsed.inSeconds.toDouble(), totalWords(story.content.split(RegExp(r'\s+')) + story.title.split(RegExp(r'\s+'))))}',
                                 ),
                                 CustomReadingScoreRow(
                                   title: 'Reading Speed',
                                   value: classifyReadingSpeed(
                                     wordPerMinute(
-                                      50,
+                                      ref
+                                          .read(timerProvider.notifier)
+                                          .elapsed
+                                          .inSeconds
+                                          .toDouble(),
                                       totalWords(
                                         story.content.split(RegExp(r'\s+')) +
                                             story.title.split(RegExp(r'\s+')),

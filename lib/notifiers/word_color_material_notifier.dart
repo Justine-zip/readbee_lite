@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/providers/timer_provider.dart';
 
 class WordColorMaterialState {
   final int currentIndex;
@@ -80,6 +81,11 @@ class WordColorMaterialNotifier
       currentIndex: nextIndex,
       isFinished: finished,
     );
+
+    if (finished) {
+      ref.read(timerProvider.notifier).stop();
+      debugPrint('TimeElapsed: ${ref.read(timerProvider.notifier).elapsed}');
+    }
   }
 
   void reset() {
