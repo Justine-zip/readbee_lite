@@ -11,6 +11,7 @@ import 'package:readbee_lite/pages/reading_material/digitral_comprehension_page.
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
+import 'package:readbee_lite/providers/story_provider.dart';
 
 class DigitalReadingScorePage extends ConsumerStatefulWidget {
   const DigitalReadingScorePage({super.key});
@@ -27,6 +28,7 @@ class _DigitalReadingScorePageState
     final eval = ref.watch(evaluationProvider);
     final miscues = ref.watch(miscueProvider);
     final selectedMaterial = ref.watch(selectedMaterialProvider);
+    final storyAsync = ref.watch(storyProvider);
 
     if (selectedMaterial == null) {
       return const CircularProgressIndicator();
@@ -109,46 +111,68 @@ class _DigitalReadingScorePageState
                         ),
                       ),
                       SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 24.0, right: 100),
-                        child: Column(
-                          children: [
-                            CustomReadingScoreRow(
-                              title: 'Total Miscue',
-                              value: '${totalMiscueCount(miscues)}',
+                      storyAsync.when(
+                        data: (story) {
+                          if (story == null) {
+                            return const CircularProgressIndicator();
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              left: 24.0,
+                              right: 100,
                             ),
-                            // CustomReadingScoreRow(
-                            //   title: 'Number of Words in the Passage',
-                            //   value:
-                            //       '${totalWords(selectedMaterial.content.split(' ') + selectedMaterial.title.split(' '))}',
-                            // ),
-                            // CustomReadingScoreRow(
-                            //   title: 'Reading Level',
-                            //   value: readingLevel(
-                            //     miscues[7].count,
-                            //     totalWords(
-                            //       selectedMaterial.content.split(' ') +
-                            //           selectedMaterial.title.split(' '),
-                            //     ),
-                            //   ),
-                            // ),
-                            // CustomReadingScoreRow(
-                            //   title: 'Word per Minute',
-                            //   value:
-                            //       '${wordPerMinute(50, totalWords(selectedMaterial.content.split(' ') + selectedMaterial.title.split(' ')))}',
-                            // ),
-                            // CustomReadingScoreRow(
-                            //   title: 'Reading Speed',
-                            //   value:
-                            //       '${classifyReadingSpeed(wordPerMinute(50, totalWords(selectedMaterial.content.split(' ') + selectedMaterial.title.split(' '))))}',
-                            // ),
-                            CustomReadingScoreRow(
-                              title: 'Number of Correct Words',
-                              value: '${miscues[7].count}',
+                            child: Column(
+                              children: [
+                                CustomReadingScoreRow(
+                                  title: 'Total Miscue',
+                                  value: '${totalMiscueCount(miscues)}',
+                                ),
+                                CustomReadingScoreRow(
+                                  title: 'Number of Words in the Passage',
+                                  value:
+                                      '${totalWords(story.content.split(RegExp(r'\s+')) + selectedMaterial.title.split(RegExp(r'\s+')))}',
+                                ),
+                                CustomReadingScoreRow(
+                                  title: 'Reading Level',
+                                  value: readingLevel(
+                                    miscues[7].count,
+                                    totalWords(
+                                      story.content.split(RegExp(r'\s+')) +
+                                          selectedMaterial.title.split(
+                                            RegExp(r'\s+'),
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                CustomReadingScoreRow(
+                                  title: 'Word per Minute',
+                                  value:
+                                      '${wordPerMinute(50, totalWords(story.content.split(RegExp(r'\s+')) + story.title.split(RegExp(r'\s+'))))}',
+                                ),
+                                CustomReadingScoreRow(
+                                  title: 'Reading Speed',
+                                  value: classifyReadingSpeed(
+                                    wordPerMinute(
+                                      50,
+                                      totalWords(
+                                        story.content.split(RegExp(r'\s+')) +
+                                            story.title.split(RegExp(r'\s+')),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                CustomReadingScoreRow(
+                                  title: 'Number of Correct Words',
+                                  value: '${miscues[7].count}',
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        },
+                        loading: () => const CircularProgressIndicator(),
+                        error: (e, _) => Text(e.toString()),
                       ),
+
                       SizedBox(height: 120),
                     ],
                   ),
