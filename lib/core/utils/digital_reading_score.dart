@@ -16,6 +16,7 @@ String readingLevel(int score, int totalWords) {
 }
 
 int wordPerMinute(double time, int readWords) {
+  if (time <= 0) return 0;
   return ((readWords / time) * 60).toInt();
 }
 

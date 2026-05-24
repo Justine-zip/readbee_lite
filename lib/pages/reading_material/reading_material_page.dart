@@ -8,6 +8,7 @@ import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
+import 'package:readbee_lite/providers/timer_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
 
 class MobileReadingMaterialPage extends ConsumerStatefulWidget {
@@ -28,6 +29,8 @@ class _MobileReadingMaterialPageState
     ref.read(wordColorMaterialProvider.notifier).reset();
     ref.read(miscueProvider.notifier).reset();
     ref.read(comprehensionProvider.notifier).reset();
+    ref.read(timerProvider.notifier).reset();
+    ref.read(timerStartedProvider.notifier).state = false;
   }
 
   @override
@@ -125,6 +128,8 @@ class _TabletReadingMaterialPageState
       ref.invalidate(wordColorMaterialProvider);
       ref.invalidate(miscueProvider);
       ref.invalidate(comprehensionProvider);
+      ref.read(timerProvider.notifier).reset();
+      ref.read(timerStartedProvider.notifier).state = false;
     });
   }
 
