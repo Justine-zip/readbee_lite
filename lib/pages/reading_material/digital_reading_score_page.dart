@@ -187,13 +187,13 @@ class _DigitalReadingScorePageState
           right: 50,
           child: CustomButton(
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   PageAnimationTransition(
-              //     page: DigitralComprehensionPage(),
-              //     pageAnimationType: RightToLeftTransition(),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                PageAnimationTransition(
+                  page: DigitralComprehensionPage(),
+                  pageAnimationType: RightToLeftTransition(),
+                ),
+              );
             },
             title: 'Proceed',
             size: 150,

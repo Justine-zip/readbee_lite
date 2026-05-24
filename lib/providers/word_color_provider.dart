@@ -7,7 +7,7 @@ final wordColorMaterialProvider = NotifierProvider.autoDispose<
   WordColorMaterialState
 >(WordColorMaterialNotifier.new);
 
-// final wordColorComprehensionProvider = NotifierProvider<
-//   WordColorComprehensionNotifier,
-//   WordColorComprehensionState
-// >(WordColorComprehensionNotifier.new);
+final wordColorComprehensionProvider = NotifierProvider<
+  WordColorComprehensionNotifier,
+  WordColorComprehensionState
+>(WordColorComprehensionNotifier.new);

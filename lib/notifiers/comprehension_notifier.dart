@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ComprehensionState {
@@ -46,6 +47,7 @@ class ComprehensionNotifier extends StateNotifier<ComprehensionState> {
       );
     } else {
       state = state.copyWith(selectedAnswers: updatedAnswers, isFinished: true);
+      debugPrint('AnswersDebug: $updatedAnswers');
     }
   }
 
