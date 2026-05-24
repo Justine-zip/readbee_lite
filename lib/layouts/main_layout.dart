@@ -4,6 +4,7 @@ import 'package:readbee_lite/pages/event/event_page.dart';
 import 'package:readbee_lite/pages/profile/profile_page.dart';
 import 'package:readbee_lite/pages/reading_material/reading_material_page.dart';
 import 'package:readbee_lite/pages/record/record_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MobileMainLayout extends StatefulWidget {
   const MobileMainLayout({super.key});
@@ -107,6 +108,8 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
   @override
   Widget build(BuildContext context) {
     debugPrint('Layout: Tablet');
+    debugPrint('usserData: ${Supabase.instance.client.auth.currentUser!.id}');
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
