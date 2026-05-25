@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
 import 'package:readbee_lite/layouts/responsive.dart';
 import 'package:readbee_lite/pages/auth/login_page.dart';
+import 'package:readbee_lite/pages/auth/status_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthGate extends StatelessWidget {
@@ -25,10 +26,7 @@ class AuthGate extends StatelessWidget {
         final session = snapshot.hasData ? snapshot.data!.session : null;
 
         if (session != null) {
-          return Responsive(
-            mobile: MobileMainLayout(),
-            tablet: TabletMainLayout(),
-          );
+          return StatusPage();
         } else {
           return TabletLoginPage();
         }

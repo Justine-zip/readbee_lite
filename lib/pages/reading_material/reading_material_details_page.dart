@@ -8,6 +8,7 @@ import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/pages/reading_material/digital_reading_page.dart';
+import 'package:readbee_lite/providers/calendar_event_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/pupil_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
@@ -165,8 +166,53 @@ class _ReadingMaterialDetailsPageState
                                       ),
 
                                       CustomButton(
-                                        onTap: () {
+                                        onTap: () async {
                                           debugPrint('Tapped');
+
+                                          final appointmentsAsync = ref.read(
+                                            appointmentsProvider,
+                                          );
+
+                                          final appointments =
+                                              appointmentsAsync.value;
+
+                                          if (appointments == null) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Loading appointments...',
+                                                ),
+                                              ),
+                                            );
+                                            return;
+                                          }
+
+                                          final now = DateTime.now();
+
+                                          final hasTodayAppointment =
+                                              appointments.any((a) {
+                                                return a.startTime.year ==
+                                                        now.year &&
+                                                    a.startTime.month ==
+                                                        now.month &&
+                                                    a.startTime.day == now.day;
+                                              });
+
+                                          if (!hasTodayAppointment) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'No appointment for today',
+                                                ),
+                                              ),
+                                            );
+                                            return;
+                                          }
+
                                           evaluationList(context);
                                         },
                                         title: 'Proceed',

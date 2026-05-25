@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/providers/assignment.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -10,11 +11,17 @@ final selectedDay = StateProvider<DateTime>((ref) {
 final appointmentsProvider = FutureProvider<List<Appointment>>((ref) async {
   final supabase = Supabase.instance.client;
 
+  final assignment = await ref.watch(assignmentProvider.future);
+
   final response = await supabase
       .from('assessment_schedules')
-      .select('assessment_date, status');
+      .select(
+        'assessment_date, status, assigned_evaluators!inner(confirmation_status)',
+      )
+      .eq('schedule_id', assignment!.scheduleId)
+      .eq('assigned_evaluators.confirmation_status', 'confirmed');
 
-  debugPrint('res: $response');
+  debugPrint('calendarData: $response');
 
   final data = response as List<dynamic>? ?? [];
 

@@ -9,6 +9,7 @@ import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/services/assessment_record_service.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
+import 'package:readbee_lite/providers/assignment.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
@@ -265,10 +266,12 @@ class _DigitalComprehensionScorePageState
                       final material = ref.read(selectedMaterialProvider);
 
                       final readingScore = ref.watch(readingScoreProvider);
+                      final assignment = ref.read(assignmentProvider).value;
 
                       if (selectedStudent == null ||
                           material == null ||
-                          readingScore == null) {
+                          readingScore == null ||
+                          assignment == null) {
                         return;
                       }
 
@@ -295,8 +298,10 @@ class _DigitalComprehensionScorePageState
                         pupilId: selectedStudent.studentId,
                         evaluatorUserId: userId,
                         materialId: material.materialId,
-                        yearId: '7e9fb520-5f27-48fd-9c70-37c72b9e1879',
-                        quarterId: '156ab61c-8329-44cc-a72c-2a374c40570a',
+                        scheduleId: assignment.scheduleId,
+                        assignmentId: assignment.assignmentId,
+                        yearId: assignment.yearId,
+                        quarterId: assignment.quarterId,
                         assessmentMethod: 'Digital',
                         assessmentType: 'Comprehension',
                         readingScore: readingScore,
