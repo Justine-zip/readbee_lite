@@ -9,7 +9,9 @@ import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/pages/reading_material/digital_reading_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/providers/pupil_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/providers/section_provider.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
 
 class ReadingMaterialDetailsPage extends ConsumerStatefulWidget {
@@ -200,164 +202,184 @@ class _ReadingMaterialDetailsPageState
 class EvaluationListDialog extends ConsumerWidget {
   EvaluationListDialog({super.key});
 
-  final List<Section> sections = [
-    Section(section: 'Sampaguita', sectionId: '1'),
-    Section(section: 'Tulips', sectionId: '2'),
-    Section(section: 'Rosas', sectionId: '3'),
-    Section(section: 'Emerald', sectionId: '4'),
-    Section(section: 'Ilang-Ilang', sectionId: '5'),
-  ];
-
-  final List<Student> student = [
-    Student(
-      name: 'Denmark Cabanhao',
-      lrn: '0121',
-      sectionId: '1',
-      studentId: '1',
-    ),
-    Student(name: 'Romeo Ezguera', lrn: '0740', sectionId: '1', studentId: '2'),
-    Student(name: 'Kori Sanchez', lrn: '0321', sectionId: '1', studentId: '3'),
-    Student(name: 'Bill Fraud', lrn: '0353', sectionId: '2', studentId: '4'),
-    Student(
-      name: 'Juan Dela Cruz',
-      lrn: '0586',
-      sectionId: '2',
-      studentId: '5',
-    ),
-    Student(name: 'Ezra Ramirez', lrn: '0835', sectionId: '3', studentId: '6'),
-    Student(name: 'Tanya Suami', lrn: '0035', sectionId: '3', studentId: '7'),
-    Student(
-      name: 'Ralph Angsioco',
-      lrn: '0655',
-      sectionId: '3',
-      studentId: '8',
-    ),
-    Student(name: 'Paolo Bentir', lrn: '0397', sectionId: '3', studentId: '9'),
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(evaluationProvider);
     final notifier = ref.read(evaluationProvider.notifier);
 
-    final filteredStudents = notifier.filteredStudents(student);
+    final pupilAsync = ref.watch(pupilProvider);
+    final sectionAsync = ref.watch(sectionProvider);
 
-    return Dialog(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * .5,
-        width: MediaQuery.of(context).size.width * .4,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          const Text(
-                            "Section List",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          const SizedBox(height: 10),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: sections.length,
-                              itemBuilder: (context, index) {
-                                final section = sections[index];
+    return pupilAsync.when(
+      data: (pupil) {
+        if (pupil == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-                                return ListTile(
-                                  selected:
-                                      state.selectedSectionId ==
-                                      section.sectionId,
-                                  selectedTileColor: Colors.amber.withOpacity(
-                                    .3,
-                                  ),
-                                  title: Text(section.section),
-                                  onTap: () {
-                                    notifier.selectSection(
-                                      section.sectionId,
-                                      section.section,
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+        return sectionAsync.when(
+          data: (sectionData) {
+            if (sectionData == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                    const VerticalDivider(thickness: 4),
+            final List<Section> sections =
+                sectionData.map((s) {
+                  return Section(
+                    sectionId: s.sectionId,
+                    schoolId: s.schoolId,
+                    yearId: s.yearId,
+                    gradeLevelId: s.gradeLevelId,
+                    sectionName: s.sectionName,
+                    status: s.status,
+                    adviserName: s.adviserName,
+                  );
+                }).toList();
 
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        children: [
-                          const Text(
-                            "Student List",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          const SizedBox(height: 10),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: filteredStudents.length,
-                              itemBuilder: (context, index) {
-                                final studentItem = filteredStudents[index];
+            final List<Student> student =
+                pupil.map((p) {
+                  return Student(
+                    name: p.fullName,
+                    lrn: p.lrn,
+                    sectionId: p.sectionId,
+                    studentId: p.pupilId,
+                  );
+                }).toList();
 
-                                return ListTile(
-                                  selected:
-                                      state.selectedStudent == studentItem,
-                                  selectedTileColor: Colors.amber.withOpacity(
-                                    .3,
-                                  ),
-                                  title: Text(studentItem.name),
-                                  onTap: () {
-                                    notifier.selectStudent(studentItem);
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+            final filteredStudents = notifier.filteredStudents(student);
+
+            return Dialog(
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-
-              Align(
-                alignment: Alignment.centerRight,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * .5,
+                width: MediaQuery.of(context).size.width * .4,
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: CustomButton(
-                    onTap:
-                        state.selectedStudent == null
-                            ? null
-                            : () {
-                              notifier.evaluate();
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                PageAnimationTransition(
-                                  page: DigitalReadingPage(),
-                                  pageAnimationType: RightToLeftTransition(),
-                                ),
-                              );
-                            },
-                    title: 'Evaluate',
-                    size: 150,
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "Section List",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  const SizedBox(height: 10),
+
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: sections.length,
+                                      itemBuilder: (context, index) {
+                                        final section = sections[index];
+
+                                        return ListTile(
+                                          selected:
+                                              state.selectedSectionId ==
+                                              section.sectionId,
+                                          selectedTileColor: Colors.amber
+                                              .withOpacity(.3),
+                                          title: Text(
+                                            section.sectionName ?? '',
+                                          ),
+                                          onTap: () {
+                                            notifier.selectSection(
+                                              section.sectionId,
+                                              section.sectionName ?? '',
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const VerticalDivider(thickness: 4),
+
+                            Expanded(
+                              flex: 4,
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "Student List",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  const SizedBox(height: 10),
+
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: filteredStudents.length,
+                                      itemBuilder: (context, index) {
+                                        final studentItem =
+                                            filteredStudents[index];
+
+                                        return ListTile(
+                                          selected:
+                                              state.selectedStudent ==
+                                              studentItem,
+                                          selectedTileColor: Colors.amber
+                                              .withOpacity(.3),
+                                          title: Text(studentItem.name),
+                                          onTap: () {
+                                            notifier.selectStudent(studentItem);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: CustomButton(
+                            onTap:
+                                state.selectedStudent == null
+                                    ? null
+                                    : () {
+                                      notifier.evaluate();
+
+                                      Navigator.pop(context);
+
+                                      Navigator.push(
+                                        context,
+                                        PageAnimationTransition(
+                                          page: DigitalReadingPage(),
+                                          pageAnimationType:
+                                              RightToLeftTransition(),
+                                        ),
+                                      );
+                                    },
+                            title: 'Evaluate',
+                            size: 150,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(child: Text(e.toString())),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text(e.toString())),
     );
   }
 }

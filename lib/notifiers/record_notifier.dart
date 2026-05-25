@@ -93,16 +93,24 @@ class RecordNotifier extends Notifier<RecordState> {
   }
 
   List<String> get currentOptions {
-    final sections = ref.watch(sectionProvider);
+    final sectionsAsync = ref.watch(sectionProvider);
 
-    switch (state.currentStep) {
-      case RecordStep.grade:
-        return ['Grade 3', 'Grade 4', 'Grade 5', 'Grade 6'];
-      case RecordStep.section:
-        return sections.map((s) => s.section).toList();
-      case RecordStep.language:
-        return ['English', 'Tagalog'];
-    }
+    return sectionsAsync.when(
+      data: (sections) {
+        switch (state.currentStep) {
+          case RecordStep.grade:
+            return ['Grade 3', 'Grade 4', 'Grade 5', 'Grade 6'];
+
+          case RecordStep.section:
+            return sections?.map((s) => s.sectionName ?? '').toList() ?? [];
+
+          case RecordStep.language:
+            return ['English', 'Tagalog'];
+        }
+      },
+      loading: () => [],
+      error: (_, __) => [],
+    );
   }
 
   String get currentTitle {

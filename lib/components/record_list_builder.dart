@@ -18,49 +18,66 @@ class RecordListBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sections = ref.watch(sectionProvider);
     final recordState = ref.watch(recordProvider);
-    return Expanded(
-      child: ListView.builder(
-        itemCount: itemCount,
-        itemBuilder: (context, index) {
-          final value =
-              recordState.currentStep == RecordStep.section
-                  ? sections[index].section
-                  : title[index];
+    final sectionsAsync = ref.watch(sectionProvider);
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
-            child: Card(
-              color: Theme.of(context).colorScheme.surfaceContainer,
-              clipBehavior: Clip.antiAlias,
-              elevation: 2,
-              child: InkWell(
-                onTap: () {
-                  onTap?.call(value);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(28.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        value,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+    return sectionsAsync.when(
+      data: (sections) {
+        final sectionList = sections ?? [];
+
+        return Expanded(
+          child: ListView.builder(
+            itemCount: itemCount,
+            padding: const EdgeInsets.only(bottom: 100),
+            itemBuilder: (context, index) {
+              final value =
+                  recordState.currentStep == RecordStep.section
+                      ? sectionList[index].sectionName ?? ''
+                      : title[index];
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24.0,
+                  vertical: 12,
+                ),
+                child: Card(
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 2,
+                  child: InkWell(
+                    onTap: () {
+                      onTap?.call(value);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(28.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            value,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const CustomCircularProgressIndicator(value: .6),
+                        ],
                       ),
-                      const CustomCircularProgressIndicator(value: .6),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          );
-        },
-        padding: EdgeInsets.only(bottom: 100),
-      ),
+              );
+            },
+          ),
+        );
+      },
+
+      loading:
+          () =>
+              const Expanded(child: Center(child: CircularProgressIndicator())),
+
+      error: (e, _) => Expanded(child: Center(child: Text(e.toString()))),
     );
   }
 }
