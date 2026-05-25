@@ -6,13 +6,16 @@ import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
+import 'package:readbee_lite/core/services/assessment_record_service.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/providers/reading_score_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DigitalComprehensionScorePage extends ConsumerStatefulWidget {
   const DigitalComprehensionScorePage({super.key});
@@ -253,40 +256,91 @@ class _DigitalComprehensionScorePageState
                 bottom: 50,
                 right: 50,
                 child: CustomButton(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return Dialog(
-                          child: Container(
-                            width: 400,
-                            height: 250,
-                            decoration: BoxDecoration(
-                              color:
-                                  Theme.of(
-                                    context,
-                                  ).colorScheme.surfaceContainer,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Center(
-                                child: Text(
-                                  'Congratulations for finishing the evaluation!',
-                                  style: const TextStyle(fontSize: 22),
-                                  textAlign: TextAlign.center,
+                  onTap: () async {
+                    try {
+                      final supabase = Supabase.instance.client;
+                      final userId = supabase.auth.currentUser!.id;
+
+                      final selectedStudent = eval.selectedStudent;
+                      final material = ref.read(selectedMaterialProvider);
+
+                      final readingScore = ref.watch(readingScoreProvider);
+
+                      if (selectedStudent == null ||
+                          material == null ||
+                          readingScore == null) {
+                        return;
+                      }
+
+                      final readingLevel =
+                          (readingScore['miscueOverallSummary'] as List?)
+                              ?.firstWhere(
+                                (item) => item['type'] == 'Reading Level',
+                                orElse: () => {'count': 'Unknown'},
+                              )['count'];
+
+                      final comprehensionScore = {
+                        // "answerSummary": compState.answerSummary,
+                        "comprehensionSummary": [
+                          {"type": "No. of Correct Answer", "count": correct},
+                          {"type": "No. of Wrong Answer", "count": wrong},
+                          {"type": "Comprehension Score", "count": level},
+                          {"type": "Comprehension Rate", "count": rate},
+                        ],
+                      };
+
+                      final totalScore = rate;
+
+                      await AssessmentRecordService().insertAssessmentRecord(
+                        pupilId: selectedStudent.studentId,
+                        evaluatorUserId: userId,
+                        materialId: material.materialId,
+                        yearId: '7e9fb520-5f27-48fd-9c70-37c72b9e1879',
+                        quarterId: '156ab61c-8329-44cc-a72c-2a374c40570a',
+                        assessmentMethod: 'Digital',
+                        assessmentType: 'Comprehension',
+                        readingScore: readingScore,
+                        comprehensionScore: comprehensionScore,
+                        totalScore: totalScore,
+                        readingLevel: readingLevel,
+                        miscueContent: '',
+                      );
+
+                      if (!mounted) return;
+
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return Dialog(
+                            child: Container(
+                              width: 400,
+                              height: 250,
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).colorScheme.surfaceContainer,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: Center(
+                                  child: Text(
+                                    'Congratulations for finishing the evaluation!',
+                                    style: TextStyle(fontSize: 22),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
+                          );
+                        },
+                      );
 
-                    if (mounted) {
                       Future.delayed(const Duration(seconds: 3), () {
                         Navigator.pop(context);
+
                         Navigator.push(
                           context,
                           PageAnimationTransition(
@@ -295,6 +349,14 @@ class _DigitalComprehensionScorePageState
                           ),
                         );
                       });
+                    } catch (e) {
+                      debugPrint(e.toString());
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to save assessment record'),
+                        ),
+                      );
                     }
                   },
                   title: 'Proceed',

@@ -10,6 +10,7 @@ import 'package:readbee_lite/core/utils/digital_reading_score.dart';
 import 'package:readbee_lite/pages/reading_material/digitral_comprehension_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
+import 'package:readbee_lite/providers/reading_score_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
 import 'package:readbee_lite/providers/timer_provider.dart';
@@ -192,13 +193,76 @@ class _DigitalReadingScorePageState
           right: 50,
           child: CustomButton(
             onTap: () {
-              Navigator.push(
-                context,
-                PageAnimationTransition(
-                  page: DigitralComprehensionPage(),
-                  pageAnimationType: RightToLeftTransition(),
-                ),
-              );
+              final miscues = ref.read(miscueProvider);
+              final storyAsync = ref.read(storyProvider);
+              final selectedMaterial = ref.read(selectedMaterialProvider);
+              final timer = ref.read(timerProvider.notifier);
+
+              storyAsync.whenData((story) {
+                if (story == null || selectedMaterial == null) return;
+
+                final totalWordsCount = totalWords(
+                  story.content.split(RegExp(r'\s+')) +
+                      selectedMaterial.title.split(RegExp(r'\s+')),
+                );
+
+                final readingScore = {
+                  "miscueSummary":
+                      miscues.map((m) {
+                        return {"type": m.name, "count": m.count};
+                      }).toList(),
+                  "miscueOverallSummary": [
+                    {
+                      "type": "Reading Level",
+                      "count": readingLevel(
+                        miscues[7].count,
+                        totalWords(
+                          story.content.split(RegExp(r'\s+')) +
+                              selectedMaterial.title.split(RegExp(r'\s+')),
+                        ),
+                      ),
+                    },
+                    {
+                      "type": "Total Miscues",
+                      "count": totalMiscueCount(miscues),
+                    },
+                    {
+                      "type": "Number of Words in the Passage",
+                      "count": totalWordsCount,
+                    },
+                    {
+                      "type": "Word per Minute",
+                      "count": wordPerMinute(
+                        timer.elapsed.inSeconds.toDouble(),
+                        totalWordsCount,
+                      ),
+                    },
+                    {
+                      "type": "Reading Speed",
+                      "count": classifyReadingSpeed(
+                        wordPerMinute(
+                          timer.elapsed.inSeconds.toDouble(),
+                          totalWordsCount,
+                        ),
+                      ),
+                    },
+                    {
+                      "type": "Number of Correct Words",
+                      "count": miscues[7].count,
+                    },
+                  ],
+                };
+
+                ref.read(readingScoreProvider.notifier).state = readingScore;
+
+                Navigator.push(
+                  context,
+                  PageAnimationTransition(
+                    page: DigitralComprehensionPage(),
+                    pageAnimationType: RightToLeftTransition(),
+                  ),
+                );
+              });
             },
             title: 'Proceed',
             size: 150,

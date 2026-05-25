@@ -322,13 +322,18 @@ class EvaluationListDialog extends ConsumerWidget {
 
                                         return ListTile(
                                           selected:
-                                              state.selectedStudent ==
-                                              studentItem,
+                                              state
+                                                  .selectedStudent
+                                                  ?.studentId ==
+                                              studentItem.studentId,
                                           selectedTileColor: Colors.amber
                                               .withOpacity(.3),
                                           title: Text(studentItem.name),
                                           onTap: () {
                                             notifier.selectStudent(studentItem);
+                                            debugPrint(
+                                              'Student: ${studentItem.studentId}',
+                                            );
                                           },
                                         );
                                       },
