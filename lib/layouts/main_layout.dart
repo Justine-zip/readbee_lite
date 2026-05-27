@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
 import 'package:readbee_lite/pages/event/event_page.dart';
+import 'package:readbee_lite/pages/home/home_page.dart';
 import 'package:readbee_lite/pages/profile/profile_page.dart';
 import 'package:readbee_lite/pages/reading_material/reading_material_page.dart';
 import 'package:readbee_lite/pages/record/record_page.dart';
@@ -132,16 +133,7 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
 
               body: const TabBarView(
                 children: [
-                  Center(
-                    child: Text(
-                      'H O M E',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.amber,
-                      ),
-                    ),
-                  ),
+                  TabletHomePage(),
                   RecordPage(),
                   TabletReadingMaterialPage(),
                   EventPage(),

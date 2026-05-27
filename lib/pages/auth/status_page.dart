@@ -4,6 +4,8 @@ import 'package:readbee_lite/layouts/main_layout.dart';
 import 'package:readbee_lite/layouts/responsive.dart';
 import 'package:readbee_lite/providers/assignment.dart';
 import 'package:readbee_lite/providers/calendar_event_provider.dart';
+import 'package:readbee_lite/providers/profile_provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class StatusPage extends ConsumerStatefulWidget {
@@ -37,7 +39,10 @@ class _StatusPageState extends ConsumerState<StatusPage> {
       });
     });
 
-    return Responsive(mobile: MobileMainLayout(), tablet: TabletMainLayout());
+    return Responsive(
+      mobile: ShowCaseWidget(builder: (context) => MobileMainLayout()),
+      tablet: ShowCaseWidget(builder: (context) => TabletMainLayout()),
+    );
   }
 
   void _showTopRightNotification(BuildContext context, String assignmentId) {
