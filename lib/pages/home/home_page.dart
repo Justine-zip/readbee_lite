@@ -16,6 +16,7 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileProvider);
     final readingSpeeds = ref.watch(readingSpeedProvider);
+    final filter = ref.watch(analyticsFilterProvider);
 
     return Scaffold(
       body: RefreshIndicator(
@@ -85,12 +86,23 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'SY-Language',
-                      style: TextStyle(fontSize: 24, color: Colors.black54),
+                    Text(
+                      '${filter.language ?? 'All Languages'} • '
+                      '${filter.yearId ?? 'All Years'} • '
+                      '${filter.quarterId ?? 'All Quarters'} • ',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.black54,
+                      ),
                     ),
+
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => const AnalyticsFilterDialog(),
+                        );
+                      },
                       icon: const Icon(Icons.filter_alt_outlined),
                     ),
                   ],
@@ -699,6 +711,184 @@ class _YAxisLabel extends StatelessWidget {
         text,
         style: const TextStyle(fontSize: 16, color: Colors.black45),
       ),
+    );
+  }
+}
+
+class AnalyticsFilterDialog extends ConsumerWidget {
+  const AnalyticsFilterDialog({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filter = ref.watch(analyticsFilterProvider);
+
+    final years = ref.watch(schoolYearsProvider);
+    final quarters = ref.watch(quartersProvider);
+    final gradeLevels = ref.watch(gradeLevelsProvider);
+    final languages = ref.watch(languagesProvider);
+
+    return AlertDialog(
+      title: const Text('Analytics Filters'),
+      backgroundColor: Colors.white,
+      content: SizedBox(
+        width: 400,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              languages.when(
+                data: (data) {
+                  return DropdownButtonFormField<String>(
+                    value: filter.language,
+                    decoration: const InputDecoration(labelText: 'Language'),
+                    items: [
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('All Languages'),
+                      ),
+
+                      ...data.map(
+                        (e) => DropdownMenuItem(value: e, child: Text(e)),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      ref.read(analyticsFilterProvider.notifier).state =
+                          value == null
+                              ? filter.copyWith(clearLanguage: true)
+                              : filter.copyWith(language: value);
+                    },
+                  );
+                },
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
+              ),
+
+              const SizedBox(height: 20),
+
+              years.when(
+                data: (data) {
+                  return DropdownButtonFormField<String>(
+                    value: filter.yearId,
+                    decoration: const InputDecoration(labelText: 'School Year'),
+                    items: [
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('All Years'),
+                      ),
+
+                      ...data.map<DropdownMenuItem<String>>((e) {
+                        final startYear = DateTime.parse(e['start_date']).year;
+
+                        final endYear = DateTime.parse(e['end_date']).year;
+
+                        return DropdownMenuItem<String>(
+                          value: e['year_id'],
+                          child: Text('$startYear-$endYear'),
+                        );
+                      }),
+                    ],
+                    onChanged: (value) {
+                      ref.read(analyticsFilterProvider.notifier).state =
+                          value == null
+                              ? filter.copyWith(clearYearId: true)
+                              : filter.copyWith(yearId: value);
+                    },
+                  );
+                },
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
+              ),
+
+              const SizedBox(height: 20),
+
+              quarters.when(
+                data: (data) {
+                  return DropdownButtonFormField<int>(
+                    value: filter.quarterId,
+                    decoration: const InputDecoration(labelText: 'Quarter'),
+                    items: [
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('All Quarters'),
+                      ),
+
+                      ...data.map(
+                        (e) => DropdownMenuItem(
+                          value: e['quarter_id'],
+                          child: Text(e['quarter_number']),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      ref.read(analyticsFilterProvider.notifier).state =
+                          value == null
+                              ? filter.copyWith(clearQuarterId: true)
+                              : filter.copyWith(quarterId: value);
+                    },
+                  );
+                },
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
+              ),
+
+              const SizedBox(height: 20),
+
+              gradeLevels.when(
+                data: (data) {
+                  return DropdownButtonFormField<String>(
+                    value: filter.gradeLevelId,
+                    decoration: const InputDecoration(labelText: 'Grade Level'),
+                    items: [
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('All Grade Levels'),
+                      ),
+
+                      ...data.map(
+                        (e) => DropdownMenuItem(
+                          value: e['grade_level_id'],
+                          child: Text('Grade ${e['grade_number']}'),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      ref.read(analyticsFilterProvider.notifier).state =
+                          value == null
+                              ? filter.copyWith(clearGradeLevelId: true)
+                              : filter.copyWith(gradeLevelId: value);
+                    },
+                  );
+                },
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      actions: [
+        TextButton(
+          onPressed: () {
+            ref.read(analyticsFilterProvider.notifier).state =
+                const AnalyticsFilter();
+
+            Navigator.pop(context);
+          },
+          child: const Text('Clear'),
+        ),
+
+        ElevatedButton(
+          onPressed: () {
+            ref.invalidate(readingSpeedProvider);
+            ref.invalidate(readingLevelProvider);
+            ref.invalidate(comprehensionLevelProvider);
+
+            Navigator.pop(context);
+          },
+          child: const Text('Apply'),
+        ),
+      ],
     );
   }
 }
