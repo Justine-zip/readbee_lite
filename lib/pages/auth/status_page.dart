@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
 import 'package:readbee_lite/layouts/responsive.dart';
-import 'package:readbee_lite/providers/assignment.dart';
+import 'package:readbee_lite/providers/assignment_provider.dart';
 import 'package:readbee_lite/providers/calendar_event_provider.dart';
+import 'package:readbee_lite/providers/grade_level_provider.dart';
+import 'package:readbee_lite/providers/section_provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -23,18 +25,29 @@ class _StatusPageState extends ConsumerState<StatusPage> {
   Widget build(BuildContext context) {
     final assignmentAsync = ref.watch(assignmentProvider);
     ref.watch(appointmentsProvider);
+    ref.watch(gradeLevelProvider);
+    ref.watch(sectionProvider);
 
-    assignmentAsync.whenData((assignment) {
-      if (assignment == null) return;
+    assignmentAsync.whenData((assignments) {
+      if (assignments == null) return;
 
-      if (assignment.confirmationStatus == 'confirmed') return;
+      final pendingAssignment = assignments.firstWhere(
+        (a) => a.confirmationStatus != 'confirmed',
+        orElse: () => assignments.first,
+      );
+
+      final hasUnconfirmed = assignments.any(
+        (a) => a.confirmationStatus != 'confirmed',
+      );
+
+      if (!hasUnconfirmed) return;
 
       if (_notificationShown) return;
 
       _notificationShown = true;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showTopRightNotification(context, assignment.assignmentId);
+        _showTopRightNotification(context, pendingAssignment.assignmentId);
       });
     });
 

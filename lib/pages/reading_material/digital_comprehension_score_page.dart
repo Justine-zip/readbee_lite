@@ -9,7 +9,7 @@ import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/services/assessment_record_service.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
-import 'package:readbee_lite/providers/assignment.dart';
+import 'package:readbee_lite/providers/assignment_provider.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
@@ -266,12 +266,16 @@ class _DigitalComprehensionScorePageState
                       final material = ref.read(selectedMaterialProvider);
 
                       final readingScore = ref.watch(readingScoreProvider);
-                      final assignment = ref.read(assignmentProvider).value;
+                      final assignments =
+                          ref.watch(assignmentProvider).value ?? [];
+
+                      final assignment = assignments.firstWhere(
+                        (a) => a.sectionId == selectedStudent!.sectionId,
+                      );
 
                       if (selectedStudent == null ||
                           material == null ||
-                          readingScore == null ||
-                          assignment == null) {
+                          readingScore == null) {
                         return;
                       }
 

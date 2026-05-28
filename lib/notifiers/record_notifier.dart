@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/student.dart';
+import 'package:readbee_lite/providers/grade_level_provider.dart';
 import 'package:readbee_lite/providers/section_provider.dart';
 
 enum RecordStep { grade, section, language }
@@ -7,15 +9,18 @@ enum RecordStep { grade, section, language }
 class RecordState {
   final RecordStep currentStep;
   final String? selectedGrade;
+  final String? selectedGradeLevelId;
   final String? selectedSection;
+  final String? selectedSectionId;
   final String? selectedLanguage;
-  //final String? selectedStudent;
   final Student? selectedStudent;
 
   const RecordState({
     this.currentStep = RecordStep.grade,
     this.selectedGrade,
+    this.selectedGradeLevelId,
     this.selectedSection,
+    this.selectedSectionId,
     this.selectedLanguage,
     this.selectedStudent,
   });
@@ -23,14 +28,18 @@ class RecordState {
   RecordState copyWith({
     RecordStep? currentStep,
     String? selectedGrade,
+    String? selectedGradeLevelId,
     String? selectedSection,
+    String? selectedSectionId,
     String? selectedLanguage,
     Student? selectedStudent,
   }) {
     return RecordState(
       currentStep: currentStep ?? this.currentStep,
       selectedGrade: selectedGrade ?? this.selectedGrade,
+      selectedGradeLevelId: selectedGradeLevelId ?? this.selectedGradeLevelId,
       selectedSection: selectedSection ?? this.selectedSection,
+      selectedSectionId: selectedSectionId ?? this.selectedSectionId,
       selectedLanguage: selectedLanguage ?? this.selectedLanguage,
       selectedStudent: selectedStudent ?? this.selectedStudent,
     );
@@ -43,16 +52,18 @@ class RecordNotifier extends Notifier<RecordState> {
     return const RecordState();
   }
 
-  void selectGrade(String grade) {
+  void selectGrade(String grade, String gradeLevelId) {
     state = state.copyWith(
       selectedGrade: grade,
+      selectedGradeLevelId: gradeLevelId,
       currentStep: RecordStep.section,
     );
   }
 
-  void selectSection(String section) {
+  void selectSection(String section, String sectionId) {
     state = state.copyWith(
       selectedSection: section,
+      selectedSectionId: sectionId,
       currentStep: RecordStep.language,
     );
   }
@@ -75,12 +86,29 @@ class RecordNotifier extends Notifier<RecordState> {
 
   bool handleSelection(String value) {
     if (state.currentStep == RecordStep.grade) {
-      selectGrade(value);
+      final grades = ref.read(gradeLevelProvider).value ?? [];
+
+      final selectedGradeData = grades.firstWhere(
+        (g) => 'Grade ${g.gradeNumber}' == value,
+      );
+
+      selectGrade(value, selectedGradeData.gradeLevelId);
+
       return false;
     }
 
     if (state.currentStep == RecordStep.section) {
-      selectSection(value);
+      final section = ref.read(sectionProvider).value ?? [];
+
+      section.forEach((s) => debugPrint('SectionIdx: ${s.sectionId}'));
+
+      final selectedSectionData = section.firstWhere(
+        (s) => s.sectionName == value,
+      );
+      selectSection(value, selectedSectionData.sectionId);
+
+      debugPrint('SectionId: ${state.selectedSectionId}');
+
       return false;
     }
 
@@ -94,23 +122,35 @@ class RecordNotifier extends Notifier<RecordState> {
 
   List<String> get currentOptions {
     final sectionsAsync = ref.watch(sectionProvider);
+    final gradeLevelsAsync = ref.watch(gradeLevelProvider);
 
-    return sectionsAsync.when(
-      data: (sections) {
-        switch (state.currentStep) {
-          case RecordStep.grade:
-            return ['Grade 3', 'Grade 4', 'Grade 5', 'Grade 6'];
+    debugPrint('SelectedGrade: ${state.selectedGrade}');
+    debugPrint('SelectedGradeLevelId: ${state.selectedGradeLevelId}');
 
-          case RecordStep.section:
-            return sections?.map((s) => s.sectionName ?? '').toList() ?? [];
+    return switch (state.currentStep) {
+      RecordStep.grade => gradeLevelsAsync.when(
+        data: (grades) {
+          return grades.map((g) => 'Grade ${g.gradeNumber}').toList();
+        },
+        loading: () => [],
+        error: (_, __) => [],
+      ),
 
-          case RecordStep.language:
-            return ['English', 'Tagalog'];
-        }
-      },
-      loading: () => [],
-      error: (_, __) => [],
-    );
+      RecordStep.section => sectionsAsync.when(
+        data: (sections) {
+          final filteredSections =
+              sections.where((section) {
+                return section.gradeLevelId == state.selectedGradeLevelId;
+              }).toList();
+
+          return filteredSections.map((s) => s.sectionName ?? '').toList();
+        },
+        loading: () => [],
+        error: (_, __) => [],
+      ),
+
+      RecordStep.language => ['English', 'Tagalog'],
+    };
   }
 
   String get currentTitle {

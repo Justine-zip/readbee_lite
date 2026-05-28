@@ -5,41 +5,16 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/pages/record/record_details_page.dart';
+import 'package:readbee_lite/providers/pupil_provider.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
 class StudentListDialog extends ConsumerWidget {
-  StudentListDialog({super.key});
-
-  final List<Student> student = [
-    Student(
-      name: 'Denmark Cabanhao',
-      lrn: '0121',
-      sectionId: '1',
-      studentId: '1',
-    ),
-    Student(name: 'Romeo Ezguera', lrn: '0740', sectionId: '1', studentId: '2'),
-    Student(name: 'Kori Sanchez', lrn: '0321', sectionId: '1', studentId: '3'),
-    Student(name: 'Bill Fraud', lrn: '0353', sectionId: '2', studentId: '4'),
-    Student(
-      name: 'Juan Dela Cruz',
-      lrn: '0586',
-      sectionId: '2',
-      studentId: '5',
-    ),
-    Student(name: 'Ezra Ramirez', lrn: '0835', sectionId: '3', studentId: '6'),
-    Student(name: 'Tanya Suami', lrn: '0035', sectionId: '3', studentId: '7'),
-    Student(
-      name: 'Ralph Angsioco',
-      lrn: '0655',
-      sectionId: '3',
-      studentId: '8',
-    ),
-    Student(name: 'Paolo Bentir', lrn: '0397', sectionId: '3', studentId: '9'),
-  ];
+  const StudentListDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recordState = ref.watch(recordProvider);
+    final pupilsAsync = ref.watch(pupilProvider);
 
     return Dialog(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
@@ -51,37 +26,60 @@ class StudentListDialog extends ConsumerWidget {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    const Text("Student List", style: TextStyle(fontSize: 20)),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: student.length,
-                        itemBuilder: (context, index) {
-                          final studentItem = student[index];
-                          final selectedStudent = recordState.selectedStudent;
+              const Text("Pupil List", style: TextStyle(fontSize: 20)),
+              const SizedBox(height: 10),
 
-                          return ListTile(
-                            selected:
-                                selectedStudent?.studentId ==
-                                studentItem.studentId,
-                            selectedTileColor: Colors.amber.withOpacity(.3),
-                            title: Text(
-                              studentItem.name,
-                              style: TextStyle(fontSize: 24),
-                            ),
-                            onTap: () {
-                              ref
-                                  .read(recordProvider.notifier)
-                                  .selectedStudent(studentItem);
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: pupilsAsync.when(
+                  data: (pupils) {
+                    if (pupils == null || pupils.isEmpty) {
+                      return const Center(child: Text("No pupils found"));
+                    }
+
+                    final sectionId = recordState.selectedSectionId;
+
+                    final filteredPupils =
+                        pupils.where((p) => p.sectionId == sectionId).toList();
+
+                    return ListView.builder(
+                      itemCount: filteredPupils.length,
+                      itemBuilder: (context, index) {
+                        final pupilItem = filteredPupils[index];
+                        final selectedStudent = recordState.selectedStudent;
+
+                        return ListTile(
+                          selected:
+                              selectedStudent?.studentId == pupilItem.pupilId,
+                          selectedTileColor: Colors.amber.withOpacity(.3),
+
+                          title: Text(
+                            pupilItem.fullName,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+
+                          subtitle: Text(pupilItem.lrn),
+
+                          onTap: () {
+                            ref
+                                .read(recordProvider.notifier)
+                                .selectedStudent(
+                                  Student(
+                                    studentId: pupilItem.pupilId,
+                                    name: pupilItem.fullName,
+                                    lrn: pupilItem.lrn,
+                                    sectionId: pupilItem.sectionId,
+                                  ),
+                                );
+                          },
+                        );
+                      },
+                    );
+                  },
+
+                  loading:
+                      () => const Center(child: CircularProgressIndicator()),
+
+                  error: (err, stack) => Center(child: Text("Error: $err")),
                 ),
               ),
 
@@ -102,7 +100,6 @@ class StudentListDialog extends ConsumerWidget {
                               );
                             }
                             : null,
-
                     title: 'Evaluate',
                     size: 150,
                   ),

@@ -58,6 +58,7 @@ class RecordPage extends ConsumerWidget {
             ),
 
             RecordListBuilder(
+              key: ValueKey(recordState.selectedGradeLevelId),
               itemCount: itemCount,
               title: listValue,
               onTap: (value) {

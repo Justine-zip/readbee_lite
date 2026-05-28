@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/custom_circular_progress_indicator.dart';
-import 'package:readbee_lite/notifiers/record_notifier.dart';
-import 'package:readbee_lite/providers/record_provider.dart';
 import 'package:readbee_lite/providers/section_provider.dart';
 
 class RecordListBuilder extends ConsumerWidget {
@@ -18,22 +16,16 @@ class RecordListBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recordState = ref.watch(recordProvider);
     final sectionsAsync = ref.watch(sectionProvider);
 
     return sectionsAsync.when(
       data: (sections) {
-        final sectionList = sections ?? [];
-
         return Expanded(
           child: ListView.builder(
             itemCount: itemCount,
             padding: const EdgeInsets.only(bottom: 100),
             itemBuilder: (context, index) {
-              final value =
-                  recordState.currentStep == RecordStep.section
-                      ? sectionList[index].sectionName ?? ''
-                      : title[index];
+              final value = title[index];
 
               return Padding(
                 padding: const EdgeInsets.symmetric(
