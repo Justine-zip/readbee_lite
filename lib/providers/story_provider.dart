@@ -9,6 +9,8 @@ final storyProvider = FutureProvider<Story?>((ref) async {
 
   final selectedMaterial = ref.watch(selectedMaterialProvider);
 
+  debugPrint('SelectedMaterial: $selectedMaterial');
+
   if (selectedMaterial == null) {
     return null;
   }

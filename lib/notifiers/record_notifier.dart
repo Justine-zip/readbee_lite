@@ -149,7 +149,7 @@ class RecordNotifier extends Notifier<RecordState> {
         error: (_, __) => [],
       ),
 
-      RecordStep.language => ['English', 'Tagalog'],
+      RecordStep.language => ['English', 'Filipino'],
     };
   }
 
