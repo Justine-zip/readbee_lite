@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_story_container.dart';
 import 'package:readbee_lite/providers/assessment_record_provider.dart';
+import 'package:readbee_lite/providers/quiz_question_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
@@ -21,6 +23,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
     final materialAsync = ref.watch(readingMaterialProvider);
     final storyAsync = ref.watch(storyProvider);
     final assessmentAsync = ref.watch(assessmentRecordProvider);
+    final questionAsync = ref.watch(quizQuestionProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
@@ -41,7 +44,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${record.selectedGrade} • ${record.selectedSection} • ${record.selectedLanguage}',
+                  '${record.selectedGrade} • ${record.selectedSection} • ${record.selectedLanguage} • ${record.selectedStudent!.name}',
                   style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -156,7 +159,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                               story.title,
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
-                                                fontSize: 32,
+                                                fontSize: 28,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -168,7 +171,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                               ),
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
-                                                fontSize: 32,
+                                                fontSize: 28,
                                               ),
                                             ),
                                           ],
@@ -211,145 +214,262 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                         }
 
                                         final item = filteredAssessment.first;
-                                        final raw = item.readingScore;
+                                        final readingScore = item.readingScore;
+                                        final comprehensionScore =
+                                            item.comprehensionScore;
 
                                         final miscues =
-                                            (raw['miscueSummary'] is List)
-                                                ? List<
-                                                  Map<String, dynamic>
-                                                >.from(raw['miscueSummary'])
-                                                : <Map<String, dynamic>>[];
-
-                                        final miscueOverallSummary =
-                                            (raw['miscueOverallSummary']
+                                            (readingScore['miscueSummary']
                                                     is List)
                                                 ? List<
                                                   Map<String, dynamic>
                                                 >.from(
-                                                  raw['miscueOverallSummary'],
+                                                  readingScore['miscueSummary'],
                                                 )
                                                 : <Map<String, dynamic>>[];
 
-                                        return IntrinsicHeight(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 3,
-                                                child: Card(
-                                                  color: Colors.white,
-                                                  margin:
-                                                      const EdgeInsets.symmetric(
-                                                        vertical: 8,
-                                                        horizontal: 12,
-                                                      ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                          24,
-                                                        ),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children:
-                                                          miscues.map((m) {
-                                                            return Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                  '${m['type']}:',
-                                                                  style: const TextStyle(
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  m['count']
-                                                                      .toString(),
-                                                                  style: const TextStyle(
-                                                                    fontSize:
-                                                                        22,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          }).toList(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
+                                        final miscueOverallSummary =
+                                            (readingScore['miscueOverallSummary']
+                                                    is List)
+                                                ? List<
+                                                  Map<String, dynamic>
+                                                >.from(
+                                                  readingScore['miscueOverallSummary'],
+                                                )
+                                                : <Map<String, dynamic>>[];
 
-                                              Expanded(
-                                                flex: 4,
-                                                child: Card(
-                                                  color: Colors.white,
-                                                  margin:
-                                                      const EdgeInsets.symmetric(
-                                                        vertical: 8,
-                                                        horizontal: 12,
-                                                      ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                          24,
+                                        final comprehensionSummary =
+                                            (comprehensionScore['comprehensionSummary']
+                                                    is List)
+                                                ? List<
+                                                  Map<String, dynamic>
+                                                >.from(
+                                                  comprehensionScore['comprehensionSummary'],
+                                                )
+                                                : <Map<String, dynamic>>[];
+
+                                        return Column(
+                                          children: [
+                                            IntrinsicHeight(
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 3,
+                                                    child: Card(
+                                                      color: Colors.white,
+                                                      margin:
+                                                          const EdgeInsets.symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 12,
+                                                          ),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              24,
+                                                            ),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children:
+                                                              miscues.map((m) {
+                                                                return Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      '${m['type']}:',
+                                                                      style: const TextStyle(
+                                                                        fontSize:
+                                                                            20,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      m['count']
+                                                                          .toString(),
+                                                                      style: const TextStyle(
+                                                                        fontSize:
+                                                                            22,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              }).toList(),
                                                         ),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children:
-                                                          miscueOverallSummary.map((
-                                                            m,
-                                                          ) {
-                                                            return Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                  '${m['type']}:',
-                                                                  style: const TextStyle(
-                                                                    fontSize:
-                                                                        22,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  m['count']
-                                                                      .toString(),
-                                                                  style: const TextStyle(
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          }).toList(),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
+
+                                                  Expanded(
+                                                    flex: 4,
+                                                    child: Card(
+                                                      color: Colors.white,
+                                                      margin:
+                                                          const EdgeInsets.symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 12,
+                                                          ),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              24,
+                                                            ),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children:
+                                                              miscueOverallSummary.map((
+                                                                m,
+                                                              ) {
+                                                                return Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      '${m['type']}:',
+                                                                      style: const TextStyle(
+                                                                        fontSize:
+                                                                            22,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      m['count']
+                                                                          .toString(),
+                                                                      style: const TextStyle(
+                                                                        fontSize:
+                                                                            20,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              }).toList(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                            SizedBox(height: 50),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                ...comprehensionSummary.map((
+                                                  c,
+                                                ) {
+                                                  return ComprehensionScoreBox(
+                                                    subtitle: c['type'],
+                                                    value:
+                                                        c['count'].toString(),
+                                                    size: 200,
+                                                  );
+                                                }),
+                                              ],
+                                            ),
+                                          ],
                                         );
                                       },
                                       loading:
                                           () => const Center(
                                             child: CircularProgressIndicator(),
                                           ),
+                                      error:
+                                          (e, _) =>
+                                              Center(child: Text(e.toString())),
+                                    ),
+                                    SizedBox(height: 50),
+                                    questionAsync.when(
+                                      data: (question) {
+                                        if (question.isEmpty) {
+                                          return const Center(
+                                            child: Text('No questions found'),
+                                          );
+                                        }
+
+                                        return Material(
+                                          elevation: 3,
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...List.generate(question.length, (
+                                                  index,
+                                                ) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                          bottom: 16,
+                                                        ),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          '${index + 1}. ${question[index].questionText}',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style:
+                                                              const TextStyle(
+                                                                fontSize: 22,
+                                                              ),
+                                                        ),
+                                                        ...List.generate(
+                                                          question[index]
+                                                              .choices
+                                                              .length,
+                                                          (choiceIndex) {
+                                                            return Text(
+                                                              '    ${question[index].choices[choiceIndex].letter}. '
+                                                              '${question[index].choices[choiceIndex].choice}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style:
+                                                                  const TextStyle(
+                                                                    fontSize:
+                                                                        20,
+                                                                  ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+
+                                      loading:
+                                          () => const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+
                                       error:
                                           (e, _) =>
                                               Center(child: Text(e.toString())),
