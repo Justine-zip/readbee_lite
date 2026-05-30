@@ -9,6 +9,7 @@ import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/utils/digital_reading_score.dart';
 import 'package:readbee_lite/pages/reading_material/digitral_comprehension_page.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_score_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
@@ -35,6 +36,12 @@ class _DigitalReadingScorePageState
     if (selectedMaterial == null) {
       return const CircularProgressIndicator();
     }
+
+    final miscueMap = ref.watch(miscueContentProvider);
+
+    debugPrint('mismap: $miscueMap');
+    // debugPrint('mismap: {Omission} - ${miscueMap["Omission"]}');
+    // debugPrint('mismap: {Substitution} - ${miscueMap["Substitution"]}');
     return Stack(
       children: [
         Scaffold(

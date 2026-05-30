@@ -12,6 +12,7 @@ import 'package:readbee_lite/layouts/main_layout.dart';
 import 'package:readbee_lite/providers/assignment_provider.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
 import 'package:readbee_lite/providers/reading_score_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
@@ -279,6 +280,8 @@ class _DigitalComprehensionScorePageState
                         return;
                       }
 
+                      final miscueContent = ref.watch(miscueContentProvider);
+
                       final readingLevel =
                           (readingScore['miscueOverallSummary'] as List?)
                               ?.firstWhere(
@@ -307,12 +310,12 @@ class _DigitalComprehensionScorePageState
                         yearId: assignment.yearId,
                         quarterId: assignment.quarterId,
                         assessmentMethod: 'Digital',
-                        assessmentType: 'Comprehension',
+                        assessmentType: 'Oral Reading and Comprehension',
                         readingScore: readingScore,
                         comprehensionScore: comprehensionScore,
                         totalScore: totalScore,
                         readingLevel: readingLevel,
-                        miscueContent: '',
+                        miscueContent: miscueContent,
                       );
 
                       if (!mounted) return;

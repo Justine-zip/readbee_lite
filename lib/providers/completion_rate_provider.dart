@@ -56,8 +56,6 @@ final gradeRateProvider = FutureProvider<Map<String, double>>((ref) async {
   for (final pupil in pupilAsync) {
     final gradeId = pupil.gradeLevelId;
 
-    if (gradeId == null) continue;
-
     pupilPerGrade[gradeId] = (pupilPerGrade[gradeId] ?? 0) + 1;
   }
 
@@ -141,7 +139,6 @@ final sectionRateProvider = FutureProvider<Map<String, double>>((ref) async {
 
   for (final pupil in pupilAsync) {
     final sectionId = pupil.sectionId;
-    if (sectionId == null) continue;
 
     pupilPerSection[sectionId] = (pupilPerSection[sectionId] ?? 0) + 1;
   }

@@ -17,7 +17,7 @@ class AssessmentRecordService {
     String? scheduleId,
     String? assignmentId,
     String? assessmentType,
-    String? miscueContent,
+    required Map<String, List<int>> miscueContent,
   }) async {
     await supabase.from('assessment_records').insert({
       'pupil_id': pupilId,

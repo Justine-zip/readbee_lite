@@ -6,6 +6,7 @@ import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/pages/reading_material/digital_reading_score_page.dart';
+import 'package:readbee_lite/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
@@ -173,13 +174,22 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                             onTap: () {
                               final miscue = miscues[index];
 
-                              final started = ref.read(timerStartedProvider);
+                              final current = Map<String, List<int>>.from(
+                                ref.read(miscueContentProvider),
+                              );
 
-                              if (!started) {
-                                ref.read(timerStartedProvider.notifier).state =
-                                    true;
-                                ref.read(timerProvider.notifier).start();
-                              }
+                              current.putIfAbsent(miscue.name, () => []);
+
+                              debugPrint('currentmismap: $current');
+
+                              current[miscue.name]!.add(
+                                ref
+                                    .read(wordColorMaterialProvider)
+                                    .currentIndex,
+                              );
+
+                              ref.read(miscueContentProvider.notifier).state =
+                                  current;
 
                               ref
                                   .read(miscueProvider.notifier)

@@ -264,10 +264,6 @@ class EvaluationListDialog extends ConsumerWidget {
 
         return sectionAsync.when(
           data: (sectionData) {
-            if (sectionData == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             final List<Section> sections =
                 sectionData.map((s) {
                   return Section(
