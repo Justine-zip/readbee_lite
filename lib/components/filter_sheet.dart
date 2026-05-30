@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/custom_dropdown.dart';
+import 'package:readbee_lite/models/material_filter.dart';
+import 'package:readbee_lite/providers/material_filter_provider.dart';
 
-class FilterSheet extends StatelessWidget {
+class FilterSheet extends ConsumerWidget {
   final double sheetSize;
   final double textSize;
   const FilterSheet({
@@ -11,7 +14,8 @@ class FilterSheet extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filter = ref.watch(materialFilterProvider);
     return DraggableScrollableSheet(
       initialChildSize: sheetSize,
       maxChildSize: sheetSize * 1.1,
@@ -47,7 +51,15 @@ class FilterSheet extends StatelessWidget {
                             'Grade Level',
                             style: TextStyle(fontSize: 16 * textSize),
                           ),
-                          CustomDropdown(option: ['1', '2', '3']),
+                          CustomDropdown(
+                            option: ['3', '4', '5', '6'],
+                            value: filter.gradeLevel,
+                            onChanged: (value) {
+                              ref
+                                  .read(materialFilterProvider.notifier)
+                                  .state = filter.copyWith(gradeLevel: value);
+                            },
+                          ),
                         ],
                       ),
                       SizedBox(height: 15),
@@ -58,13 +70,25 @@ class FilterSheet extends StatelessWidget {
                             'Language',
                             style: TextStyle(fontSize: 16 * textSize),
                           ),
-                          CustomDropdown(option: ['Tagalog', 'English']),
+                          CustomDropdown(
+                            option: ['Filipino', 'English'],
+                            value: filter.language,
+                            onChanged: (value) {
+                              ref
+                                  .read(materialFilterProvider.notifier)
+                                  .state = filter.copyWith(language: value);
+                            },
+                          ),
                         ],
                       ),
                       SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
+                          onPressed: () {
+                            ref.read(materialFilterProvider.notifier).state =
+                                MaterialFilter.empty;
+                          },
                           child: Text(
                             'Reset Filter',
                             style: TextStyle(
@@ -73,30 +97,9 @@ class FilterSheet extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          onPressed: () {},
                         ),
                       ),
                       SizedBox(height: 10),
-                      Divider(),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Grid Count',
-                            style: TextStyle(fontSize: 16 * textSize),
-                          ),
-                          SizedBox(
-                            width: 150,
-                            child: Slider(
-                              activeColor: Colors.amber,
-                              divisions: 3,
-                              value: .1,
-                              onChanged: (value) {},
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),

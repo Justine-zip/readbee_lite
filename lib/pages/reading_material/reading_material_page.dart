@@ -6,6 +6,7 @@ import 'package:readbee_lite/components/reading_material_builder.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/providers/material_filter_provider.dart';
 import 'package:readbee_lite/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/reading_material_provider.dart';
@@ -137,7 +138,7 @@ class _TabletReadingMaterialPageState
 
   @override
   Widget build(BuildContext context) {
-    final material = ref.watch(readingMaterialProvider);
+    final material = ref.watch(filteredReadingMaterialProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
@@ -166,7 +167,7 @@ class _TabletReadingMaterialPageState
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,
                         builder: (context) {
-                          return FilterSheet(textSize: 1.25, sheetSize: .45);
+                          return FilterSheet(textSize: 1.25, sheetSize: .30);
                         },
                       );
                     },
