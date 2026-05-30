@@ -14,7 +14,7 @@ class AssessmentRecord {
   final double totalScore;
   final String readingLevel;
   final String status;
-  final String miscueContent;
+  final Map<String, dynamic> miscueContent;
 
   AssessmentRecord({
     required this.assessmentRecordId,

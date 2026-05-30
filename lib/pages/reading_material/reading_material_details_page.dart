@@ -8,11 +8,15 @@ import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/pages/reading_material/digital_reading_page.dart';
+import 'package:readbee_lite/providers/assessment_record_provider.dart';
+import 'package:readbee_lite/providers/assignment_provider.dart';
 import 'package:readbee_lite/providers/calendar_event_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/pupil_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/providers/reading_material_provider.dart';
 import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:readbee_lite/providers/selected_material_provider.dart';
 import 'package:readbee_lite/providers/story_provider.dart';
 
 class ReadingMaterialDetailsPage extends ConsumerStatefulWidget {
@@ -25,8 +29,6 @@ class ReadingMaterialDetailsPage extends ConsumerStatefulWidget {
 
 class _ReadingMaterialDetailsPageState
     extends ConsumerState<ReadingMaterialDetailsPage> {
-  String sectionId = '1';
-
   @override
   Widget build(BuildContext context) {
     final storyAsync = ref.watch(storyProvider);
@@ -246,179 +248,220 @@ class _ReadingMaterialDetailsPageState
 }
 
 class EvaluationListDialog extends ConsumerWidget {
-  EvaluationListDialog({super.key});
+  const EvaluationListDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(evaluationProvider);
     final notifier = ref.read(evaluationProvider.notifier);
 
+    final assessmentAsynnc = ref.watch(assessmentRecordProvider);
     final pupilAsync = ref.watch(pupilProvider);
     final sectionAsync = ref.watch(sectionProvider);
 
-    return pupilAsync.when(
-      data: (pupil) {
-        if (pupil == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return assessmentAsynnc.when(
+      data: (assessmennt) {
+        return pupilAsync.when(
+          data: (pupil) {
+            if (pupil == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-        return sectionAsync.when(
-          data: (sectionData) {
-            final List<Section> sections =
-                sectionData.map((s) {
-                  return Section(
-                    sectionId: s.sectionId,
-                    schoolId: s.schoolId,
-                    yearId: s.yearId,
-                    gradeLevelId: s.gradeLevelId,
-                    sectionName: s.sectionName,
-                    status: s.status,
-                    adviserName: s.adviserName,
-                  );
-                }).toList();
+            return sectionAsync.when(
+              data: (sectionData) {
+                final List<Section> sections =
+                    sectionData.map((s) {
+                      return Section(
+                        sectionId: s.sectionId,
+                        schoolId: s.schoolId,
+                        yearId: s.yearId,
+                        gradeLevelId: s.gradeLevelId,
+                        sectionName: s.sectionName,
+                        status: s.status,
+                        adviserName: s.adviserName,
+                      );
+                    }).toList();
 
-            final List<Student> student =
-                pupil.map((p) {
-                  return Student(
-                    name: p.fullName,
-                    lrn: p.lrn,
-                    sectionId: p.sectionId,
-                    studentId: p.pupilId,
-                  );
-                }).toList();
+                final List<Student> students =
+                    pupil.map((p) {
+                      return Student(
+                        name: p.fullName,
+                        lrn: p.lrn,
+                        sectionId: p.sectionId,
+                        studentId: p.pupilId,
+                      );
+                    }).toList();
 
-            final filteredStudents = notifier.filteredStudents(student);
+                final sectionFilteredStudents = notifier.filteredStudents(
+                  students,
+                );
 
-            return Dialog(
-              backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * .5,
-                width: MediaQuery.of(context).size.width * .4,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "Section List",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  const SizedBox(height: 10),
+                final existingStudentIds =
+                    (assessmennt ?? [])
+                        .where(
+                          (a) =>
+                              a.materialId ==
+                              ref.read(selectedMaterialProvider)!.materialId,
+                        )
+                        .map((a) => a.pupilId)
+                        .toSet();
 
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: sections.length,
-                                      itemBuilder: (context, index) {
-                                        final section = sections[index];
+                final filteredStudents =
+                    sectionFilteredStudents.where((student) {
+                      return !existingStudentIds.contains(student.studentId);
+                    }).toList();
 
-                                        return ListTile(
-                                          selected:
-                                              state.selectedSectionId ==
-                                              section.sectionId,
-                                          selectedTileColor: Colors.amber
-                                              .withOpacity(.3),
-                                          title: Text(
-                                            section.sectionName ?? '',
-                                          ),
-                                          onTap: () {
-                                            notifier.selectSection(
-                                              section.sectionId,
-                                              section.sectionName ?? '',
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            const VerticalDivider(thickness: 4),
-
-                            Expanded(
-                              flex: 4,
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "Student List",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  const SizedBox(height: 10),
-
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: filteredStudents.length,
-                                      itemBuilder: (context, index) {
-                                        final studentItem =
-                                            filteredStudents[index];
-
-                                        return ListTile(
-                                          selected:
-                                              state
-                                                  .selectedStudent
-                                                  ?.studentId ==
-                                              studentItem.studentId,
-                                          selectedTileColor: Colors.amber
-                                              .withOpacity(.3),
-                                          title: Text(studentItem.name),
-                                          onTap: () {
-                                            notifier.selectStudent(studentItem);
-                                            debugPrint(
-                                              'Student: ${studentItem.studentId}',
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: CustomButton(
-                            onTap:
-                                state.selectedStudent == null
-                                    ? null
-                                    : () {
-                                      notifier.evaluate();
-
-                                      Navigator.pop(context);
-
-                                      Navigator.push(
-                                        context,
-                                        PageAnimationTransition(
-                                          page: DigitalReadingPage(),
-                                          pageAnimationType:
-                                              RightToLeftTransition(),
-                                        ),
-                                      );
-                                    },
-                            title: 'Evaluate',
-                            size: 150,
-                          ),
-                        ),
-                      ),
-                    ],
+                return Dialog(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.surfaceContainer,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                ),
-              ),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * .5,
+                    width: MediaQuery.of(context).size.width * .4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        "Section List",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: sections.length,
+                                          itemBuilder: (context, index) {
+                                            final section = sections[index];
+
+                                            return ListTile(
+                                              selected:
+                                                  state.selectedSectionId ==
+                                                  section.sectionId,
+                                              selectedTileColor: Colors.amber
+                                                  .withOpacity(.3),
+                                              title: Text(
+                                                section.sectionName ?? '',
+                                              ),
+                                              onTap: () {
+                                                notifier.selectSection(
+                                                  section.sectionId,
+                                                  section.sectionName ?? '',
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                const VerticalDivider(thickness: 4),
+
+                                Expanded(
+                                  flex: 4,
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        "Student List",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      const SizedBox(height: 10),
+
+                                      Expanded(
+                                        child:
+                                            filteredStudents.isEmpty
+                                                ? const Center(
+                                                  child: Text(
+                                                    'No students available',
+                                                  ),
+                                                )
+                                                : ListView.builder(
+                                                  itemCount:
+                                                      filteredStudents.length,
+                                                  itemBuilder: (
+                                                    context,
+                                                    index,
+                                                  ) {
+                                                    final studentItem =
+                                                        filteredStudents[index];
+
+                                                    return ListTile(
+                                                      selected:
+                                                          state
+                                                              .selectedStudent
+                                                              ?.studentId ==
+                                                          studentItem.studentId,
+                                                      selectedTileColor: Colors
+                                                          .amber
+                                                          .withOpacity(.3),
+                                                      title: Text(
+                                                        studentItem.name,
+                                                      ),
+                                                      onTap: () {
+                                                        notifier.selectStudent(
+                                                          studentItem,
+                                                        );
+
+                                                        debugPrint(
+                                                          'Student: ${studentItem.studentId}',
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: CustomButton(
+                                onTap:
+                                    state.selectedStudent == null
+                                        ? null
+                                        : () {
+                                          notifier.evaluate();
+
+                                          Navigator.pop(context);
+
+                                          Navigator.push(
+                                            context,
+                                            PageAnimationTransition(
+                                              page: DigitalReadingPage(),
+                                              pageAnimationType:
+                                                  RightToLeftTransition(),
+                                            ),
+                                          );
+                                        },
+                                title: 'Evaluate',
+                                size: 150,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text(e.toString())),
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),

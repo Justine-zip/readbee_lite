@@ -9,6 +9,7 @@ import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/services/assessment_record_service.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
+import 'package:readbee_lite/providers/assessment_record_provider.dart';
 import 'package:readbee_lite/providers/assignment_provider.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
@@ -376,6 +377,8 @@ class _DigitalComprehensionScorePageState
                         ),
                       );
                     }
+
+                    ref.invalidate(assessmentRecordProvider);
                   },
                   title: 'Proceed',
                   size: 200,

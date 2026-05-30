@@ -34,7 +34,7 @@ final assessmentRecordProvider = FutureProvider<List<AssessmentRecord>?>((
       totalScore: assessment['total_score'] ?? 0,
       readingLevel: assessment['reading_level'] ?? '',
       status: assessment['status'] ?? '',
-      miscueContent: assessment['miscue_content'] ?? '',
+      miscueContent: assessment['miscue_content'] ?? [],
     );
   }).toList();
 });
