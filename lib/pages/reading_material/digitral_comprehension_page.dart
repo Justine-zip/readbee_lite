@@ -70,6 +70,7 @@ class _DigitralComprehensionPageState
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     final selectedMaterial = ref.watch(selectedMaterialProvider);
     final questionAsync = ref.watch(quizQuestionProvider);

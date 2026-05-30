@@ -41,6 +41,8 @@ class _DigitalComprehensionScorePageState
     final compState = ref.watch(comprehensionProvider);
     final answerKey = ref.watch(wordColorComprehensionProvider).key;
 
+    debugPrint('CompState: ${compState.selectedAnswers}');
+
     return questionAsync.when(
       data: (questions) {
         final totalQuestions = questions.length;
@@ -289,8 +291,12 @@ class _DigitalComprehensionScorePageState
                                 orElse: () => {'count': 'Unknown'},
                               )['count'];
 
+                      final answerSummary = compState.selectedAnswers.map(
+                        (key, value) => MapEntry(key.toString(), value),
+                      );
+
                       final comprehensionScore = {
-                        // "answerSummary": compState.answerSummary,
+                        "answerSummary": answerSummary,
                         "comprehensionSummary": [
                           {"type": "No. of Correct Answer", "count": correct},
                           {"type": "No. of Wrong Answer", "count": wrong},

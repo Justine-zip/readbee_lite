@@ -188,6 +188,14 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                                     .currentIndex,
                               );
 
+                              final started = ref.read(timerStartedProvider);
+
+                              if (!started) {
+                                ref.read(timerStartedProvider.notifier).state =
+                                    true;
+                                ref.read(timerProvider.notifier).start();
+                              }
+
                               ref.read(miscueContentProvider.notifier).state =
                                   current;
 
