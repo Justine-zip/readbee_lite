@@ -5,7 +5,9 @@ import 'package:readbee_lite/components/custom_textfield.dart';
 import 'package:readbee_lite/components/filter_sheet.dart';
 import 'package:readbee_lite/components/reading_material_builder.dart';
 import 'package:readbee_lite/components/title_bar.dart';
+import 'package:readbee_lite/models/grade_level.dart';
 import 'package:readbee_lite/models/material_draft.dart';
+import 'package:readbee_lite/models/user_role.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
 import 'package:readbee_lite/providers/grade_level_provider.dart';
@@ -14,6 +16,7 @@ import 'package:readbee_lite/providers/material_filter_provider.dart';
 import 'package:readbee_lite/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/timer_provider.dart';
+import 'package:readbee_lite/providers/user_role_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -300,27 +303,33 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
               ),
 
               const SizedBox(height: 15),
-              DropdownButton<String>(
-                value:
-                    (draft.gradeLevelId == null || draft.gradeLevelId!.isEmpty)
-                        ? null
-                        : draft.gradeLevelId,
-                hint: const Text('Select Grade Level'),
-                items: const [
-                  DropdownMenuItem(value: '3', child: Text('Grade 3')),
-                  DropdownMenuItem(value: '4', child: Text('Grade 4')),
-                  DropdownMenuItem(value: '5', child: Text('Grade 5')),
-                  DropdownMenuItem(value: '6', child: Text('Grade 6')),
-                ],
-                onChanged: (value) {
-                  ref.read(materialDraftProvider.notifier).setGradeLevel(value);
-                  debugPrint(
-                    'Provider value: ${ref.read(materialDraftProvider).gradeLevelId}',
-                  );
-                  debugPrint(
-                    'Draft Provider value: ${ref.read(materialDraftProvider).gradeLevelId}',
-                  );
-                },
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  underline: const SizedBox(),
+                  value:
+                      (draft.gradeLevelId == null ||
+                              draft.gradeLevelId!.isEmpty)
+                          ? null
+                          : draft.gradeLevelId,
+                  hint: const Text('Select Grade Level'),
+                  items: const [
+                    DropdownMenuItem(value: '3', child: Text('Grade 3')),
+                    DropdownMenuItem(value: '4', child: Text('Grade 4')),
+                    DropdownMenuItem(value: '5', child: Text('Grade 5')),
+                    DropdownMenuItem(value: '6', child: Text('Grade 6')),
+                  ],
+                  onChanged: (value) {
+                    ref
+                        .read(materialDraftProvider.notifier)
+                        .setGradeLevel(value);
+                  },
+                ),
               ),
 
               const SizedBox(height: 15),
@@ -508,7 +517,7 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
               child: CustomButton(
                 title: 'Submit',
                 size: 100,
-                onTap: () {
+                onTap: () async {
                   notifier.addQuestion(
                     QuizQuestionDraft(
                       question: questionController.text,
@@ -523,7 +532,17 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
                     ),
                   );
 
-                  saveReadingMaterial(ref);
+                  final draft = ref.read(materialDraftProvider);
+                  final userRole = await ref.read(userRoleProvider.future);
+                  final gradeLevels = await ref.read(
+                    gradeLevelUnfilteredProvider.future,
+                  );
+
+                  await saveReadingMaterial(
+                    draft: draft,
+                    userRole: userRole,
+                    gradeLevels: gradeLevels,
+                  );
 
                   Navigator.pop(context);
                 },
@@ -536,10 +555,13 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
   }
 }
 
-Future<void> saveReadingMaterial(WidgetRef ref) async {
+Future<void> saveReadingMaterial({
+  required ReadingMaterialDraft draft,
+  required UserRole userRole,
+  required List<GradeLevel> gradeLevels,
+}) async {
   final supabase = Supabase.instance.client;
-  final draft = ref.read(materialDraftProvider);
-  final gradeLevels = await ref.read(gradeLevelUnfilteredProvider.future);
+  final userSchoolId = userRole.schoolId;
 
   debugPrint('draft.gradeLevelId = ${draft.gradeLevelId}');
 
@@ -563,6 +585,7 @@ Future<void> saveReadingMaterial(WidgetRef ref) async {
             'word_count': draft.wordCount,
             'language': draft.language,
             'grade_level_id': gradeLevel.gradeLevelId,
+            'created_by': supabase.auth.currentUser!.id,
           })
           .select()
           .single();
@@ -572,7 +595,10 @@ Future<void> saveReadingMaterial(WidgetRef ref) async {
   final quiz =
       await supabase
           .from('quizzes')
-          .insert({'total_score': draft.questions.length})
+          .insert({
+            'total_score': draft.questions.length,
+            'created_by': supabase.auth.currentUser!.id,
+          })
           .select()
           .single();
 
@@ -604,7 +630,7 @@ Future<void> saveReadingMaterial(WidgetRef ref) async {
     'story_id': storyId,
     'quiz_id': quizId,
     'status': 'draft',
+    'uploaded_by': supabase.auth.currentUser!.id,
+    'school_id': userSchoolId,
   });
-
-  ref.read(materialDraftProvider.notifier).reset();
 }
