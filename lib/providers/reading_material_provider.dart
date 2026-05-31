@@ -7,7 +7,9 @@ final readingMaterialProvider = FutureProvider<List<ReadingMaterial>>((
 ) async {
   final supabase = Supabase.instance.client;
 
-  final response = await supabase.from('reading_materials').select('''
+  final response = await supabase
+      .from('reading_materials')
+      .select('''
         *,
         stories (
           content,
@@ -21,7 +23,8 @@ final readingMaterialProvider = FutureProvider<List<ReadingMaterial>>((
             correct_answer
           )
         )
-      ''');
+      ''')
+      .eq('status', 'approved');
 
   return response.map<ReadingMaterial>((json) {
     final story = json['stories'];
@@ -32,7 +35,7 @@ final readingMaterialProvider = FutureProvider<List<ReadingMaterial>>((
 
       title: json['title'] ?? '',
 
-      description: json['description'],
+      description: json['description'] ?? '',
 
       coverImage: json['cover_image'] ?? '',
 

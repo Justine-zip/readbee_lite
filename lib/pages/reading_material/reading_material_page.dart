@@ -5,13 +5,17 @@ import 'package:readbee_lite/components/custom_textfield.dart';
 import 'package:readbee_lite/components/filter_sheet.dart';
 import 'package:readbee_lite/components/reading_material_builder.dart';
 import 'package:readbee_lite/components/title_bar.dart';
+import 'package:readbee_lite/models/material_draft.dart';
 import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/providers/grade_level_provider.dart';
+import 'package:readbee_lite/providers/material_draft_provider.dart';
 import 'package:readbee_lite/providers/material_filter_provider.dart';
 import 'package:readbee_lite/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/timer_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MobileReadingMaterialPage extends ConsumerStatefulWidget {
   const MobileReadingMaterialPage({super.key});
@@ -233,11 +237,35 @@ class _TabletReadingMaterialPageState
   }
 }
 
-class StoryDialog extends ConsumerWidget {
+class StoryDialog extends ConsumerStatefulWidget {
   const StoryDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<StoryDialog> createState() => _StoryDialogState();
+}
+
+class _StoryDialogState extends ConsumerState<StoryDialog> {
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+  final gradeController = TextEditingController();
+  final wordController = TextEditingController();
+  final languageController = TextEditingController();
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    contentController.dispose();
+    gradeController.dispose();
+    wordController.dispose();
+    languageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notifier = ref.read(materialDraftProvider.notifier);
+    final draft = ref.watch(materialDraftProvider);
+
     return AlertDialog(
       title: const Text('Add Story'),
       backgroundColor: Colors.white,
@@ -249,79 +277,107 @@ class StoryDialog extends ConsumerWidget {
           child: Column(
             children: [
               TextField(
-                decoration: InputDecoration(
+                controller: titleController,
+                decoration: const InputDecoration(
                   hintText: 'Title',
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
+                  border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 15),
+
+              const SizedBox(height: 15),
+
               SizedBox(
                 height: 200,
                 child: TextField(
+                  controller: contentController,
                   maxLines: null,
                   expands: true,
                   decoration: const InputDecoration(
                     hintText: 'Story Content',
                     border: OutlineInputBorder(),
-                    alignLabelWithHint: true,
                   ),
                 ),
               ),
-              SizedBox(height: 15),
-              CustomButton(
-                onTap: () {
-                  debugPrint('Scan');
+
+              const SizedBox(height: 15),
+              DropdownButton<String>(
+                value:
+                    (draft.gradeLevelId == null || draft.gradeLevelId!.isEmpty)
+                        ? null
+                        : draft.gradeLevelId,
+                hint: const Text('Select Grade Level'),
+                items: const [
+                  DropdownMenuItem(value: '3', child: Text('Grade 3')),
+                  DropdownMenuItem(value: '4', child: Text('Grade 4')),
+                  DropdownMenuItem(value: '5', child: Text('Grade 5')),
+                  DropdownMenuItem(value: '6', child: Text('Grade 6')),
+                ],
+                onChanged: (value) {
+                  ref.read(materialDraftProvider.notifier).setGradeLevel(value);
+                  debugPrint(
+                    'Provider value: ${ref.read(materialDraftProvider).gradeLevelId}',
+                  );
+                  debugPrint(
+                    'Draft Provider value: ${ref.read(materialDraftProvider).gradeLevelId}',
+                  );
                 },
-                title: 'Scan from Img',
               ),
-              SizedBox(height: 15),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Grade Level',
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
-                ),
-              ),
-              SizedBox(height: 15),
+
+              const SizedBox(height: 15),
+
               Row(
-                spacing: 8,
                 children: [
                   Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      controller: wordController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
                         hintText: 'Words',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1),
-                        ),
+                        border: OutlineInputBorder(),
                       ),
                     ),
                   ),
+
+                  const SizedBox(width: 8),
+
                   Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      controller: languageController,
+                      decoration: const InputDecoration(
                         hintText: 'Language',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1),
-                        ),
+                        border: OutlineInputBorder(),
                       ),
                     ),
                   ),
                 ],
               ),
-              Spacer(),
+
+              const Spacer(),
+
               Align(
                 alignment: Alignment.bottomRight,
                 child: CustomButton(
-                  onTap: () {
-                    debugPrint('Next');
-                    Navigator.pop(context);
-                    showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (_) => const QuizlDialog(),
-                    );
-                  },
                   title: 'Next',
                   size: 100,
+                  onTap: () {
+                    notifier.setTitle(titleController.text);
+
+                    notifier.setContent(contentController.text);
+
+                    notifier.setWordCount(
+                      int.tryParse(wordController.text) ?? 0,
+                    );
+
+                    notifier.setLanguage(languageController.text);
+
+                    Navigator.pop(context);
+
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) => const QuizDialog(),
+                    );
+                  },
                 ),
               ),
             ],
@@ -332,83 +388,223 @@ class StoryDialog extends ConsumerWidget {
   }
 }
 
-class QuizlDialog extends ConsumerWidget {
-  const QuizlDialog({super.key});
+class QuizDialog extends ConsumerStatefulWidget {
+  const QuizDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<QuizDialog> createState() => _QuizDialogState();
+}
+
+class _QuizDialogState extends ConsumerState<QuizDialog> {
+  final questionController = TextEditingController();
+
+  final aController = TextEditingController();
+  final bController = TextEditingController();
+  final cController = TextEditingController();
+  final dController = TextEditingController();
+
+  final answerController = TextEditingController();
+
+  @override
+  void dispose() {
+    questionController.dispose();
+    aController.dispose();
+    bController.dispose();
+    cController.dispose();
+    dController.dispose();
+    answerController.dispose();
+    super.dispose();
+  }
+
+  int getAnswerIndex(String answer) {
+    switch (answer.toUpperCase()) {
+      case 'A':
+        return 0;
+      case 'B':
+        return 1;
+      case 'C':
+        return 2;
+      case 'D':
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notifier = ref.read(materialDraftProvider.notifier);
+
     return AlertDialog(
       title: const Text('Add Quiz Question'),
       backgroundColor: Colors.white,
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 550),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * .7,
-          width: MediaQuery.of(context).size.width * .3,
-          child: Column(
-            children: [
-              SizedBox(
-                height: 100,
-                child: TextField(
-                  maxLines: null,
-                  expands: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Story Content',
-                    border: OutlineInputBorder(),
-                    alignLabelWithHint: true,
-                  ),
-                ),
+      content: SizedBox(
+        width: 500,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: questionController,
+              decoration: const InputDecoration(
+                hintText: 'Question',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 15),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'A',
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
-                ),
+            ),
+
+            const SizedBox(height: 15),
+
+            TextField(
+              controller: aController,
+              decoration: const InputDecoration(
+                hintText: 'Choice A',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 15),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'B',
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
-                ),
+            ),
+
+            const SizedBox(height: 15),
+
+            TextField(
+              controller: bController,
+              decoration: const InputDecoration(
+                hintText: 'Choice B',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 15),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'C',
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
-                ),
+            ),
+
+            const SizedBox(height: 15),
+
+            TextField(
+              controller: cController,
+              decoration: const InputDecoration(
+                hintText: 'Choice C',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 15),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'D',
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
-                ),
+            ),
+
+            const SizedBox(height: 15),
+
+            TextField(
+              controller: dController,
+              decoration: const InputDecoration(
+                hintText: 'Choice D',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 15),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Correct Answer (A/B/C/D)',
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
-                ),
+            ),
+
+            const SizedBox(height: 15),
+
+            TextField(
+              controller: answerController,
+              decoration: const InputDecoration(
+                hintText: 'Correct Answer (A/B/C/D)',
+                border: OutlineInputBorder(),
               ),
-              Spacer(),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: CustomButton(
-                  onTap: () {
-                    debugPrint('Submit');
-                  },
-                  title: 'Submit',
-                  size: 100,
-                ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Align(
+              alignment: Alignment.bottomRight,
+              child: CustomButton(
+                title: 'Submit',
+                size: 100,
+                onTap: () {
+                  notifier.addQuestion(
+                    QuizQuestionDraft(
+                      question: questionController.text,
+                      choices: [
+                        QuizChoice(choice: aController.text, letter: "A"),
+                        QuizChoice(choice: bController.text, letter: "B"),
+                        QuizChoice(choice: cController.text, letter: "C"),
+                        QuizChoice(choice: dController.text, letter: "D"),
+                      ],
+                      correctAnswer:
+                          getAnswerIndex(answerController.text).toString(),
+                    ),
+                  );
+
+                  saveReadingMaterial(ref);
+
+                  Navigator.pop(context);
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+Future<void> saveReadingMaterial(WidgetRef ref) async {
+  final supabase = Supabase.instance.client;
+  final draft = ref.read(materialDraftProvider);
+  final gradeLevels = await ref.read(gradeLevelUnfilteredProvider.future);
+
+  debugPrint('draft.gradeLevelId = ${draft.gradeLevelId}');
+
+  for (final g in gradeLevels) {
+    debugPrint('gradeNumber=${g.gradeNumber}, gradeLevelId=${g.gradeLevelId}');
+  }
+
+  final gradeLevel = gradeLevels.firstWhere(
+    (g) => g.gradeNumber.toString() == draft.gradeLevelId,
+    orElse:
+        () => throw Exception('Invalid grade selected: ${draft.gradeLevelId}'),
+  );
+
+  debugPrint('grIdx: ${gradeLevel.gradeLevelId}');
+  final story =
+      await supabase
+          .from('stories')
+          .insert({
+            'title': draft.title,
+            'content': draft.content,
+            'word_count': draft.wordCount,
+            'language': draft.language,
+            'grade_level_id': gradeLevel.gradeLevelId,
+          })
+          .select()
+          .single();
+
+  final storyId = story['story_id'];
+
+  final quiz =
+      await supabase
+          .from('quizzes')
+          .insert({'total_score': draft.questions.length})
+          .select()
+          .single();
+
+  final quizId = quiz['quiz_id'];
+
+  await supabase
+      .from('quiz_questions')
+      .insert(
+        draft.questions
+            .asMap()
+            .entries
+            .map(
+              (entry) => {
+                'quiz_id': quizId,
+                'question_text': entry.value.question,
+                'choices': entry.value.choices,
+                'correct_answer': entry.value.correctAnswer,
+                'question_order': entry.key + 1,
+              },
+            )
+            .toList(),
+      );
+
+  await supabase.from('reading_materials').insert({
+    'title': draft.title,
+    'language': draft.language,
+    'word_count': draft.wordCount,
+    'grade_level_id': gradeLevel.gradeLevelId,
+    'story_id': storyId,
+    'quiz_id': quizId,
+    'status': 'draft',
+  });
+
+  ref.read(materialDraftProvider.notifier).reset();
 }

@@ -42,3 +42,22 @@ final gradeLevelProvider = FutureProvider<List<GradeLevel>>((ref) async {
     error: (_, __) async => [],
   );
 });
+
+final gradeLevelUnfilteredProvider = FutureProvider<List<GradeLevel>>((
+  ref,
+) async {
+  final supabase = Supabase.instance.client;
+
+  final response = await supabase.from('grade_levels').select('*');
+
+  debugPrint('GradeLevelData: $response');
+
+  return (response as List).map((g) {
+    return GradeLevel(
+      gradeLevelId: g['grade_level_id'],
+      schoolId: g['school_id'],
+      gradeNumber: g['grade_number'],
+      isActive: g['is_active'],
+    );
+  }).toList();
+});
