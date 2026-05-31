@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_textfield.dart';
 import 'package:readbee_lite/components/filter_sheet.dart';
@@ -269,6 +273,47 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
     final notifier = ref.read(materialDraftProvider.notifier);
     final draft = ref.watch(materialDraftProvider);
 
+    final ImagePicker _picker = ImagePicker();
+    File? selectedImage;
+
+    Future<String> extractTextFromImage(File imageFile) async {
+      final inputImage = InputImage.fromFile(imageFile);
+
+      final textRecognizer = TextRecognizer(
+        script: TextRecognitionScript.latin,
+      );
+
+      final RecognizedText recognizedText = await textRecognizer.processImage(
+        inputImage,
+      );
+
+      for (final block in recognizedText.blocks) {
+        debugPrint('Blockx: ${block.text}');
+      }
+
+      await textRecognizer.close();
+
+      return recognizedText.text;
+    }
+
+    Future<void> pickImage() async {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (image == null) return;
+
+      final file = File(image.path);
+
+      setState(() {
+        selectedImage = file;
+      });
+
+      final extractedText = await extractTextFromImage(file);
+
+      debugPrint(extractedText);
+
+      contentController.text = extractedText;
+    }
+
     return AlertDialog(
       title: const Text('Add Story'),
       backgroundColor: Colors.white,
@@ -363,6 +408,17 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
 
               const Spacer(),
 
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: CustomButton(
+                  title: 'Scan Img',
+                  size: 100,
+                  onTap: () async {
+                    debugPrint('Scan Image');
+                    await pickImage();
+                  },
+                ),
+              ),
               Align(
                 alignment: Alignment.bottomRight,
                 child: CustomButton(
