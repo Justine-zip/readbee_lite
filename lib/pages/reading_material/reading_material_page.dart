@@ -55,7 +55,7 @@ class _MobileReadingMaterialPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             const Text(
               'Reading Materials',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -65,7 +65,7 @@ class _MobileReadingMaterialPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
-                CustomTextfield(hint: 'Search...'),
+                const CustomTextfield(hint: 'Search...'),
                 IconButton(
                   onPressed: () {
                     showModalBottomSheet(
@@ -73,7 +73,7 @@ class _MobileReadingMaterialPageState
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       builder: (context) {
-                        return FilterSheet(textSize: 1, sheetSize: .4);
+                        return const FilterSheet(textSize: 1, sheetSize: .4);
                       },
                     );
                   },
@@ -159,8 +159,8 @@ class _TabletReadingMaterialPageState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 25),
-                TitleBar(
+                const SizedBox(height: 25),
+                const TitleBar(
                   title: 'Reading Materials',
                   description:
                       'Select reading materials to assess students, ensuring accurate and organized evaluation of tjeir reading skills',
@@ -172,7 +172,7 @@ class _TabletReadingMaterialPageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      CustomTextfield(hint: 'Search...'),
+                      const CustomTextfield(hint: 'Search...'),
                       IconButton(
                         onPressed: () {
                           showModalBottomSheet(
@@ -180,7 +180,7 @@ class _TabletReadingMaterialPageState
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (context) {
-                              return FilterSheet(
+                              return const FilterSheet(
                                 textSize: 1.25,
                                 sheetSize: .30,
                               );
@@ -194,7 +194,8 @@ class _TabletReadingMaterialPageState
                 ),
                 const SizedBox(height: 10),
                 material.when(
-                  loading: () => Center(child: CircularProgressIndicator()),
+                  loading:
+                      () => const Center(child: CircularProgressIndicator()),
                   data: (data) {
                     return ReadingMaterialBuilder(material: data);
                   },
@@ -203,20 +204,6 @@ class _TabletReadingMaterialPageState
                           Center(child: Text(error.toString())),
                 ),
               ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 130,
-          right: 50,
-          child: SizedBox(
-            width: 70,
-            height: 70,
-            child: FloatingActionButton(
-              onPressed: () {
-                debugPrint('add Material');
-              },
-              child: const Icon(Icons.add, size: 36),
             ),
           ),
         ),
@@ -259,10 +246,28 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
   final languageController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+
+    titleController.addListener(_updateWordCount);
+    contentController.addListener(_updateWordCount);
+  }
+
+  void _updateWordCount() {
+    final text = '${titleController.text} ${contentController.text}'.trim();
+
+    final count = text.isEmpty ? 0 : text.split(RegExp(r'\s+')).length;
+
+    wordController.text = count.toString();
+  }
+
+  @override
   void dispose() {
+    titleController.removeListener(_updateWordCount);
+    contentController.removeListener(_updateWordCount);
+
     titleController.dispose();
     contentController.dispose();
-    gradeController.dispose();
     wordController.dispose();
     languageController.dispose();
     super.dispose();
@@ -273,7 +278,7 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
     final notifier = ref.read(materialDraftProvider.notifier);
     final draft = ref.watch(materialDraftProvider);
 
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     File? selectedImage;
 
     Future<String> extractTextFromImage(File imageFile) async {
@@ -297,7 +302,7 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
     }
 
     Future<void> pickImage() async {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
       if (image == null) return;
 
@@ -311,7 +316,19 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
 
       debugPrint(extractedText);
 
-      contentController.text = extractedText;
+      final lines =
+          extractedText
+              .split('\n')
+              .where((line) => line.trim().isNotEmpty)
+              .toList();
+
+      if (lines.isNotEmpty) {
+        titleController.text = lines.first;
+        contentController.text = lines.skip(1).join('\n');
+      } else {
+        titleController.clear();
+        contentController.clear();
+      }
     }
 
     return AlertDialog(
@@ -384,7 +401,7 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                   Expanded(
                     child: TextField(
                       controller: wordController,
-                      keyboardType: TextInputType.number,
+                      readOnly: true,
                       decoration: const InputDecoration(
                         hintText: 'Words',
                         border: OutlineInputBorder(),
@@ -395,55 +412,72 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                   const SizedBox(width: 8),
 
                   Expanded(
-                    child: TextField(
-                      controller: languageController,
+                    child: DropdownButtonFormField<String>(
+                      initialValue:
+                          languageController.text.isEmpty
+                              ? null
+                              : languageController.text,
                       decoration: const InputDecoration(
                         hintText: 'Language',
                         border: OutlineInputBorder(),
                       ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'English',
+                          child: Text('English'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Filipino',
+                          child: Text('Filipino'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        languageController.text = value ?? '';
+                        debugPrint(
+                          'LanguageController: ${languageController.text}',
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
-
               const Spacer(),
 
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: CustomButton(
-                  title: 'Scan Img',
-                  size: 100,
-                  onTap: () async {
-                    debugPrint('Scan Image');
-                    await pickImage();
-                  },
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: CustomButton(
-                  title: 'Next',
-                  size: 100,
-                  onTap: () {
-                    notifier.setTitle(titleController.text);
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomButton(
+                    title: 'Scan Img',
+                    size: 100,
+                    onTap: () async {
+                      debugPrint('Scan Image');
+                      await pickImage();
+                    },
+                  ),
+                  CustomButton(
+                    title: 'Next',
+                    size: 100,
+                    onTap: () {
+                      notifier.setTitle(titleController.text);
 
-                    notifier.setContent(contentController.text);
+                      notifier.setContent(contentController.text);
 
-                    notifier.setWordCount(
-                      int.tryParse(wordController.text) ?? 0,
-                    );
+                      notifier.setWordCount(
+                        int.tryParse(wordController.text) ?? 0,
+                      );
 
-                    notifier.setLanguage(languageController.text);
+                      notifier.setLanguage(languageController.text);
 
-                    Navigator.pop(context);
+                      Navigator.pop(context);
 
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) => const QuizDialog(),
-                    );
-                  },
-                ),
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) => const QuizDialog(),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
