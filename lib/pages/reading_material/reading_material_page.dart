@@ -963,6 +963,36 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
 
                         if (context.mounted) {
                           Navigator.pop(context);
+
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return Dialog(
+                                child: Container(
+                                  width: 400,
+                                  height: 250,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.surfaceContainer,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Material Added Successfully!\n\nIt will be reviewed by the admin and will appear in the list once approved.`',
+                                        style: TextStyle(fontSize: 22),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                         }
                       }
                     },
