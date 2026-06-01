@@ -245,6 +245,8 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
   final wordController = TextEditingController();
   final languageController = TextEditingController();
 
+  String? _errorMessage;
+
   @override
   void initState() {
     super.initState();
@@ -268,6 +270,7 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
 
     titleController.dispose();
     contentController.dispose();
+    gradeController.dispose();
     wordController.dispose();
     languageController.dispose();
     super.dispose();
@@ -279,7 +282,6 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
     final draft = ref.watch(materialDraftProvider);
 
     final ImagePicker picker = ImagePicker();
-    File? selectedImage;
 
     Future<String> extractTextFromImage(File imageFile) async {
       final inputImage = InputImage.fromFile(imageFile);
@@ -307,10 +309,6 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
       if (image == null) return;
 
       final file = File(image.path);
-
-      setState(() {
-        selectedImage = file;
-      });
 
       final extractedText = await extractTextFromImage(file);
 
@@ -387,6 +385,9 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                     DropdownMenuItem(value: '6', child: Text('Grade 6')),
                   ],
                   onChanged: (value) {
+                    setState(() {
+                      _errorMessage = null;
+                    });
                     ref
                         .read(materialDraftProvider.notifier)
                         .setGradeLevel(value);
@@ -432,6 +433,9 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                         ),
                       ],
                       onChanged: (value) {
+                        setState(() {
+                          _errorMessage = null;
+                        });
                         languageController.text = value ?? '';
                         debugPrint(
                           'LanguageController: ${languageController.text}',
@@ -442,6 +446,32 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                 ],
               ),
               const Spacer(),
+
+              if (_errorMessage != null) ...[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.warning_amber_rounded,
+                        color: Colors.redAccent,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: const TextStyle(
+                            color: Colors.redAccent,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -458,22 +488,42 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                     title: 'Next',
                     size: 100,
                     onTap: () {
-                      notifier.setTitle(titleController.text);
+                      final title = titleController.text.trim();
+                      final content = contentController.text.trim();
+                      final gradeLevel = draft.gradeLevelId;
+                      final language = languageController.text.trim();
 
-                      notifier.setContent(contentController.text);
+                      if (title.isEmpty ||
+                          content.isEmpty ||
+                          gradeLevel == null ||
+                          gradeLevel.isEmpty ||
+                          language.isEmpty) {
+                        setState(() {
+                          _errorMessage =
+                              'All fields are required before proceeding.';
+                        });
+                        return;
+                      }
 
+                      setState(() {
+                        _errorMessage = null;
+                      });
+
+                      notifier.setTitle(title);
+                      notifier.setContent(content);
                       notifier.setWordCount(
                         int.tryParse(wordController.text) ?? 0,
                       );
+                      notifier.setLanguage(language);
 
-                      notifier.setLanguage(languageController.text);
+                      debugPrint('draft.gradeLevelId =: ${draft.gradeLevelId}');
 
                       Navigator.pop(context);
 
                       showDialog(
                         context: context,
-                        barrierDismissible: false,
-                        builder: (_) => const QuizDialog(),
+                        barrierDismissible: true,
+                        builder: (_) => const QuizDialogOption(),
                       );
                     },
                   ),
@@ -487,8 +537,188 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
   }
 }
 
+class QuizDialogOption extends StatelessWidget {
+  const QuizDialogOption({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final ImagePicker picker = ImagePicker();
+
+    Future<String> extractTextFromImage(File imageFile) async {
+      final inputImage = InputImage.fromFile(imageFile);
+
+      final textRecognizer = TextRecognizer(
+        script: TextRecognitionScript.latin,
+      );
+
+      final RecognizedText recognizedText = await textRecognizer.processImage(
+        inputImage,
+      );
+
+      for (final block in recognizedText.blocks) {
+        debugPrint('QuizBlockx: ${block.text}');
+      }
+
+      await textRecognizer.close();
+
+      return recognizedText.text;
+    }
+
+    Future<List<Map<String, dynamic>>> pickImage() async {
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+      if (image == null) return [];
+
+      final file = File(image.path);
+      final extractedText = await extractTextFromImage(file);
+
+      final lines =
+          extractedText
+              .split('\n')
+              .map((e) => e.trim())
+              .where((e) => e.isNotEmpty)
+              .toList();
+
+      final questionRegExp = RegExp(r'^(?![a-zA-Z]\.)(?!\d+$).+$');
+      final choicesRegExp = RegExp(r'^[a-zA-Z]\..*');
+
+      final List<Map<String, dynamic>> quizItems = [];
+
+      String currentQuestionBlock = "";
+      List<String> currentChoicesBlock = [];
+
+      for (final line in lines) {
+        final trimmedLine = line.trim();
+        if (trimmedLine.isEmpty) continue;
+
+        final questionMatch = questionRegExp.firstMatch(trimmedLine);
+        final choiceMatch = choicesRegExp.firstMatch(trimmedLine);
+
+        if (questionMatch != null) {
+          if (currentChoicesBlock.isNotEmpty) {
+            quizItems.add({
+              'question': currentQuestionBlock,
+              'choices': List<String>.from(currentChoicesBlock),
+            });
+            currentQuestionBlock = "";
+            currentChoicesBlock.clear();
+          }
+
+          final text = questionMatch.group(0)!;
+          if (currentQuestionBlock.isEmpty) {
+            currentQuestionBlock = text;
+          } else {
+            currentQuestionBlock += " $text";
+          }
+        } else if (choiceMatch != null) {
+          currentChoicesBlock.add(choiceMatch.group(0)!);
+        }
+      }
+
+      if (currentQuestionBlock.isNotEmpty) {
+        quizItems.add({
+          'question': currentQuestionBlock,
+          'choices': currentChoicesBlock,
+        });
+      }
+
+      return quizItems;
+    }
+
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      contentPadding: const EdgeInsets.all(24),
+      content: SizedBox(
+        width: 400,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Choose Quiz Input Method',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 24),
+
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () async {
+                      debugPrint('Scan Quiz Image');
+                      final quizData = await pickImage();
+
+                      Navigator.pop(context);
+
+                      if (quizData.isNotEmpty) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (_) => QuizDialog(quizItems: quizData),
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Column(
+                        children: [
+                          Icon(Icons.image_search, size: 40),
+                          SizedBox(height: 8),
+                          Text('Scan Image'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 16),
+
+                Expanded(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      Navigator.pop(context);
+
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (_) => const QuizDialog(),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Column(
+                        children: [
+                          Icon(Icons.edit_note, size: 40),
+                          SizedBox(height: 8),
+                          Text('Manual'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class QuizDialog extends ConsumerStatefulWidget {
-  const QuizDialog({super.key});
+  final List<Map<String, dynamic>>? quizItems;
+
+  const QuizDialog({super.key, this.quizItems});
 
   @override
   ConsumerState<QuizDialog> createState() => _QuizDialogState();
@@ -496,13 +726,40 @@ class QuizDialog extends ConsumerStatefulWidget {
 
 class _QuizDialogState extends ConsumerState<QuizDialog> {
   final questionController = TextEditingController();
-
   final aController = TextEditingController();
   final bController = TextEditingController();
   final cController = TextEditingController();
   final dController = TextEditingController();
-
   final answerController = TextEditingController();
+
+  int _currentIndex = 0;
+  bool _isChoiceDVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentQuizItem();
+  }
+
+  void _loadCurrentQuizItem() {
+    if (widget.quizItems != null && widget.quizItems!.isNotEmpty) {
+      if (_currentIndex < widget.quizItems!.length) {
+        final currentItem = widget.quizItems![_currentIndex];
+        final List<dynamic> choices = currentItem['choices'] ?? [];
+
+        questionController.text = currentItem['question'] ?? '';
+        aController.text = choices.isNotEmpty ? choices[0] : '';
+        bController.text = choices.length > 1 ? choices[1] : '';
+        cController.text = choices.length > 2 ? choices[2] : '';
+        dController.text = choices.length > 3 ? choices[3] : '';
+
+        _isChoiceDVisible = choices.length > 3;
+        answerController.clear();
+      }
+    } else {
+      _isChoiceDVisible = false;
+    }
+  }
 
   @override
   void dispose() {
@@ -530,115 +787,190 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  bool get _hasMoreItems {
+    if (widget.quizItems == null) return false;
+    return _currentIndex < widget.quizItems!.length - 1;
+  }
+
+  void _saveCurrentToDraft() {
     final notifier = ref.read(materialDraftProvider.notifier);
 
+    final allChoices = [
+      QuizChoice(choice: aController.text.trim(), letter: "A"),
+      QuizChoice(choice: bController.text.trim(), letter: "B"),
+      QuizChoice(choice: cController.text.trim(), letter: "C"),
+    ];
+
+    if (_isChoiceDVisible) {
+      allChoices.add(QuizChoice(choice: dController.text.trim(), letter: "D"));
+    }
+
+    final validChoices = allChoices.where((c) => c.choice.isNotEmpty).toList();
+
+    notifier.addQuestion(
+      QuizQuestionDraft(
+        question: questionController.text.trim(),
+        choices: validChoices,
+        correctAnswer: getAnswerIndex(answerController.text).toString(),
+      ),
+    );
+  }
+
+  void _clearFieldsForNewQuestion() {
+    questionController.clear();
+    aController.clear();
+    bController.clear();
+    cController.clear();
+    dController.clear();
+    answerController.clear();
+    setState(() {
+      _isChoiceDVisible = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hasItems = widget.quizItems != null && widget.quizItems!.isNotEmpty;
+
+    final String titleText =
+        hasItems
+            ? 'Add Quiz Question (${_currentIndex + 1} of ${widget.quizItems!.length})'
+            : 'Add Quiz Question';
+
     return AlertDialog(
-      title: const Text('Add Quiz Question'),
+      title: Text(titleText),
       backgroundColor: Colors.white,
       content: SizedBox(
         width: 500,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: questionController,
-              decoration: const InputDecoration(
-                hintText: 'Question',
-                border: OutlineInputBorder(),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: questionController,
+                decoration: const InputDecoration(
+                  hintText: 'Question',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            const SizedBox(height: 15),
-
-            TextField(
-              controller: aController,
-              decoration: const InputDecoration(
-                hintText: 'Choice A',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 15),
+              TextField(
+                controller: aController,
+                decoration: const InputDecoration(
+                  hintText: 'Choice A',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            const SizedBox(height: 15),
-
-            TextField(
-              controller: bController,
-              decoration: const InputDecoration(
-                hintText: 'Choice B',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 15),
+              TextField(
+                controller: bController,
+                decoration: const InputDecoration(
+                  hintText: 'Choice B',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-
-            const SizedBox(height: 15),
-
-            TextField(
-              controller: cController,
-              decoration: const InputDecoration(
-                hintText: 'Choice C',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 15),
+              TextField(
+                controller: cController,
+                decoration: const InputDecoration(
+                  hintText: 'Choice C',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
+              const SizedBox(height: 15),
 
-            const SizedBox(height: 15),
+              if (_isChoiceDVisible) ...[
+                TextField(
+                  controller: dController,
+                  decoration: const InputDecoration(
+                    hintText: 'Choice D',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ] else ...[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        _isChoiceDVisible = true;
+                      });
+                    },
+                    icon: const Icon(Icons.add, size: 18),
+                    label: const Text('Add Choice D'),
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
 
-            TextField(
-              controller: dController,
-              decoration: const InputDecoration(
-                hintText: 'Choice D',
-                border: OutlineInputBorder(),
+              TextField(
+                controller: answerController,
+                decoration: const InputDecoration(
+                  hintText: 'Correct Answer (A/B/C/D)',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
+              const SizedBox(height: 20),
 
-            const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (!hasItems)
+                    TextButton.icon(
+                      onPressed: () {
+                        if (questionController.text.trim().isNotEmpty) {
+                          _saveCurrentToDraft();
+                          _clearFieldsForNewQuestion();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Question saved to draft!'),
+                            ),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.add_box),
+                      label: const Text('New Question'),
+                    )
+                  else
+                    const SizedBox.shrink(),
 
-            TextField(
-              controller: answerController,
-              decoration: const InputDecoration(
-                hintText: 'Correct Answer (A/B/C/D)',
-                border: OutlineInputBorder(),
+                  CustomButton(
+                    title: _hasMoreItems ? 'Next' : 'Submit',
+                    size: 100,
+                    onTap: () async {
+                      _saveCurrentToDraft();
+
+                      if (_hasMoreItems) {
+                        setState(() {
+                          _currentIndex++;
+                          _loadCurrentQuizItem();
+                        });
+                      } else {
+                        final draft = ref.read(materialDraftProvider);
+                        final userRole = await ref.read(
+                          userRoleProvider.future,
+                        );
+                        final gradeLevels = await ref.read(
+                          gradeLevelUnfilteredProvider.future,
+                        );
+
+                        await saveReadingMaterial(
+                          draft: draft,
+                          userRole: userRole,
+                          gradeLevels: gradeLevels,
+                        );
+
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      }
+                    },
+                  ),
+                ],
               ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Align(
-              alignment: Alignment.bottomRight,
-              child: CustomButton(
-                title: 'Submit',
-                size: 100,
-                onTap: () async {
-                  notifier.addQuestion(
-                    QuizQuestionDraft(
-                      question: questionController.text,
-                      choices: [
-                        QuizChoice(choice: aController.text, letter: "A"),
-                        QuizChoice(choice: bController.text, letter: "B"),
-                        QuizChoice(choice: cController.text, letter: "C"),
-                        QuizChoice(choice: dController.text, letter: "D"),
-                      ],
-                      correctAnswer:
-                          getAnswerIndex(answerController.text).toString(),
-                    ),
-                  );
-
-                  final draft = ref.read(materialDraftProvider);
-                  final userRole = await ref.read(userRoleProvider.future);
-                  final gradeLevels = await ref.read(
-                    gradeLevelUnfilteredProvider.future,
-                  );
-
-                  await saveReadingMaterial(
-                    draft: draft,
-                    userRole: userRole,
-                    gradeLevels: gradeLevels,
-                  );
-
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -719,7 +1051,7 @@ Future<void> saveReadingMaterial({
     'grade_level_id': gradeLevel.gradeLevelId,
     'story_id': storyId,
     'quiz_id': quizId,
-    'status': 'draft',
+    'status': 'pending',
     'uploaded_by': supabase.auth.currentUser!.id,
     'school_id': userSchoolId,
   });
