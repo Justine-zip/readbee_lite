@@ -71,8 +71,8 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: [
-                          Text('Story', style: TextStyle(fontSize: 40)),
-                          SizedBox(height: 30),
+                          const Text('Story', style: TextStyle(fontSize: 40)),
+                          const SizedBox(height: 30),
                           Expanded(
                             child: materialAsync.when(
                               data: (material) {
@@ -120,135 +120,219 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                       ),
                     ),
                   ),
-                  VerticalDivider(thickness: 8),
+                  const VerticalDivider(thickness: 8),
                   Expanded(
                     flex: 5,
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: [
-                          Text(
+                          const Text(
                             'Story Evaluation',
                             style: TextStyle(fontSize: 40),
                           ),
                           Expanded(
-                            child: storyAsync.when(
-                              data: (story) {
-                                if (story == null) {
-                                  return const Center(
-                                    child: Text('No story found'),
-                                  );
-                                }
+                            child: ListView(
+                              padding: const EdgeInsets.all(24),
+                              children: [
+                                assessmentAsync.when(
+                                  data: (assessment) {
+                                    if (assessment == null ||
+                                        assessment.isEmpty) {
+                                      return const Center(
+                                        child: Text('No reading score'),
+                                      );
+                                    }
 
-                                if (story.language != record.selectedLanguage) {
-                                  return const Center(
-                                    child: Text('Language does not match'),
-                                  );
-                                }
+                                    final selectedStudentId =
+                                        record.selectedStudent?.studentId;
+                                    final selectedMaterial = ref.read(
+                                      selectedMaterialProvider,
+                                    );
 
-                                return ListView(
-                                  padding: const EdgeInsets.all(24),
-                                  children: [
-                                    Material(
-                                      elevation: 3,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(24.0),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              story.title,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontSize: 28,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 20),
-                                            Text(
-                                              story.content.replaceAll(
-                                                '\n',
-                                                ' ',
-                                              ),
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontSize: 28,
-                                              ),
-                                            ),
-                                          ],
+                                    final filteredAssessment =
+                                        assessment.where((a) {
+                                          return a.pupilId ==
+                                                  selectedStudentId &&
+                                              a.materialId ==
+                                                  selectedMaterial?.materialId;
+                                        }).toList();
+
+                                    if (filteredAssessment.isEmpty) {
+                                      return const Center(
+                                        child: Text(
+                                          'No record for selected student & language',
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                    }
 
-                                    const SizedBox(height: 30),
+                                    final item = filteredAssessment.first;
+                                    final readingScore = item.readingScore;
+                                    final comprehensionScore =
+                                        item.comprehensionScore;
 
-                                    assessmentAsync.when(
-                                      data: (assessment) {
-                                        if (assessment == null ||
-                                            assessment.isEmpty) {
-                                          return const Center(
-                                            child: Text('No reading score'),
-                                          );
-                                        }
+                                    final Map<String, Color> miscueColors = {
+                                      'Omission': Colors.purple,
+                                      'Repetition': Colors.grey,
+                                      'Substitution': Colors.red,
+                                      'Reversal': Colors.blue,
+                                      'Transposition': Colors.pink,
+                                      'Insertion': Colors.yellow,
+                                      'Mispronunciation': Colors.orange,
+                                      'Correct': Colors.green,
+                                    };
 
-                                        final selectedStudentId =
-                                            record.selectedStudent?.studentId;
-                                        final selectedMaterial = ref.read(
-                                          selectedMaterialProvider,
+                                    final Map<int, Color> wordColors = {};
+
+                                    final miscueContent =
+                                        Map<String, dynamic>.from(
+                                          item.miscueContent ?? {},
                                         );
 
-                                        final filteredAssessment =
-                                            assessment.where((a) {
-                                              return a.pupilId ==
-                                                      selectedStudentId &&
-                                                  a.materialId ==
-                                                      selectedMaterial!
-                                                          .materialId;
-                                            }).toList();
+                                    miscueContent.forEach((type, indexes) {
+                                      final color =
+                                          miscueColors[type] ?? Colors.black;
 
-                                        if (filteredAssessment.isEmpty) {
-                                          return const Center(
-                                            child: Text(
-                                              'No record for selected student & language',
-                                            ),
-                                          );
-                                        }
+                                      for (final index in List<int>.from(
+                                        indexes,
+                                      )) {
+                                        wordColors[index] = color;
+                                      }
+                                    });
 
-                                        final item = filteredAssessment.first;
-                                        final readingScore = item.readingScore;
-                                        final comprehensionScore =
-                                            item.comprehensionScore;
+                                    debugPrint(
+                                      'misContent: ${item.miscueContent}',
+                                    );
 
-                                        final miscues =
-                                            (readingScore['miscueSummary']
-                                                    is List)
-                                                ? List<
-                                                  Map<String, dynamic>
-                                                >.from(
-                                                  readingScore['miscueSummary'],
-                                                )
-                                                : <Map<String, dynamic>>[];
+                                    final miscues =
+                                        (readingScore['miscueSummary'] is List)
+                                            ? List<Map<String, dynamic>>.from(
+                                              readingScore['miscueSummary'],
+                                            )
+                                            : <Map<String, dynamic>>[];
 
-                                        final miscueOverallSummary =
-                                            (readingScore['miscueOverallSummary']
-                                                    is List)
-                                                ? List<
-                                                  Map<String, dynamic>
-                                                >.from(
-                                                  readingScore['miscueOverallSummary'],
-                                                )
-                                                : <Map<String, dynamic>>[];
+                                    final miscueOverallSummary =
+                                        (readingScore['miscueOverallSummary']
+                                                is List)
+                                            ? List<Map<String, dynamic>>.from(
+                                              readingScore['miscueOverallSummary'],
+                                            )
+                                            : <Map<String, dynamic>>[];
 
-                                        final comprehensionSummary =
-                                            (comprehensionScore['comprehensionSummary']
-                                                    is List)
-                                                ? List<
-                                                  Map<String, dynamic>
-                                                >.from(
-                                                  comprehensionScore['comprehensionSummary'],
-                                                )
-                                                : <Map<String, dynamic>>[];
+                                    final comprehensionSummary =
+                                        (comprehensionScore['comprehensionSummary']
+                                                is List)
+                                            ? List<Map<String, dynamic>>.from(
+                                              comprehensionScore['comprehensionSummary'],
+                                            )
+                                            : <Map<String, dynamic>>[];
 
-                                        return Column(
+                                    return Column(
+                                      children: [
+                                        storyAsync.when(
+                                          data: (story) {
+                                            if (story == null) {
+                                              return const Center(
+                                                child: Text('No story found'),
+                                              );
+                                            }
+
+                                            if (story.language !=
+                                                record.selectedLanguage) {
+                                              return const Center(
+                                                child: Text(
+                                                  'Language does not match',
+                                                ),
+                                              );
+                                            }
+
+                                            final titleWords = story.title
+                                                .split(RegExp(r'\s+'));
+
+                                            final contentWords = story.content
+                                                .replaceAll('\n', ' ')
+                                                .split(RegExp(r'\s+'));
+
+                                            final titleWordCount =
+                                                titleWords.length;
+                                            return Material(
+                                              elevation: 3,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  24.0,
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    RichText(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      text: TextSpan(
+                                                        style: const TextStyle(
+                                                          fontSize: 28,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black,
+                                                        ),
+                                                        children: List.generate(
+                                                          titleWords.length,
+                                                          (index) => TextSpan(
+                                                            text:
+                                                                '${titleWords[index]} ',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  wordColors[index] ??
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(height: 20),
+
+                                                    RichText(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      text: TextSpan(
+                                                        style: const TextStyle(
+                                                          fontSize: 28,
+                                                          color: Colors.black,
+                                                        ),
+                                                        children: List.generate(
+                                                          contentWords.length,
+                                                          (index) => TextSpan(
+                                                            text:
+                                                                '${contentWords[index]} ',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  wordColors[index +
+                                                                      titleWordCount] ??
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          error:
+                                              (e, _) => Center(
+                                                child: Text(e.toString()),
+                                              ),
+                                          loading:
+                                              () => const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                        ),
+
+                                        Column(
                                           children: [
                                             IntrinsicHeight(
                                               child: Row(
@@ -361,7 +445,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(height: 50),
+                                            const SizedBox(height: 50),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceEvenly,
@@ -380,111 +464,95 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                               ],
                                             ),
                                           ],
-                                        );
-                                      },
-                                      loading:
-                                          () => const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                      error:
-                                          (e, _) =>
-                                              Center(child: Text(e.toString())),
-                                    ),
-                                    SizedBox(height: 50),
-                                    questionAsync.when(
-                                      data: (question) {
-                                        if (question.isEmpty) {
-                                          return const Center(
-                                            child: Text('No questions found'),
-                                          );
-                                        }
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  loading:
+                                      () => const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                  error:
+                                      (e, _) =>
+                                          Center(child: Text(e.toString())),
+                                ),
+                                const SizedBox(height: 50),
+                                questionAsync.when(
+                                  data: (question) {
+                                    if (question.isEmpty) {
+                                      return const Center(
+                                        child: Text('No questions found'),
+                                      );
+                                    }
 
-                                        return Material(
-                                          elevation: 3,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                ...List.generate(question.length, (
-                                                  index,
-                                                ) {
-                                                  return Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                          bottom: 16,
-                                                        ),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
+                                    return Material(
+                                      elevation: 3,
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ...List.generate(question.length, (
+                                              index,
+                                            ) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                  bottom: 16,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
 
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          '${index + 1}. ${question[index].questionText}',
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      '${index + 1}. ${question[index].questionText}',
+                                                      textAlign: TextAlign.left,
+                                                      style: const TextStyle(
+                                                        fontSize: 22,
+                                                      ),
+                                                    ),
+                                                    ...List.generate(
+                                                      question[index]
+                                                          .choices
+                                                          .length,
+                                                      (choiceIndex) {
+                                                        return Text(
+                                                          '    ${question[index].choices[choiceIndex].letter}. '
+                                                          '${question[index].choices[choiceIndex].choice}',
                                                           textAlign:
                                                               TextAlign.left,
                                                           style:
                                                               const TextStyle(
-                                                                fontSize: 22,
+                                                                fontSize: 20,
                                                               ),
-                                                        ),
-                                                        ...List.generate(
-                                                          question[index]
-                                                              .choices
-                                                              .length,
-                                                          (choiceIndex) {
-                                                            return Text(
-                                                              '    ${question[index].choices[choiceIndex].letter}. '
-                                                              '${question[index].choices[choiceIndex].choice}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style:
-                                                                  const TextStyle(
-                                                                    fontSize:
-                                                                        20,
-                                                                  ),
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
+                                                        );
+                                                      },
                                                     ),
-                                                  );
-                                                }),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                                  ],
+                                                ),
+                                              );
+                                            }),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
 
-                                      loading:
-                                          () => const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
+                                  loading:
+                                      () => const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
 
-                                      error:
-                                          (e, _) =>
-                                              Center(child: Text(e.toString())),
-                                    ),
-                                  ],
-                                );
-                              },
-
-                              loading:
-                                  () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-
-                              error:
-                                  (e, _) => Center(child: Text(e.toString())),
+                                  error:
+                                      (e, _) =>
+                                          Center(child: Text(e.toString())),
+                                ),
+                              ],
                             ),
                           ),
                         ],
