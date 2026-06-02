@@ -5,6 +5,7 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/profile_general_option.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/pages/profile/account_details_page.dart';
+import 'package:readbee_lite/providers/dark_mode_provider.dart';
 import 'package:readbee_lite/providers/profile_provider.dart';
 import 'package:readbee_lite/providers/theme_provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -237,7 +238,7 @@ class TabletProfilePage extends ConsumerWidget {
                             ProfileGeneralOption(
                               size: 22,
                               title: 'Dark Mode',
-                              value: ref.watch(themeProvider) == ThemeMode.dark,
+                              value: ref.watch(darkModeProvider),
                               onTap: () {
                                 ref.read(themeProvider.notifier).toggleTheme();
                               },

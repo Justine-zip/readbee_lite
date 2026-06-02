@@ -273,11 +273,14 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                                       textAlign:
                                                           TextAlign.center,
                                                       text: TextSpan(
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                           fontSize: 28,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color: Colors.black,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .tertiary,
                                                         ),
                                                         children: List.generate(
                                                           titleWords.length,
@@ -286,8 +289,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                                                 '${titleWords[index]} ',
                                                             style: TextStyle(
                                                               color:
-                                                                  wordColors[index] ??
-                                                                  Colors.black,
+                                                                  wordColors[index],
                                                             ),
                                                           ),
                                                         ),
@@ -312,8 +314,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                                             style: TextStyle(
                                                               color:
                                                                   wordColors[index +
-                                                                      titleWordCount] ??
-                                                                  Colors.black,
+                                                                      titleWordCount],
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,

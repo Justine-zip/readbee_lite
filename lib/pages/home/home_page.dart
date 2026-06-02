@@ -487,7 +487,7 @@ class ReadingLevelChartCard extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainer,
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: const [
                     BoxShadow(
