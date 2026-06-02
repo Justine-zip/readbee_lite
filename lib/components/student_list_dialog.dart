@@ -16,6 +16,8 @@ class StudentListDialog extends ConsumerWidget {
     final recordState = ref.watch(recordProvider);
     final pupilsAsync = ref.watch(pupilProvider);
 
+    final selectedStudent = ref.watch(recordProvider).selectedStudent;
+
     return Dialog(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -50,7 +52,7 @@ class StudentListDialog extends ConsumerWidget {
                         return ListTile(
                           selected:
                               selectedStudent?.studentId == pupilItem.pupilId,
-                          selectedTileColor: Colors.amber.withOpacity(.3),
+                          selectedTileColor: Colors.amber.withValues(alpha: .3),
 
                           title: Text(
                             pupilItem.fullName,
@@ -89,8 +91,11 @@ class StudentListDialog extends ConsumerWidget {
                   padding: const EdgeInsets.all(12),
                   child: CustomButton(
                     onTap:
-                        (ref.watch(recordProvider).selectedStudent != null)
-                            ? () {
+                        selectedStudent == null
+                            ? null
+                            : () {
+                              Navigator.pop(context);
+
                               Navigator.push(
                                 context,
                                 PageAnimationTransition(
@@ -98,8 +103,7 @@ class StudentListDialog extends ConsumerWidget {
                                   pageAnimationType: RightToLeftTransition(),
                                 ),
                               );
-                            }
-                            : null,
+                            },
                     title: 'Evaluate',
                     size: 150,
                   ),

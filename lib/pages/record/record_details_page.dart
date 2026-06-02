@@ -186,7 +186,7 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
 
                                     final miscueContent =
                                         Map<String, dynamic>.from(
-                                          item.miscueContent ?? {},
+                                          item.miscueContent,
                                         );
 
                                     miscueContent.forEach((type, indexes) {

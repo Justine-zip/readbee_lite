@@ -70,7 +70,7 @@ class RecordPage extends ConsumerWidget {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return StudentListDialog();
+                      return const StudentListDialog();
                     },
                   );
                 }
