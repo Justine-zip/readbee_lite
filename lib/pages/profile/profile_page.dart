@@ -228,10 +228,9 @@ class TabletProfilePage extends ConsumerWidget {
                                 );
                               },
                             ),
-                            ProfileGeneralOption(
+                            const ProfileGeneralOption(
                               size: 22,
                               title: 'Show Assistant',
-                              onTap: () {},
                               isToggle: true,
                               value: false,
                             ),

@@ -5,6 +5,7 @@ import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/components/page_title.dart';
+import 'package:readbee_lite/components/prompt_box.dart';
 import 'package:readbee_lite/pages/reading_material/digital_reading_score_page.dart';
 import 'package:readbee_lite/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/providers/miscue_provider.dart';
@@ -52,9 +53,9 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
             children: [
               Column(
                 children: [
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                  PageTitle(title: 'Digital Reading'),
+                  const PageTitle(title: 'Digital Reading'),
 
                   //Timer
                   Text(
@@ -65,18 +66,18 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                       color: Colors.grey,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   //Score Counter
                   Text(
                     '${miscues[7].count}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
                     ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
                   //Reading Material
                   Center(
@@ -113,7 +114,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                                     }),
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 RichText(
                                   textAlign: TextAlign.center,
                                   text: TextSpan(
@@ -151,7 +152,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                     ),
                   ),
 
-                  Spacer(),
+                  const Spacer(),
 
                   // Miscue Digital Buttons
                   if (!wordState.isFinished) ...[
@@ -210,13 +211,13 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
-                                color: Colors.blue,
+                                color: Colors.amber,
                               ),
                               alignment: Alignment.center,
                               child: Text(
                                 miscues[index].name,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -229,7 +230,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                     ),
                   ],
 
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                 ],
               ),
               //Flag & Reset Buttons
@@ -240,7 +241,33 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                   icon: Icons.flag,
                   radius: 30,
                   color: Colors.grey,
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => PromptBox(
+                            title: 'Finish Reading?',
+                            subtitle:
+                                'Are you sure you want to finish the reading? This will end the session and mark the pupil as non-reader.',
+                            confirmText: 'Finish',
+                            cancelText: 'Cancel',
+                            onCancel: () {
+                              Navigator.pop(context);
+                            },
+                            onConfirm: () {
+                              Navigator.pop(context);
+                              ref.read(timerProvider.notifier).reset();
+                              Navigator.push(
+                                context,
+                                PageAnimationTransition(
+                                  page: const DigitalReadingScorePage(),
+                                  pageAnimationType: RightToLeftTransition(),
+                                ),
+                              );
+                            },
+                          ),
+                    );
+                  },
                   iconSize: 18,
                   iconColor: Colors.white,
                 ),
@@ -253,11 +280,32 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                   radius: 30,
                   color: Colors.amber,
                   onTap: () {
-                    ref.read(miscueProvider.notifier).reset();
-                    ref.read(wordColorMaterialProvider.notifier).reset();
-
-                    ref.read(timerProvider.notifier).reset();
-                    ref.read(timerStartedProvider.notifier).state = false;
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => PromptBox(
+                            title: 'Reset Reading?',
+                            subtitle:
+                                'This will clear all your current progress and start the reading over.',
+                            confirmText: 'Reset',
+                            cancelText: 'Cancel',
+                            onCancel: () {
+                              Navigator.pop(context);
+                            },
+                            onConfirm: () {
+                              ref
+                                  .read(wordColorMaterialProvider.notifier)
+                                  .reset();
+                              ref.read(miscueContentProvider.notifier).state =
+                                  {};
+                              ref.read(miscueProvider.notifier).reset();
+                              ref.read(timerProvider.notifier).reset();
+                              ref.read(timerStartedProvider.notifier).state =
+                                  false;
+                              Navigator.pop(context);
+                            },
+                          ),
+                    );
                   },
                   iconSize: 18,
                   iconColor: Colors.white,
@@ -274,7 +322,7 @@ class _DigitalReadingPageState extends ConsumerState<DigitalReadingPage> {
                       Navigator.push(
                         context,
                         PageAnimationTransition(
-                          page: DigitalReadingScorePage(),
+                          page: const DigitalReadingScorePage(),
                           pageAnimationType: RightToLeftTransition(),
                         ),
                       );

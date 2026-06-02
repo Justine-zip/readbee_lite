@@ -48,8 +48,8 @@ class _DigitalReadingScorePageState
           body: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 30),
-                PageTitle(title: 'Digital Reading Score'),
+                const SizedBox(height: 30),
+                const PageTitle(title: 'Digital Reading Score'),
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: MaterialTitleBar(
@@ -58,20 +58,20 @@ class _DigitalReadingScorePageState
                     gradeSection: 'Grade & Section: ${eval.selectedSection}',
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 64.0),
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         'Summary of Miscue',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 30),
-                      Row(
+                      const SizedBox(height: 30),
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -94,7 +94,7 @@ class _DigitalReadingScorePageState
                         padding: const EdgeInsets.only(left: 24.0, right: 100),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: miscues.length - 1,
                           itemBuilder: (context, index) {
                             return Row(
@@ -102,14 +102,14 @@ class _DigitalReadingScorePageState
                               children: [
                                 Text(
                                   miscues[index].name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.normal,
                                   ),
                                 ),
                                 Text(
                                   '${miscues[index].count}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.normal,
                                   ),
@@ -119,7 +119,7 @@ class _DigitalReadingScorePageState
                           },
                         ),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       storyAsync.when(
                         data: (story) {
                           if (story == null) {
@@ -186,7 +186,7 @@ class _DigitalReadingScorePageState
                         error: (e, _) => Text(e.toString()),
                       ),
 
-                      SizedBox(height: 120),
+                      const SizedBox(height: 120),
                     ],
                   ),
                 ),
@@ -265,7 +265,7 @@ class _DigitalReadingScorePageState
                 Navigator.push(
                   context,
                   PageAnimationTransition(
-                    page: DigitralComprehensionPage(),
+                    page: const DigitralComprehensionPage(),
                     pageAnimationType: RightToLeftTransition(),
                   ),
                 );

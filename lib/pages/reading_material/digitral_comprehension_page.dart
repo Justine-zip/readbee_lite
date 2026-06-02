@@ -58,7 +58,7 @@ class _DigitralComprehensionPageState
                     Navigator.push(
                       context,
                       PageAnimationTransition(
-                        page: DigitalComprehensionScorePage(),
+                        page: const DigitalComprehensionScorePage(),
                         pageAnimationType: RightToLeftTransition(),
                       ),
                     );
@@ -88,11 +88,11 @@ class _DigitralComprehensionPageState
         Scaffold(
           body: Column(
             children: [
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
 
-              PageTitle(title: 'Digital Comprehension'),
+              const PageTitle(title: 'Digital Comprehension'),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               questionAsync.when(
                 data: (questions) {
@@ -115,7 +115,7 @@ class _DigitralComprehensionPageState
                         ),
                       ),
 
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       //Questions
                       Center(
@@ -130,14 +130,14 @@ class _DigitralComprehensionPageState
                                 child: Text(
                                   questions[currentIndex].questionText,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 42),
+                                  style: const TextStyle(fontSize: 42),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 50),
+                      const SizedBox(height: 50),
 
                       //Choices
                       SizedBox(
@@ -172,7 +172,9 @@ class _DigitralComprehensionPageState
                                             questions[currentIndex]
                                                 .choices[index]
                                                 .choice,
-                                            style: TextStyle(fontSize: 24),
+                                            style: const TextStyle(
+                                              fontSize: 24,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -191,7 +193,7 @@ class _DigitralComprehensionPageState
                 error: (e, _) => Text(e.toString()),
               ),
 
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
             ],
           ),
         ),

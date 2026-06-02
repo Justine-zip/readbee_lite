@@ -4,6 +4,8 @@ import 'package:readbee_lite/components/custom_button.dart';
 class PromptBox extends StatelessWidget {
   final String title;
   final String? subtitle;
+  final String? confirmText;
+  final String? cancelText;
   final VoidCallback? onConfirm;
   final VoidCallback? onCancel;
 
@@ -11,6 +13,8 @@ class PromptBox extends StatelessWidget {
     super.key,
     required this.title,
     this.subtitle,
+    this.confirmText,
+    this.cancelText,
     this.onConfirm,
     this.onCancel,
   });
@@ -19,7 +23,7 @@ class PromptBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      insetPadding: EdgeInsets.all(20),
+      insetPadding: const EdgeInsets.all(20),
       child: SizedBox(
         width: 400,
         child: Padding(
@@ -29,19 +33,30 @@ class PromptBox extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 10),
               if (subtitle != null) ...[
-                Text(subtitle ?? '', style: TextStyle(fontSize: 20)),
+                Text(subtitle ?? '', style: const TextStyle(fontSize: 20)),
                 const SizedBox(height: 30),
               ],
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomButton(onTap: onCancel, title: 'Not Yet', size: 150),
-                  SizedBox(width: 10),
-                  CustomButton(onTap: onConfirm, title: 'Submit', size: 150),
+                  CustomButton(
+                    onTap: onCancel,
+                    title: cancelText ?? 'Not Yet',
+                    size: 150,
+                  ),
+                  const SizedBox(width: 10),
+                  CustomButton(
+                    onTap: onConfirm,
+                    title: confirmText ?? 'Submit',
+                    size: 150,
+                  ),
                 ],
               ),
             ],

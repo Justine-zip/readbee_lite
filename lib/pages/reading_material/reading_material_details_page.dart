@@ -38,9 +38,9 @@ class _ReadingMaterialDetailsPageState
           body: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
 
-                PageTitle(title: 'Reading Material'),
+                const PageTitle(title: 'Reading Material'),
 
                 Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -59,7 +59,7 @@ class _ReadingMaterialDetailsPageState
                         child: Material(
                           elevation: 3,
                           clipBehavior: Clip.antiAlias,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(12),
                             topLeft: Radius.circular(12),
                           ),
@@ -72,16 +72,16 @@ class _ReadingMaterialDetailsPageState
                                   children: [
                                     Text(
                                       story.title,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
                                     Text(
                                       story.content,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 24),
+                                      style: const TextStyle(fontSize: 24),
                                     ),
                                   ],
                                 ),
@@ -224,7 +224,22 @@ class _ReadingMaterialDetailsPageState
                             ),
                           );
                         },
-                        loading: () => const CircularProgressIndicator(),
+                        loading:
+                            () => Center(
+                              child: Container(
+                                color: Colors.transparent,
+                                child: const Center(
+                                  child: Image(
+                                    image: AssetImage(
+                                      'assets/splashscreen/LoadingBee.gif',
+                                    ),
+                                    width: 200,
+                                    height: 200,
+                                    gaplessPlayback: true,
+                                  ),
+                                ),
+                              ),
+                            ),
                         error: (e, _) => Text(e.toString()),
                       ),
                     ],
@@ -241,7 +256,10 @@ class _ReadingMaterialDetailsPageState
   }
 
   Future<dynamic> evaluationList(BuildContext context) {
-    return showDialog(context: context, builder: (_) => EvaluationListDialog());
+    return showDialog(
+      context: context,
+      builder: (_) => const EvaluationListDialog(),
+    );
   }
 }
 
@@ -345,7 +363,7 @@ class EvaluationListDialog extends ConsumerWidget {
                                                   state.selectedSectionId ==
                                                   section.sectionId,
                                               selectedTileColor: Colors.amber
-                                                  .withOpacity(.3),
+                                                  .withValues(alpha: .3),
                                               title: Text(
                                                 section.sectionName ?? '',
                                               ),
@@ -401,7 +419,9 @@ class EvaluationListDialog extends ConsumerWidget {
                                                           studentItem.studentId,
                                                       selectedTileColor: Colors
                                                           .amber
-                                                          .withOpacity(.3),
+                                                          .withValues(
+                                                            alpha: .3,
+                                                          ),
                                                       title: Text(
                                                         studentItem.name,
                                                       ),
@@ -441,7 +461,7 @@ class EvaluationListDialog extends ConsumerWidget {
                                           Navigator.push(
                                             context,
                                             PageAnimationTransition(
-                                              page: DigitalReadingPage(),
+                                              page: const DigitalReadingPage(),
                                               pageAnimationType:
                                                   RightToLeftTransition(),
                                             ),

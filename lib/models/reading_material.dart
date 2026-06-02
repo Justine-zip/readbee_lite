@@ -2,7 +2,7 @@ class ReadingMaterial {
   final String materialId;
   final String title;
   final String? description;
-  final String coverImage;
+  final String? coverImage;
   final String language;
   final int wordCount;
   final String gradeLevelId;
@@ -17,7 +17,7 @@ class ReadingMaterial {
     required this.materialId,
     required this.title,
     this.description,
-    required this.coverImage,
+    this.coverImage,
     required this.language,
     required this.wordCount,
     required this.gradeLevelId,

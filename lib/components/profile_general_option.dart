@@ -9,7 +9,7 @@ class ProfileGeneralOption extends StatelessWidget {
   const ProfileGeneralOption({
     super.key,
     required this.title,
-    required this.onTap,
+    this.onTap,
     this.isToggle = false,
     this.value = false,
     required this.size,
@@ -34,11 +34,9 @@ class ProfileGeneralOption extends StatelessWidget {
                   ? Switch(
                     focusColor: Theme.of(context).colorScheme.primary,
                     value: value,
-                    onChanged: (_) {
-                      if (onTap != null) onTap!();
-                    },
+                    onChanged: (_) => onTap?.call(),
                   )
-                  : Icon(Icons.arrow_forward_ios_rounded),
+                  : const Icon(Icons.arrow_forward_ios_rounded),
             ],
           ),
         ),
