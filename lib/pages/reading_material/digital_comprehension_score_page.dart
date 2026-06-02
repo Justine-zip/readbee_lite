@@ -74,9 +74,9 @@ class _DigitalComprehensionScorePageState
                 body: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
-                      PageTitle(title: 'Digital Comprehension'),
+                      const PageTitle(title: 'Digital Comprehension'),
                       Padding(
                         padding: const EdgeInsets.all(24.0),
                         child: MaterialTitleBar(
@@ -86,7 +86,7 @@ class _DigitalComprehensionScorePageState
                               'Grade & Section: ${eval.selectedSection}',
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         children: [
                           Expanded(
@@ -132,7 +132,7 @@ class _DigitalComprehensionScorePageState
                             child: Material(
                               elevation: 3,
                               clipBehavior: Clip.antiAlias,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 bottomRight: Radius.circular(12),
                                 topRight: Radius.circular(12),
                               ),
@@ -153,7 +153,7 @@ class _DigitalComprehensionScorePageState
                                               children: [
                                                 Text(
                                                   questions[index].questionText,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontSize: 26,
                                                   ),
                                                 ),
@@ -203,7 +203,11 @@ class _DigitalComprehensionScorePageState
                                                                   );
 
                                                               Color textColor =
-                                                                  Colors.black;
+                                                                  Theme.of(
+                                                                        context,
+                                                                      )
+                                                                      .colorScheme
+                                                                      .tertiary;
 
                                                               if (userAnswer !=
                                                                   null) {
@@ -250,7 +254,7 @@ class _DigitalComprehensionScorePageState
                           ),
                         ],
                       ),
-                      SizedBox(height: 60),
+                      const SizedBox(height: 60),
                     ],
                   ),
                 ),
@@ -363,7 +367,7 @@ class _DigitalComprehensionScorePageState
                         Navigator.push(
                           context,
                           PageAnimationTransition(
-                            page: TabletMainLayout(initialIndex: 2),
+                            page: const TabletMainLayout(initialIndex: 2),
                             pageAnimationType: RightToLeftTransition(),
                           ),
                         );
@@ -372,7 +376,7 @@ class _DigitalComprehensionScorePageState
                       debugPrint(e.toString());
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Failed to save assessment record'),
                         ),
                       );

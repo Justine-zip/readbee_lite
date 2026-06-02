@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readbee_lite/providers/profile_provider.dart';
 import 'package:readbee_lite/providers/analytics_provider.dart';
+import 'package:readbee_lite/providers/profile_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TabletHomePage extends ConsumerStatefulWidget {
@@ -61,10 +61,10 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
                             () => Shimmer.fromColors(
                               baseColor: Colors.white,
                               highlightColor: Colors.amber,
-                              child: Text(
+                              child: const Text(
                                 'ReadBee',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 38,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -72,7 +72,7 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
                             ),
                         error: (e, _) => const Text('Error'),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       const Text(
                         'Every word read is a step toward a brighter mind. Let\'s keep going!',
                         style: TextStyle(color: Colors.white70, fontSize: 24),
@@ -90,10 +90,7 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
                       '${filter.language ?? 'All Languages'} • '
                       '${filter.yearId ?? 'All Years'} • '
                       '${filter.quarterId ?? 'All Quarters'} • ',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.black54,
-                      ),
+                      style: const TextStyle(fontSize: 24),
                     ),
 
                     IconButton(
@@ -115,11 +112,10 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Reading Speed',
                         textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          color: Colors.black54,
+                        style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
@@ -252,8 +248,8 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
 
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .3,
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             Expanded(
                               child: ReadingLevelChartCard(
                                 title: 'Reading Level',
@@ -291,13 +287,13 @@ class _StatCard extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * .2,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(.08),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
+            color: Colors.black26,
           ),
         ],
       ),
@@ -315,11 +311,7 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 28,
-              color: Colors.black54,
-              fontWeight: FontWeight.w600,
-            ),
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -339,13 +331,13 @@ class ReadingLevelChartCard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(.08),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
+            color: Colors.black26,
           ),
         ],
       ),
@@ -387,10 +379,7 @@ class ReadingLevelChartCard extends ConsumerWidget {
               children: [
                 Text(
                   value.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
 
                 const SizedBox(height: 6),
@@ -416,7 +405,6 @@ class ReadingLevelChartCard extends ConsumerWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
-                  color: Colors.black54,
                 ),
               ),
 
@@ -425,9 +413,9 @@ class ReadingLevelChartCard extends ConsumerWidget {
               Expanded(
                 child: Stack(
                   children: [
-                    Column(
+                    const Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         _YAxisLabel('15'),
                         _YAxisLabel('10'),
                         _YAxisLabel('5'),
@@ -501,11 +489,11 @@ class ReadingLevelChartCard extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(18),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
-                      color: Colors.black.withOpacity(.08),
                       blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      offset: Offset(0, 4),
+                      color: Colors.black26,
                     ),
                   ],
                 ),
@@ -530,13 +518,13 @@ class ComprehesionLevelChartCard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(.08),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
+            color: Colors.black26,
           ),
         ],
       ),
@@ -576,10 +564,7 @@ class ComprehesionLevelChartCard extends ConsumerWidget {
               children: [
                 Text(
                   value.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 6),
                 AnimatedContainer(
@@ -603,7 +588,6 @@ class ComprehesionLevelChartCard extends ConsumerWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
-                  color: Colors.black54,
                 ),
               ),
 
@@ -613,9 +597,9 @@ class ComprehesionLevelChartCard extends ConsumerWidget {
                 child: Stack(
                   children: [
                     // Y-axis labels
-                    Column(
+                    const Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         _YAxisLabel('15'),
                         _YAxisLabel('10'),
                         _YAxisLabel('5'),
@@ -682,11 +666,11 @@ class ComprehesionLevelChartCard extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(18),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
-                      color: Colors.black.withOpacity(.08),
+                      color: Colors.black26,
                       blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
@@ -707,10 +691,7 @@ class _YAxisLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, color: Colors.black45),
-      ),
+      child: Text(text, style: const TextStyle(fontSize: 16)),
     );
   }
 }
@@ -729,7 +710,7 @@ class AnalyticsFilterDialog extends ConsumerWidget {
 
     return AlertDialog(
       title: const Text('Analytics Filters'),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       content: SizedBox(
         width: 400,
         child: SingleChildScrollView(
@@ -739,7 +720,7 @@ class AnalyticsFilterDialog extends ConsumerWidget {
               languages.when(
                 data: (data) {
                   return DropdownButtonFormField<String>(
-                    value: filter.language,
+                    initialValue: filter.language,
                     decoration: const InputDecoration(labelText: 'Language'),
                     items: [
                       const DropdownMenuItem(
@@ -768,7 +749,7 @@ class AnalyticsFilterDialog extends ConsumerWidget {
               years.when(
                 data: (data) {
                   return DropdownButtonFormField<String>(
-                    value: filter.yearId,
+                    initialValue: filter.yearId,
                     decoration: const InputDecoration(labelText: 'School Year'),
                     items: [
                       const DropdownMenuItem(
@@ -804,7 +785,7 @@ class AnalyticsFilterDialog extends ConsumerWidget {
               quarters.when(
                 data: (data) {
                   return DropdownButtonFormField<int>(
-                    value: filter.quarterId,
+                    initialValue: filter.quarterId,
                     decoration: const InputDecoration(labelText: 'Quarter'),
                     items: [
                       const DropdownMenuItem(
@@ -836,7 +817,7 @@ class AnalyticsFilterDialog extends ConsumerWidget {
               gradeLevels.when(
                 data: (data) {
                   return DropdownButtonFormField<String>(
-                    value: filter.gradeLevelId,
+                    initialValue: filter.gradeLevelId,
                     decoration: const InputDecoration(labelText: 'Grade Level'),
                     items: [
                       const DropdownMenuItem(

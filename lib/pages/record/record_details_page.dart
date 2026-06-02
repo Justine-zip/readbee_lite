@@ -346,7 +346,10 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                                   Expanded(
                                                     flex: 3,
                                                     child: Card(
-                                                      color: Colors.white,
+                                                      color:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .surfaceContainer,
                                                       margin:
                                                           const EdgeInsets.symmetric(
                                                             vertical: 8,
@@ -398,7 +401,10 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                                   Expanded(
                                                     flex: 4,
                                                     child: Card(
-                                                      color: Colors.white,
+                                                      color:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .surfaceContainer,
                                                       margin:
                                                           const EdgeInsets.symmetric(
                                                             vertical: 8,

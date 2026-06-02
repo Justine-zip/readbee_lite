@@ -1,21 +1,21 @@
 class Profile {
   final String id;
   final String fullName;
-  final String sex;
-  final String phone;
-  final String address;
-  final String title;
-  final String position;
+  final String? sex;
+  final String? phone;
+  final String? address;
+  final String? title;
+  final String? position;
   final String email;
 
   Profile({
     required this.id,
     required this.fullName,
-    required this.sex,
-    required this.phone,
-    required this.address,
-    required this.title,
-    required this.position,
+    this.sex,
+    this.phone,
+    this.address,
+    this.title,
+    this.position,
     required this.email,
   });
 

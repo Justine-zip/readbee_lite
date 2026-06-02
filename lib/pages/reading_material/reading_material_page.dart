@@ -193,15 +193,31 @@ class _TabletReadingMaterialPageState
                   ),
                 ),
                 const SizedBox(height: 10),
-                material.when(
-                  loading:
-                      () => const Center(child: CircularProgressIndicator()),
-                  data: (data) {
-                    return ReadingMaterialBuilder(material: data);
-                  },
-                  error:
-                      (error, stackTrace) =>
-                          Center(child: Text(error.toString())),
+                Expanded(
+                  child: material.when(
+                    loading:
+                        () => Center(
+                          child: Container(
+                            color: Colors.transparent,
+                            child: const Center(
+                              child: Image(
+                                image: AssetImage(
+                                  'assets/splashscreen/LoadingBee.gif',
+                                ),
+                                width: 200,
+                                height: 200,
+                                gaplessPlayback: true,
+                              ),
+                            ),
+                          ),
+                        ),
+                    data: (data) {
+                      return ReadingMaterialBuilder(material: data);
+                    },
+                    error:
+                        (error, stackTrace) =>
+                            Center(child: Text(error.toString())),
+                  ),
                 ),
               ],
             ),

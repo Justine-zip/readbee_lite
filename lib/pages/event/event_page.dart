@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:readbee_lite/providers/calendar_event_provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventPage extends ConsumerWidget {
   const EventPage({super.key});
@@ -26,6 +26,12 @@ class EventPage extends ConsumerWidget {
                 data: (appointments) {
                   return SfCalendar(
                     view: CalendarView.month,
+
+                    headerStyle: CalendarHeaderStyle(
+                      backgroundColor:
+                          Theme.of(context).colorScheme.primaryContainer,
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
 
                     dataSource: MeetingDataSource(appointments),
 
@@ -56,7 +62,7 @@ class EventPage extends ConsumerWidget {
                                       ? (appts.first as Appointment).color
                                       : Theme.of(
                                         context,
-                                      ).colorScheme.surfaceContainer),
+                                      ).colorScheme.primaryContainer),
                         ),
                         child: Stack(
                           children: [
@@ -97,7 +103,7 @@ class EventPage extends ConsumerWidget {
                     todayHighlightColor: Colors.amber,
 
                     selectionDecoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.3),
+                      color: Colors.blue.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(8),
                     ),
 
@@ -121,7 +127,7 @@ class EventPage extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                 ),
                 child:
                     selectedEvents.isEmpty

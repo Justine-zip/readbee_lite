@@ -56,8 +56,8 @@ class _StatusPageState extends ConsumerState<StatusPage> {
     });
 
     return Responsive(
-      mobile: ShowCaseWidget(builder: (context) => MobileMainLayout()),
-      tablet: ShowCaseWidget(builder: (context) => TabletMainLayout()),
+      mobile: ShowCaseWidget(builder: (context) => const MobileMainLayout()),
+      tablet: ShowCaseWidget(builder: (context) => const TabletMainLayout()),
     );
   }
 
@@ -82,7 +82,7 @@ class _StatusPageState extends ConsumerState<StatusPage> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -108,7 +108,7 @@ class _StatusPageState extends ConsumerState<StatusPage> {
                                     color:
                                         Theme.of(
                                           context,
-                                        ).colorScheme.surfaceVariant,
+                                        ).colorScheme.surfaceContainerHighest,
                                   ),
                                 ),
                               ),

@@ -24,9 +24,9 @@ class AuthGate extends StatelessWidget {
         final session = snapshot.hasData ? snapshot.data!.session : null;
 
         if (session != null) {
-          return StatusPage();
+          return const StatusPage();
         } else {
-          return TabletLoginPage();
+          return const TabletLoginPage();
         }
       },
     );

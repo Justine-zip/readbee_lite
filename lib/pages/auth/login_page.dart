@@ -53,7 +53,7 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TabletMainLayout(initialIndex: 0),
+              builder: (context) => const TabletMainLayout(initialIndex: 0),
             ),
           );
         }
@@ -183,7 +183,7 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
           ),
           if (_isLoading)
             Container(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               child: Center(
                 child: Image(
                   image: _loadingGif,
