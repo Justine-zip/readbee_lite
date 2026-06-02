@@ -227,6 +227,12 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                             )
                                             : <Map<String, dynamic>>[];
 
+                                    final answerSummary =
+                                        Map<String, dynamic>.from(
+                                          comprehensionScore['answerSummary'] ??
+                                              {},
+                                        );
+
                                     return Column(
                                       children: [
                                         storyAsync.when(
@@ -465,6 +471,199 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(height: 50),
+
+                                        questionAsync.when(
+                                          data: (question) {
+                                            if (question.isEmpty) {
+                                              return const Center(
+                                                child: Text(
+                                                  'No questions found',
+                                                ),
+                                              );
+                                            }
+
+                                            return Material(
+                                              elevation: 3,
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  16,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ...List.generate(question.length, (
+                                                      index,
+                                                    ) {
+                                                      final studentAnswer =
+                                                          answerSummary[index
+                                                                  .toString()]
+                                                              ?.toString() ??
+                                                          '';
+
+                                                      final studentAnswerIndex =
+                                                          studentAnswer
+                                                                  .isNotEmpty
+                                                              ? studentAnswer
+                                                                      .toUpperCase()
+                                                                      .codeUnitAt(
+                                                                        0,
+                                                                      ) -
+                                                                  65
+                                                              : -1;
+
+                                                      final correctAnswerIndex =
+                                                          question[index]
+                                                              .correctAnswer;
+
+                                                      final isCorrect =
+                                                          studentAnswerIndex ==
+                                                          correctAnswerIndex;
+
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                              bottom: 16,
+                                                            ),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              '${index + 1}. ${question[index].questionText}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                    fontSize:
+                                                                        22,
+                                                                  ),
+                                                            ),
+
+                                                            const SizedBox(
+                                                              height: 8,
+                                                            ),
+
+                                                            ...List.generate(
+                                                              question[index]
+                                                                  .choices
+                                                                  .length,
+                                                              (choiceIndex) {
+                                                                final choice =
+                                                                    question[index]
+                                                                        .choices[choiceIndex];
+
+                                                                Color?
+                                                                textColor;
+                                                                FontWeight
+                                                                fontWeight =
+                                                                    FontWeight
+                                                                        .normal;
+
+                                                                if (choiceIndex ==
+                                                                    correctAnswerIndex) {
+                                                                  textColor =
+                                                                      Colors
+                                                                          .green;
+                                                                  fontWeight =
+                                                                      FontWeight
+                                                                          .bold;
+                                                                }
+
+                                                                if (!isCorrect &&
+                                                                    choiceIndex ==
+                                                                        studentAnswerIndex) {
+                                                                  textColor =
+                                                                      Colors
+                                                                          .red;
+                                                                  fontWeight =
+                                                                      FontWeight
+                                                                          .bold;
+                                                                }
+
+                                                                return Padding(
+                                                                  padding:
+                                                                      const EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            2,
+                                                                      ),
+                                                                  child: Text(
+                                                                    '${choice.letter}. ${choice.choice}',
+                                                                    style: TextStyle(
+                                                                      fontSize:
+                                                                          20,
+                                                                      color:
+                                                                          textColor,
+                                                                      fontWeight:
+                                                                          fontWeight,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+
+                                                            const SizedBox(
+                                                              height: 8,
+                                                            ),
+
+                                                            Row(
+                                                              children: [
+                                                                const Text(
+                                                                  'Student Answer: ',
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+
+                                                                Text(
+                                                                  studentAnswer,
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color:
+                                                                        isCorrect
+                                                                            ? Colors.green
+                                                                            : Colors.red,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+
+                                                            const Divider(
+                                                              height: 32,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+
+                                          loading:
+                                              () => const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+
+                                          error:
+                                              (e, _) => Center(
+                                                child: Text(e.toString()),
+                                              ),
+                                        ),
                                       ],
                                     );
                                   },
@@ -472,82 +671,6 @@ class _RecordDetailsPageState extends ConsumerState<RecordDetailsPage> {
                                       () => const Center(
                                         child: CircularProgressIndicator(),
                                       ),
-                                  error:
-                                      (e, _) =>
-                                          Center(child: Text(e.toString())),
-                                ),
-                                const SizedBox(height: 50),
-                                questionAsync.when(
-                                  data: (question) {
-                                    if (question.isEmpty) {
-                                      return const Center(
-                                        child: Text('No questions found'),
-                                      );
-                                    }
-
-                                    return Material(
-                                      elevation: 3,
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ...List.generate(question.length, (
-                                              index,
-                                            ) {
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                  bottom: 16,
-                                                ),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      '${index + 1}. ${question[index].questionText}',
-                                                      textAlign: TextAlign.left,
-                                                      style: const TextStyle(
-                                                        fontSize: 22,
-                                                      ),
-                                                    ),
-                                                    ...List.generate(
-                                                      question[index]
-                                                          .choices
-                                                          .length,
-                                                      (choiceIndex) {
-                                                        return Text(
-                                                          '    ${question[index].choices[choiceIndex].letter}. '
-                                                          '${question[index].choices[choiceIndex].choice}',
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style:
-                                                              const TextStyle(
-                                                                fontSize: 20,
-                                                              ),
-                                                        );
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            }),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-
-                                  loading:
-                                      () => const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-
                                   error:
                                       (e, _) =>
                                           Center(child: Text(e.toString())),
