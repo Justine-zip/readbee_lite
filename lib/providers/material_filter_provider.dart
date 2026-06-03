@@ -9,12 +9,15 @@ final materialFilterProvider = StateProvider<MaterialFilter>((ref) {
   return MaterialFilter.empty;
 });
 
+final materialSearchProvider = StateProvider<String>((ref) => '');
+
 final filteredReadingMaterialProvider = Provider<
   AsyncValue<List<ReadingMaterial>>
 >((ref) {
   final materialsAsync = ref.watch(readingMaterialProvider);
   final gradeLevelAsync = ref.watch(gradeLevelProvider);
   final filter = ref.watch(materialFilterProvider);
+  final search = ref.watch(materialSearchProvider).trim().toLowerCase();
 
   return materialsAsync.whenData((materials) {
     final gradeLevels = gradeLevelAsync.value ?? [];
@@ -30,14 +33,19 @@ final filteredReadingMaterialProvider = Provider<
     return materials.where((material) {
       final gradeMatch = material.gradeLevelId == selectedGradeLevelId;
 
-      debugPrint(
-        'gdatax: gradeLevelId: ${material.gradeLevelId} || selectedGradeLevelId: $selectedGradeLevelId',
-      );
-
       final languageMatch =
           filter.language == null || material.language == filter.language;
 
-      return gradeMatch && languageMatch;
+      final searchMatch =
+          search.isEmpty ||
+          material.title.toLowerCase().contains(search) ||
+          material.language.toLowerCase().contains(search);
+
+      debugPrint(
+        'Search: $search | Material: ${material.title} | Match: $searchMatch',
+      );
+
+      return gradeMatch && languageMatch && searchMatch;
     }).toList();
   });
 });

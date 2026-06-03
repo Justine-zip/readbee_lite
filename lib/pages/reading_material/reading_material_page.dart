@@ -173,6 +173,14 @@ class _TabletReadingMaterialPageState
     });
   }
 
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final material = ref.watch(filteredReadingMaterialProvider);
@@ -203,7 +211,14 @@ class _TabletReadingMaterialPageState
                         title: 'Search Materials',
                         description:
                             'Search for reading materials by title, grade level, or language.',
-                        child: const CustomTextfield(hint: 'Search...'),
+                        child: CustomTextfield(
+                          controller: searchController,
+                          hint: 'Search...',
+                          onChanged: (value) {
+                            ref.read(materialSearchProvider.notifier).state =
+                                value;
+                          },
+                        ),
                       ),
                       IconButton(
                         onPressed: () {
