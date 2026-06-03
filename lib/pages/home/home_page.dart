@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/providers/analytics_provider.dart';
 import 'package:readbee_lite/providers/profile_provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class TabletHomePage extends ConsumerStatefulWidget {
   const TabletHomePage({super.key});
@@ -12,6 +13,21 @@ class TabletHomePage extends ConsumerStatefulWidget {
 }
 
 class _TabletHomePageState extends ConsumerState<TabletHomePage> {
+  final GlobalKey nameKey = GlobalKey();
+  final GlobalKey readingSpeedKey = GlobalKey();
+  final GlobalKey chartKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ShowCaseWidget.of(
+        context,
+      ).startShowCase([nameKey, readingSpeedKey, chartKey]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileProvider);
@@ -35,49 +51,55 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      profileAsync.when(
-                        data: (profile) {
-                          debugPrint('ProfileName: ${profile?.fullName}');
-                          return Text(
-                            profile?.fullName ?? 'Guest',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 38,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        },
-                        loading:
-                            () => Shimmer.fromColors(
-                              baseColor: Colors.white,
-                              highlightColor: Colors.amber,
-                              child: const Text(
-                                'ReadBee',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 38,
-                                  fontWeight: FontWeight.bold,
+                Showcase(
+                  key: nameKey,
+                  title: 'Welcome to ReadBee!',
+                  description:
+                      'This is your username and a motivational quote to keep you inspired.',
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        profileAsync.when(
+                          data: (profile) {
+                            debugPrint('ProfileName: ${profile?.fullName}');
+                            return Text(
+                              profile?.fullName ?? 'Guest',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 38,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          },
+                          loading:
+                              () => Shimmer.fromColors(
+                                baseColor: Colors.white,
+                                highlightColor: Colors.amber,
+                                child: const Text(
+                                  'ReadBee',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 38,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                        error: (e, _) => const Text('Error'),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Every word read is a step toward a brighter mind. Let\'s keep going!',
-                        style: TextStyle(color: Colors.white70, fontSize: 24),
-                      ),
-                    ],
+                          error: (e, _) => const Text('Error'),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Every word read is a step toward a brighter mind. Let\'s keep going!',
+                          style: TextStyle(color: Colors.white70, fontSize: 24),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
@@ -152,47 +174,53 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
                             }
                           }
 
-                          return Row(
-                            children: [
-                              Expanded(
-                                child: _StatCard(
-                                  value: slow.toString(),
-                                  label: 'Slow',
+                          return Showcase(
+                            key: readingSpeedKey,
+                            title: 'Reading Speed',
+                            description:
+                                'This section shows the distribution of reading speeds among students.',
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: _StatCard(
+                                    value: slow.toString(),
+                                    label: 'Slow',
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 14),
+                                const SizedBox(width: 14),
 
-                              Expanded(
-                                child: _StatCard(
-                                  value: fast.toString(),
-                                  label: 'Fast',
+                                Expanded(
+                                  child: _StatCard(
+                                    value: fast.toString(),
+                                    label: 'Fast',
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 14),
+                                const SizedBox(width: 14),
 
-                              Expanded(
-                                child: _StatCard(
-                                  value: struggling.toString(),
-                                  label: 'Struggling',
+                                Expanded(
+                                  child: _StatCard(
+                                    value: struggling.toString(),
+                                    label: 'Struggling',
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 14),
+                                const SizedBox(width: 14),
 
-                              Expanded(
-                                child: _StatCard(
-                                  value: average.toString(),
-                                  label: 'Average',
+                                Expanded(
+                                  child: _StatCard(
+                                    value: average.toString(),
+                                    label: 'Average',
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 14),
+                                const SizedBox(width: 14),
 
-                              Expanded(
-                                child: _StatCard(
-                                  value: nonReader.toString(),
-                                  label: 'Non-reader',
+                                Expanded(
+                                  child: _StatCard(
+                                    value: nonReader.toString(),
+                                    label: 'Non-reader',
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           );
                         },
 
@@ -246,22 +274,28 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
 
                       const SizedBox(height: 20),
 
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .3,
-                        child: const Row(
-                          children: [
-                            Expanded(
-                              child: ReadingLevelChartCard(
-                                title: 'Reading Level',
+                      Showcase(
+                        key: chartKey,
+                        title: 'Reading & Comprehension Levels',
+                        description:
+                            'These charts show the distribution of reading and comprehension levels among students. It helps you understand how your students are performing and identify those who may need extra support.',
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * .3,
+                          child: const Row(
+                            children: [
+                              Expanded(
+                                child: ReadingLevelChartCard(
+                                  title: 'Reading Level',
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 20),
-                            Expanded(
-                              child: ComprehesionLevelChartCard(
-                                title: 'Comprehension Level',
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: ComprehesionLevelChartCard(
+                                  title: 'Comprehension Level',
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],

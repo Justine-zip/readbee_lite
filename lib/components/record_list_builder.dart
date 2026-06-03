@@ -4,8 +4,9 @@ import 'package:readbee_lite/components/custom_circular_progress_indicator.dart'
 import 'package:readbee_lite/providers/completion_rate_provider.dart';
 import 'package:readbee_lite/providers/grade_level_provider.dart';
 import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
-class RecordListBuilder extends ConsumerWidget {
+class RecordListBuilder extends ConsumerStatefulWidget {
   final int itemCount;
   final List<String> title;
   final Function(dynamic index)? onTap;
@@ -18,7 +19,25 @@ class RecordListBuilder extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RecordListBuilder> createState() => _RecordListBuilderState();
+}
+
+class _RecordListBuilderState extends ConsumerState<RecordListBuilder> {
+  final GlobalKey listKey = GlobalKey();
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
+
+      final showcase = ShowCaseWidget.of(context);
+      showcase.startShowCase([listKey]);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final sectionsAsync = ref.watch(sectionProvider);
     final gradeRateAsync = ref.watch(gradeRateProvider);
     final sectionRateAsync = ref.watch(sectionRateProvider);
@@ -28,10 +47,10 @@ class RecordListBuilder extends ConsumerWidget {
       data: (sections) {
         return Expanded(
           child: ListView.builder(
-            itemCount: itemCount,
+            itemCount: widget.itemCount,
             padding: const EdgeInsets.only(bottom: 100),
             itemBuilder: (context, index) {
-              final value = title[index];
+              final value = widget.title[index];
 
               final gradeRates = gradeRateAsync.value ?? <String, double>{};
               final sectionRates = sectionRateAsync.value ?? <String, double>{};
@@ -60,7 +79,7 @@ class RecordListBuilder extends ConsumerWidget {
 
               final showIndicator = isGrade || isSection;
 
-              return Padding(
+              Widget card = Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24.0,
                   vertical: 12,
@@ -70,7 +89,7 @@ class RecordListBuilder extends ConsumerWidget {
                   clipBehavior: Clip.antiAlias,
                   elevation: 2,
                   child: InkWell(
-                    onTap: () => onTap?.call(value),
+                    onTap: () => widget.onTap?.call(value),
                     child: Padding(
                       padding: const EdgeInsets.all(42.0),
                       child: Row(
@@ -84,7 +103,6 @@ class RecordListBuilder extends ConsumerWidget {
                             ),
                           ),
 
-                          // ✅ HIDE FOR LANGUAGE
                           if (showIndicator)
                             CustomCircularProgressIndicator(
                               value: progressValue,
@@ -95,6 +113,17 @@ class RecordListBuilder extends ConsumerWidget {
                   ),
                 ),
               );
+
+              if (index == 0) {
+                return Showcase(
+                  key: listKey,
+                  title: 'Pupil Record',
+                  description: 'Tap to view $value record',
+                  child: card,
+                );
+              }
+
+              return card;
             },
           ),
         );

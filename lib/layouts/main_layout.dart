@@ -5,6 +5,7 @@ import 'package:readbee_lite/pages/home/home_page.dart';
 import 'package:readbee_lite/pages/profile/profile_page.dart';
 import 'package:readbee_lite/pages/reading_material/reading_material_page.dart';
 import 'package:readbee_lite/pages/record/record_page.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MobileMainLayout extends StatefulWidget {
@@ -79,7 +80,7 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
                   unselectedLabelColor: Theme.of(context).colorScheme.secondary,
                   indicatorColor: Theme.of(context).colorScheme.surface,
                   indicatorSize: TabBarIndicatorSize.label,
-                  tabs: [
+                  tabs: const [
                     Tab(icon: Icon(Icons.home)),
                     Tab(icon: Icon(Icons.file_copy_rounded)),
                     Tab(icon: Icon(Icons.book_online_rounded)),
@@ -123,55 +124,58 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
               ),
         );
       },
-      child: DefaultTabController(
-        length: 5,
-        initialIndex: widget.initialIndex ?? 0,
-        child: Stack(
-          children: [
-            Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-
-              body: const TabBarView(
+      child: ShowCaseWidget(
+        builder:
+            (context) => DefaultTabController(
+              length: 5,
+              initialIndex: widget.initialIndex ?? 0,
+              child: Stack(
                 children: [
-                  TabletHomePage(),
-                  RecordPage(),
-                  TabletReadingMaterialPage(),
-                  EventPage(),
-                  TabletProfilePage(),
+                  Scaffold(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+
+                    body: const TabBarView(
+                      children: [
+                        TabletHomePage(),
+                        RecordPage(),
+                        TabletReadingMaterialPage(),
+                        EventPage(),
+                        TabletProfilePage(),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    //top: 30,
+                    bottom: 30,
+                    left: 250,
+                    right: 250,
+                    child: Material(
+                      color: Theme.of(context).colorScheme.surfaceContainer,
+                      elevation: 3,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: TabBar(
+                          dividerColor: Colors.transparent,
+                          labelColor: Colors.amber,
+                          unselectedLabelColor:
+                              Theme.of(context).colorScheme.secondary,
+                          indicatorColor: Theme.of(context).colorScheme.surface,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          tabs: const [
+                            Tab(icon: Icon(Icons.home)),
+                            Tab(icon: Icon(Icons.file_copy_rounded)),
+                            Tab(icon: Icon(Icons.book_online_rounded)),
+                            Tab(icon: Icon(Icons.calendar_month_rounded)),
+                            Tab(icon: Icon(Icons.person_2_rounded)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Positioned(
-              //top: 30,
-              bottom: 30,
-              left: 250,
-              right: 250,
-              child: Material(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                elevation: 3,
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: TabBar(
-                    dividerColor: Colors.transparent,
-                    labelColor: Colors.amber,
-                    unselectedLabelColor:
-                        Theme.of(context).colorScheme.secondary,
-                    indicatorColor: Theme.of(context).colorScheme.surface,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    tabs: [
-                      Tab(icon: Icon(Icons.home)),
-                      Tab(icon: Icon(Icons.file_copy_rounded)),
-                      Tab(icon: Icon(Icons.book_online_rounded)),
-                      Tab(icon: Icon(Icons.calendar_month_rounded)),
-                      Tab(icon: Icon(Icons.person_2_rounded)),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

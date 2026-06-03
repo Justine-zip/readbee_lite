@@ -22,6 +22,7 @@ import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/timer_provider.dart';
 import 'package:readbee_lite/providers/user_role_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MobileReadingMaterialPage extends ConsumerStatefulWidget {
@@ -132,10 +133,14 @@ class _TabletReadingMaterialPageState
     extends ConsumerState<TabletReadingMaterialPage> {
   DraggableScrollableController controller = DraggableScrollableController();
 
+  final GlobalKey materialKey = GlobalKey();
+  final GlobalKey filterKey = GlobalKey();
+  final GlobalKey searchKey = GlobalKey();
+  final GlobalKey addKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
-
     Future.microtask(() {
       ref.invalidate(evaluationProvider);
       ref.invalidate(wordColorMaterialProvider);
@@ -144,6 +149,12 @@ class _TabletReadingMaterialPageState
       ref.read(timerProvider.notifier).reset();
       ref.read(timerStartedProvider.notifier).state = false;
       ref.read(miscueContentProvider.notifier).state = {};
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ShowCaseWidget.of(
+        context,
+      ).startShowCase([materialKey, searchKey, filterKey, addKey]);
     });
   }
 
@@ -172,7 +183,13 @@ class _TabletReadingMaterialPageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      const CustomTextfield(hint: 'Search...'),
+                      Showcase(
+                        key: searchKey,
+                        title: 'Search Materials',
+                        description:
+                            'Search for reading materials by title, grade level, or language.',
+                        child: const CustomTextfield(hint: 'Search...'),
+                      ),
                       IconButton(
                         onPressed: () {
                           showModalBottomSheet(
@@ -187,7 +204,13 @@ class _TabletReadingMaterialPageState
                             },
                           );
                         },
-                        icon: const Icon(Icons.filter_alt_rounded),
+                        icon: Showcase(
+                          key: filterKey,
+                          title: 'Filter Materials',
+                          description:
+                              'Filter reading materials by grade level or language.',
+                          child: const Icon(Icons.filter_alt_rounded),
+                        ),
                       ),
                     ],
                   ),
@@ -212,7 +235,13 @@ class _TabletReadingMaterialPageState
                           ),
                         ),
                     data: (data) {
-                      return ReadingMaterialBuilder(material: data);
+                      return Showcase(
+                        key: materialKey,
+                        title: 'Explore Reading Materials',
+                        description:
+                            'Tap a material to view details, assessments, and student performance.',
+                        child: ReadingMaterialBuilder(material: data),
+                      );
                     },
                     error:
                         (error, stackTrace) =>
@@ -229,16 +258,21 @@ class _TabletReadingMaterialPageState
           child: SizedBox(
             width: 70,
             height: 70,
-            child: FloatingActionButton(
-              backgroundColor: Colors.amber,
-              onPressed: () {
-                debugPrint('add Material');
-                showDialog(
-                  context: context,
-                  builder: (_) => const StoryDialog(),
-                );
-              },
-              child: const Icon(Icons.add, size: 36, color: Colors.white),
+            child: Showcase(
+              key: addKey,
+              title: 'Add Reading Material',
+              description: 'Add a new reading material.',
+              child: FloatingActionButton(
+                backgroundColor: Colors.amber,
+                onPressed: () {
+                  debugPrint('add Material');
+                  showDialog(
+                    context: context,
+                    builder: (_) => const StoryDialog(),
+                  );
+                },
+                child: const Icon(Icons.add, size: 36, color: Colors.white),
+              ),
             ),
           ),
         ),
