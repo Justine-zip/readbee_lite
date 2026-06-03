@@ -121,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      sha256: "09bad715f418841f976c77db72d5398dc1253c21fb9c0c7f0b0b985860b2d58e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -161,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.0"
+  dots_indicator:
+    dependency: transitive
+    description:
+      name: dots_indicator
+      sha256: c070af5058a084ba7b354df4b4c26c719595d70a3531eea6edd8af8716684ba3
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   ed25519_edwards:
     dependency: transitive
     description:
@@ -254,6 +270,46 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_keyboard_visibility_linux:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_linux
+      sha256: "6fba7cd9bb033b6ddd8c2beb4c99ad02d728f1e6e6d9b9446667398b2ac39f08"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  flutter_keyboard_visibility_macos:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_macos
+      sha256: c5c49b16fff453dfdafdc16f26bdd8fb8d55812a1d50b0ce25fc8d9f2e53d086
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  flutter_keyboard_visibility_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_platform_interface
+      sha256: e43a89845873f7be10cb3884345ceb9aebf00a659f479d1c8f4293fcb37022a4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  flutter_keyboard_visibility_temp_fork:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_temp_fork
+      sha256: e3d02900640fbc1129245540db16944a0898b8be81694f4bf04b6c985bed9048
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5"
+  flutter_keyboard_visibility_windows:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_windows
+      sha256: fc4b0f0b6be9b93ae527f3d527fb56ee2d918cd88bbca438c478af7bcfd0ef73
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -341,6 +397,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      sha256: "6d1264f2dffa1b1101c25a91dff0dc2daee4c18e87cd8538729773c073dbf602"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.6"
   http:
     dependency: "direct main"
     description:
@@ -429,6 +493,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.20.2"
+  introduction_screen:
+    dependency: "direct main"
+    description:
+      name: introduction_screen
+      sha256: "47ad51281f86c3ed47e0c1a0008899ad253ca71e8b626fd862e55993825a271b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   json_annotation:
     dependency: transitive
     description:
@@ -962,6 +1034,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  video_player:
+    dependency: "direct main"
+    description:
+      name: video_player
+      sha256: "48a7bdaa38a3d50ec10c78627abdbfad863fdf6f0d6e08c7c3c040cfd80ae36f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.11.1"
+  video_player_android:
+    dependency: transitive
+    description:
+      name: video_player_android
+      sha256: "5d18d04084cc0cfc7afde39d0a308d4041e8ae6e9d5255bc086c263998dd1201"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.6"
+  video_player_avfoundation:
+    dependency: transitive
+    description:
+      name: video_player_avfoundation
+      sha256: "9338f3ec22774f88146b22f13273a446719b1da010fd200c4d1d97802156ac58"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.7"
+  video_player_platform_interface:
+    dependency: transitive
+    description:
+      name: video_player_platform_interface
+      sha256: "16eaed5268c571c31840dc58ef8da5f0cd4db2a98490c3b8f1cf70122546c6e0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.7.0"
+  video_player_web:
+    dependency: transitive
+    description:
+      name: video_player_web
+      sha256: "9f3c00be2ef9b76a95d94ac5119fb843dca6f2c69e6c9968f6f2b6c9e7afbdeb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
   vm_service:
     dependency: transitive
     description:
@@ -1011,5 +1123,5 @@ packages:
     source: hosted
     version: "2.1.0"
 sdks:
-  dart: ">=3.10.0-0 <4.0.0"
-  flutter: ">=3.35.0"
+  dart: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"

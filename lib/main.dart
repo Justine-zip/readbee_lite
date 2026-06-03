@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/layouts/orientation_manager.dart';
-import 'package:readbee_lite/pages/main_page.dart';
+import 'package:readbee_lite/layouts/responsive.dart';
+import 'package:readbee_lite/pages/startup/splash_screen_page.dart';
 import 'package:readbee_lite/providers/theme_provider.dart';
 import 'package:readbee_lite/themes/app_theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -18,7 +19,7 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) => ProviderScope(child: MyApp()),
+      builder: (context) => const ProviderScope(child: MyApp()),
     ),
   );
 }
@@ -36,7 +37,10 @@ class MyApp extends ConsumerWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: theme,
-        home: const MainPage(),
+        home: const Responsive(
+          mobile: MobileSplashScreenPage(),
+          tablet: TabletSplashScreenPage(),
+        ),
       ),
     );
   }

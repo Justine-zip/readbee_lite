@@ -251,7 +251,6 @@ class TabletProfilePage extends ConsumerWidget {
                                 child: InkWell(
                                   onTap: () async {
                                     await authServices.signOut();
-                                    Navigator.pop(context);
                                   },
                                   child: Container(
                                     width:
