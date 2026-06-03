@@ -244,28 +244,31 @@ class TabletProfilePage extends ConsumerWidget {
                               isToggle: true,
                             ),
                             const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: InkWell(
-                                onTap: () async {
-                                  await authServices.signOut();
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.amber,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(12.0),
-                                    child: Text(
-                                      'Logout',
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await authServices.signOut();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.amber,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(12.0),
+                                      child: Text(
+                                        'Logout',
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),

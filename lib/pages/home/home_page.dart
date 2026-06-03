@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/providers/analytics_provider.dart';
 import 'package:readbee_lite/providers/profile_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -17,14 +18,27 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
   final GlobalKey readingSpeedKey = GlobalKey();
   final GlobalKey chartKey = GlobalKey();
 
+  Future<void> showShowcase(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final hasShown = prefs.getBool('hasShownHomeShowcase') ?? false;
+
+    if (!hasShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ShowCaseWidget.of(
+          context,
+        ).startShowCase([nameKey, readingSpeedKey, chartKey]);
+      });
+
+      await prefs.setBool('hasShownHomeShowcase', true);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ShowCaseWidget.of(
-        context,
-      ).startShowCase([nameKey, readingSpeedKey, chartKey]);
+      showShowcase(context);
     });
   }
 

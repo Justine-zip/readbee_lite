@@ -22,6 +22,7 @@ import 'package:readbee_lite/providers/miscue_provider.dart';
 import 'package:readbee_lite/providers/timer_provider.dart';
 import 'package:readbee_lite/providers/user_role_provider.dart';
 import 'package:readbee_lite/providers/word_color_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -138,6 +139,22 @@ class _TabletReadingMaterialPageState
   final GlobalKey searchKey = GlobalKey();
   final GlobalKey addKey = GlobalKey();
 
+  Future<void> showShowcase(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final hasShown = prefs.getBool('hasShownMaterialShowcase') ?? false;
+
+    if (!hasShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ShowCaseWidget.of(
+          context,
+        ).startShowCase([materialKey, searchKey, filterKey, addKey]);
+      });
+
+      await prefs.setBool('hasShownMaterialShowcase', true);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -152,9 +169,7 @@ class _TabletReadingMaterialPageState
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ShowCaseWidget.of(
-        context,
-      ).startShowCase([materialKey, searchKey, filterKey, addKey]);
+      showShowcase(context);
     });
   }
 
@@ -381,7 +396,7 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
 
     return AlertDialog(
       title: const Text('Add Story'),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 550),
         child: SizedBox(
@@ -889,7 +904,7 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
 
     return AlertDialog(
       title: Text(titleText),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       content: SizedBox(
         width: 500,
         child: SingleChildScrollView(

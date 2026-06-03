@@ -4,6 +4,7 @@ import 'package:readbee_lite/components/custom_circular_progress_indicator.dart'
 import 'package:readbee_lite/providers/completion_rate_provider.dart';
 import 'package:readbee_lite/providers/grade_level_provider.dart';
 import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class RecordListBuilder extends ConsumerStatefulWidget {
@@ -24,16 +25,26 @@ class RecordListBuilder extends ConsumerStatefulWidget {
 
 class _RecordListBuilderState extends ConsumerState<RecordListBuilder> {
   final GlobalKey listKey = GlobalKey();
+
+  Future<void> showShowcase(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final hasShown = prefs.getBool('hasShownRecordShowcase') ?? false;
+
+    if (!hasShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ShowCaseWidget.of(context).startShowCase([listKey]);
+      });
+
+      await prefs.setBool('hasShownRecordShowcase', true);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (!mounted) return;
-
-      final showcase = ShowCaseWidget.of(context);
-      showcase.startShowCase([listKey]);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => showShowcase(context));
   }
 
   @override

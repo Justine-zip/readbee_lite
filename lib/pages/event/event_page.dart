@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/providers/calendar_event_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -15,12 +16,26 @@ class _EventPageState extends ConsumerState<EventPage> {
   final GlobalKey calendarKey = GlobalKey();
   final GlobalKey eventKey = GlobalKey();
 
+  Future<void> showShowcase(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final hasShown = prefs.getBool('hasShownEventShowcase') ?? false;
+
+    if (!hasShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ShowCaseWidget.of(context).startShowCase([calendarKey, eventKey]);
+      });
+
+      await prefs.setBool('hasShownEventShowcase', true);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ShowCaseWidget.of(context).startShowCase([calendarKey, eventKey]);
+      showShowcase(context);
     });
   }
 
