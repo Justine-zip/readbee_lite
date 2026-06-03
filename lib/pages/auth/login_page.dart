@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
 
@@ -84,7 +85,8 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
               borderRadius: BorderRadius.circular(30),
               child: Container(
                 padding: const EdgeInsets.all(24),
-                width: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.width * 0.375,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
@@ -95,62 +97,76 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
                     const Text(
                       'Login',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 36,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 32),
                     const Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('UserName'),
+                      child: Text('Email', style: TextStyle(fontSize: 20)),
                     ),
                     const SizedBox(height: 8),
-                    TextField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        hintText: 'ex: Glen',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
+                    SizedBox(
+                      height: 70,
+                      child: TextField(
+                        controller: emailController,
+                        style: const TextStyle(fontSize: 20),
+                        decoration: const InputDecoration(
+                          hintText: 'ex: guest@gmail.com',
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 16,
+                          ),
+                          border: OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     const Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Password'),
+                      child: Text('Password', style: TextStyle(fontSize: 20)),
                     ),
                     const SizedBox(height: 8),
-                    TextField(
-                      controller: passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        hintText: '********',
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                    SizedBox(
+                      height: 70,
+                      child: TextField(
+                        controller: passwordController,
+                        obscureText: _obscurePassword,
+                        style: const TextStyle(fontSize: 20),
+                        decoration: InputDecoration(
+                          hintText: '********',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 16,
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -158,24 +174,28 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
                     Row(
                       children: [
                         Checkbox(value: false, onChanged: (_) {}),
-                        const Text('Remember me'),
+                        const Text(
+                          'Remember me',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 45,
-                      child: ElevatedButton(
-                        onPressed: _handleLogin,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text('Login'),
-                      ),
-                    ),
+                    CustomButton(onTap: _handleLogin, title: 'Login'),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   height: 45,
+                    //   child: ElevatedButton(
+                    //     onPressed: _handleLogin,
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor: Colors.amber,
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(8),
+                    //       ),
+                    //     ),
+                    //     child: const Text('Login'),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
