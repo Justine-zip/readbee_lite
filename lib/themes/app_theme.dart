@@ -13,6 +13,7 @@ class AppTheme {
       tertiary: Colors.black,
       secondary: Colors.grey[400],
       seedColor: Colors.amber,
+      secondaryContainer: Colors.amber,
 
       brightness: Brightness.light,
     ),
@@ -30,6 +31,8 @@ class AppTheme {
       tertiary: Colors.white,
       secondary: Colors.white,
       seedColor: Colors.amber,
+      secondaryContainer: Colors.grey[800],
+
       brightness: Brightness.dark,
     ),
     useMaterial3: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readbee_lite/layouts/responsive.dart';
 import 'package:readbee_lite/pages/auth/login_page.dart';
 import 'package:readbee_lite/pages/auth/status_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,7 +27,10 @@ class AuthGate extends StatelessWidget {
         if (session != null) {
           return const StatusPage();
         } else {
-          return const TabletLoginPage();
+          return const Responsive(
+            mobile: MobileLoginPage(),
+            tablet: TabletLoginPage(),
+          );
         }
       },
     );

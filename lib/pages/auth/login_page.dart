@@ -1,7 +1,217 @@
 import 'package:flutter/material.dart';
+import 'package:page_animation_transition/animations/right_to_left_faded_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
+
+class MobileLoginPage extends StatefulWidget {
+  const MobileLoginPage({super.key});
+
+  @override
+  State<MobileLoginPage> createState() => _MobileLoginPageState();
+}
+
+class _MobileLoginPageState extends State<MobileLoginPage> {
+  AuthServices supabase = AuthServices();
+  bool _obscurePassword = true;
+  bool _isLoading = false;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  late final AssetImage _loadingGif;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadingGif = const AssetImage('assets/splashscreen/LoadingBee.gif');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      precacheImage(_loadingGif, context);
+    });
+  }
+
+  @override
+  void dispose() {
+    _loadingGif.evict();
+    super.dispose();
+  }
+
+  void _handleLogin() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final minimumDelay = Future.delayed(const Duration(seconds: 1));
+      final loginFuture = supabase.signInWithEmailPassword(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+
+      final results = await Future.wait([loginFuture, minimumDelay]);
+      final response = results[0];
+
+      if (response.user != null) {
+        if (mounted) {
+          Navigator.push(
+            context,
+            PageAnimationTransition(
+              page: const MobileMainLayout(),
+              pageAnimationType: RightToLeftFadedTransition(),
+            ),
+          );
+        }
+      } else {
+        throw Exception('No user found.');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid login credentials')),
+        );
+      }
+      print('Login failed: $e');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      body: Stack(
+        children: [
+          Center(
+            child: Material(
+              elevation: 8,
+              borderRadius: BorderRadius.circular(30),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.5,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Email', style: TextStyle(fontSize: 12)),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 40,
+                      child: TextField(
+                        controller: emailController,
+                        style: const TextStyle(fontSize: 14),
+                        decoration: const InputDecoration(
+                          hintText: 'ex: guest@gmail.com',
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 6,
+                          ),
+                          border: OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Password', style: TextStyle(fontSize: 12)),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 40,
+                      child: TextField(
+                        controller: passwordController,
+                        obscureText: _obscurePassword,
+                        style: const TextStyle(fontSize: 14),
+                        decoration: InputDecoration(
+                          hintText: '********',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 6,
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Checkbox(value: false, onChanged: (_) {}),
+                        const Text(
+                          'Remember me',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    CustomButton(
+                      onTap: _handleLogin,
+                      title: 'Login',
+                      size: 200,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          if (_isLoading)
+            Container(
+              color: Colors.black.withValues(alpha: 0.3),
+              child: Center(
+                child: Image(
+                  image: _loadingGif,
+                  width: 200,
+                  height: 200,
+                  gaplessPlayback: true,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
 
 class TabletLoginPage extends StatefulWidget {
   const TabletLoginPage({super.key});
@@ -53,8 +263,9 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
         if (mounted) {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const TabletMainLayout(initialIndex: 0),
+            PageAnimationTransition(
+              page: const TabletMainLayout(),
+              pageAnimationType: RightToLeftFadedTransition(),
             ),
           );
         }
@@ -76,7 +287,7 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       body: Stack(
         children: [
           Center(
@@ -86,19 +297,20 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
               child: Container(
                 padding: const EdgeInsets.all(24),
                 width: MediaQuery.of(context).size.width * 0.7,
-                height: MediaQuery.of(context).size.width * 0.375,
+                height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainer,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
+                    Text(
                       'Login',
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -182,20 +394,6 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
                     ),
                     const SizedBox(height: 8),
                     CustomButton(onTap: _handleLogin, title: 'Login'),
-                    // SizedBox(
-                    //   width: double.infinity,
-                    //   height: 45,
-                    //   child: ElevatedButton(
-                    //     onPressed: _handleLogin,
-                    //     style: ElevatedButton.styleFrom(
-                    //       backgroundColor: Colors.amber,
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(8),
-                    //       ),
-                    //     ),
-                    //     child: const Text('Login'),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

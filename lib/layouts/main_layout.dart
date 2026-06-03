@@ -18,7 +18,7 @@ class MobileMainLayout extends StatefulWidget {
 class _MobileMainLayoutState extends State<MobileMainLayout> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('Layout: Mobile');
+    debugPrint('Layout: Mobilexs');
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {

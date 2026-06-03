@@ -17,6 +17,7 @@ class _MobileSplashScreenPageState extends State<MobileSplashScreenPage>
   late final AnimationController _controller;
 
   bool _isWhiteScreen = false;
+  bool _showLogo = false;
 
   @override
   void initState() {
@@ -32,9 +33,40 @@ class _MobileSplashScreenPageState extends State<MobileSplashScreenPage>
       _controller.forward();
     });
 
-    Future.delayed(const Duration(milliseconds: 4200), () {
+    Future.delayed(const Duration(milliseconds: 3200), () {
       if (!mounted) return;
-      setState(() => _isWhiteScreen = true);
+
+      setState(() {
+        _isWhiteScreen = true;
+      });
+
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (!mounted) return;
+
+        setState(() {
+          _showLogo = true;
+        });
+
+        Future.delayed(const Duration(seconds: 3), () async {
+          if (!mounted) return;
+
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('hasShownOnBoarding', false);
+
+          final hasShown = prefs.getBool('hasShownOnBoarding') ?? false;
+
+          Widget nextPage =
+              hasShown ? const MainPage() : const MobileOnboardingPage();
+
+          Navigator.pushReplacement(
+            context,
+            PageAnimationTransition(
+              page: nextPage,
+              pageAnimationType: RightToLeftFadedTransition(),
+            ),
+          );
+        });
+      });
     });
   }
 
@@ -43,11 +75,26 @@ class _MobileSplashScreenPageState extends State<MobileSplashScreenPage>
     return Scaffold(
       body:
           _isWhiteScreen
-              ? Container(color: Colors.white)
+              ? Container(
+                color: Colors.white,
+                child: Center(
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 800),
+                    curve: Curves.easeInOut,
+                    opacity: _showLogo ? 1 : 0,
+                    child: Hero(
+                      tag: 'logo',
+                      child: Image.asset(
+                        'assets/splashscreen/ReadBee_Logo-NoBg.png',
+                        width: 250,
+                      ),
+                    ),
+                  ),
+                ),
+              )
               : Stack(
                 children: [
                   Container(color: Colors.amber),
-
                   Center(
                     child: AnimatedBuilder(
                       animation: _controller,
@@ -127,7 +174,7 @@ class _TabletSplashScreenPageState extends State<TabletSplashScreenPage>
           final hasShown = prefs.getBool('hasShownOnBoarding') ?? false;
 
           Widget nextPage =
-              hasShown ? const MainPage() : const OnboardingPage();
+              hasShown ? const MainPage() : const TabletOnboardingPage();
 
           Navigator.pushReplacement(
             context,
