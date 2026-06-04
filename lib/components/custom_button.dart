@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final Function()? onTap;
   final double? size;
+  final double? pad;
+  final double? tSize;
   final String title;
   const CustomButton({
     super.key,
     required this.onTap,
     required this.title,
     this.size,
+    this.pad,
+    this.tSize,
   });
 
   @override
@@ -22,7 +26,7 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Container(
           width: size ?? double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: pad ?? 14),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: isDisabled ? Colors.grey.shade400 : Colors.amber,
@@ -31,7 +35,7 @@ class CustomButton extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: tSize ?? 18,
               color: isDisabled ? Colors.grey.shade700 : Colors.black,
             ),
           ),

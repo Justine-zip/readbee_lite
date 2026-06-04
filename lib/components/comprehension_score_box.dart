@@ -4,11 +4,15 @@ class ComprehensionScoreBox extends StatelessWidget {
   final String value;
   final String? subtitle;
   final double? size;
+  final double? valueSize;
+  final double? subTextSize;
   const ComprehensionScoreBox({
     super.key,
     required this.value,
     this.subtitle,
     this.size,
+    this.valueSize,
+    this.subTextSize,
   });
 
   @override
@@ -33,17 +37,20 @@ class ComprehensionScoreBox extends StatelessWidget {
                       value,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: value.length > 3 ? 24 : 42,
+                        fontSize:
+                            value.length > 3
+                                ? (valueSize == null ? 22 : valueSize! / 1.5)
+                                : (valueSize ?? 42),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   if (subtitle != null) ...[
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       subtitle!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: subTextSize ?? 18),
                     ),
                   ],
                 ],

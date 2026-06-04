@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 
 class CustomStoryContainer extends StatelessWidget {
   final String title;
-  const CustomStoryContainer({super.key, required this.title});
+  final double? tSize;
+  final double? pad;
+  const CustomStoryContainer({
+    super.key,
+    required this.title,
+    this.tSize,
+    this.pad,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +21,11 @@ class CustomStoryContainer extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(),
             borderRadius: BorderRadius.circular(12),
+            color: Theme.of(context).colorScheme.surfaceContainer,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Text(title, style: TextStyle(fontSize: 24)),
+            padding: EdgeInsets.all(pad ?? 24.0),
+            child: Text(title, style: TextStyle(fontSize: tSize ?? 24)),
           ),
         ),
       ),

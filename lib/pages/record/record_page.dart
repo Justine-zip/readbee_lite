@@ -5,8 +5,91 @@ import 'package:readbee_lite/components/student_list_dialog.dart';
 import 'package:readbee_lite/notifiers/record_notifier.dart';
 import 'package:readbee_lite/providers/record_provider.dart';
 
-class RecordPage extends ConsumerWidget {
-  const RecordPage({super.key});
+class MobileRecordPage extends ConsumerWidget {
+  const MobileRecordPage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recordState = ref.watch(recordProvider);
+    final notifier = ref.read(recordProvider.notifier);
+
+    final listValue = notifier.currentOptions;
+    final title = notifier.currentTitle;
+    final itemCount = listValue.length;
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 25),
+
+            const Text(
+              'Class Record',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 40),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 48,
+                  height: 48,
+                  child:
+                      recordState.currentStep != RecordStep.grade
+                          ? IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: notifier.goBack,
+                          )
+                          : null,
+                ),
+              ],
+            ),
+
+            RecordListBuilder(
+              key: ValueKey(recordState.selectedGradeLevelId),
+              itemCount: itemCount,
+              title: listValue,
+              hPad: 0,
+              vPad: 4,
+              pad: 18,
+              size: 50,
+              tSize: 12,
+              onTap: (value) {
+                final shouldNavigate = notifier.handleSelection(
+                  value.toString(),
+                );
+
+                if (shouldNavigate) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const MobileStudentListDialog();
+                    },
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TabletRecordPage extends ConsumerWidget {
+  const TabletRecordPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,7 +153,7 @@ class RecordPage extends ConsumerWidget {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return const StudentListDialog();
+                      return const TabletStudentListDialog();
                     },
                   );
                 }

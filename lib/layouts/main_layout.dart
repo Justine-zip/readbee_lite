@@ -41,7 +41,7 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
               body: const TabBarView(
                 children: [
                   MobileHomePage(),
-                  RecordPage(),
+                  MobileRecordPage(),
                   MobileReadingMaterialPage(),
                   Center(
                     child: Text(
@@ -128,7 +128,7 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
                     body: const TabBarView(
                       children: [
                         TabletHomePage(),
-                        RecordPage(),
+                        TabletRecordPage(),
                         TabletReadingMaterialPage(),
                         EventPage(),
                         TabletProfilePage(),

@@ -10,11 +10,21 @@ import 'package:showcaseview/showcaseview.dart';
 class RecordListBuilder extends ConsumerStatefulWidget {
   final int itemCount;
   final List<String> title;
+  final double? hPad;
+  final double? vPad;
+  final double? pad;
+  final double? size;
+  final double? tSize;
   final Function(dynamic index)? onTap;
 
   const RecordListBuilder({
     super.key,
     required this.itemCount,
+    this.hPad,
+    this.vPad,
+    this.pad,
+    this.size,
+    this.tSize,
     required this.title,
     required this.onTap,
   });
@@ -91,9 +101,9 @@ class _RecordListBuilderState extends ConsumerState<RecordListBuilder> {
               final showIndicator = isGrade || isSection;
 
               Widget card = Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 12,
+                padding: EdgeInsets.symmetric(
+                  horizontal: widget.hPad ?? 24.0,
+                  vertical: widget.vPad ?? 12,
                 ),
                 child: Card(
                   color: Theme.of(context).colorScheme.surfaceContainer,
@@ -102,14 +112,14 @@ class _RecordListBuilderState extends ConsumerState<RecordListBuilder> {
                   child: InkWell(
                     onTap: () => widget.onTap?.call(value),
                     child: Padding(
-                      padding: const EdgeInsets.all(42.0),
+                      padding: EdgeInsets.all(widget.pad ?? 42),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             value,
                             style: const TextStyle(
-                              fontSize: 36,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -117,6 +127,8 @@ class _RecordListBuilderState extends ConsumerState<RecordListBuilder> {
                           if (showIndicator)
                             CustomCircularProgressIndicator(
                               value: progressValue,
+                              size: widget.size,
+                              tSize: widget.tSize,
                             ),
                         ],
                       ),
