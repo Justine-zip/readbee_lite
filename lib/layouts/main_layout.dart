@@ -40,16 +40,7 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
 
               body: const TabBarView(
                 children: [
-                  Center(
-                    child: Text(
-                      'H O M E',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.amber,
-                      ),
-                    ),
-                  ),
+                  MobileHomePage(),
                   RecordPage(),
                   MobileReadingMaterialPage(),
                   Center(

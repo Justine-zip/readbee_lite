@@ -51,7 +51,6 @@ class _MobileSplashScreenPageState extends State<MobileSplashScreenPage>
           if (!mounted) return;
 
           final prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('hasShownOnBoarding', false);
 
           final hasShown = prefs.getBool('hasShownOnBoarding') ?? false;
 
