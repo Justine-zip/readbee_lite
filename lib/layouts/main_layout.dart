@@ -47,16 +47,7 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
                         MobileHomePage(),
                         MobileRecordPage(),
                         MobileReadingMaterialPage(),
-                        Center(
-                          child: Text(
-                            'E V E N T',
-                            style: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.amber,
-                            ),
-                          ),
-                        ),
+                        MobileEventPage(),
                         MobileProfilePage(),
                       ],
                     ),
@@ -136,7 +127,7 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
                         TabletHomePage(),
                         TabletRecordPage(),
                         TabletReadingMaterialPage(),
-                        EventPage(),
+                        TabletEventPage(),
                         TabletProfilePage(),
                       ],
                     ),
