@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
+import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
 import 'package:readbee_lite/pages/reading_material/digital_comprehension_score_page.dart';
@@ -10,16 +11,236 @@ import 'package:readbee_lite/providers/comprehension_provider.dart';
 import 'package:readbee_lite/providers/quiz_question_provider.dart';
 import 'package:readbee_lite/providers/selected_material_provider.dart';
 
-class DigitralComprehensionPage extends ConsumerStatefulWidget {
-  const DigitralComprehensionPage({super.key});
+class MobileDigitralComprehensionPage extends ConsumerStatefulWidget {
+  const MobileDigitralComprehensionPage({super.key});
 
   @override
-  ConsumerState<DigitralComprehensionPage> createState() =>
-      _DigitralComprehensionPageState();
+  ConsumerState<MobileDigitralComprehensionPage> createState() =>
+      _MobileDigitralComprehensionPageState();
 }
 
-class _DigitralComprehensionPageState
-    extends ConsumerState<DigitralComprehensionPage> {
+class _MobileDigitralComprehensionPageState
+    extends ConsumerState<MobileDigitralComprehensionPage> {
+  bool isDialogShowing = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    ref.listenManual(comprehensionProvider.select((s) => s.isFinished), (
+      previous,
+      next,
+    ) {
+      if (next == true && !isDialogShowing) {
+        isDialogShowing = true;
+
+        Future.microtask(() {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder:
+                (_) => PromptBox(
+                  title: 'Submit Assessment',
+                  subtitle: 'Are you sure you want to submit?',
+
+                  contPad: 60,
+
+                  titleSize: 16,
+                  subtitleSize: 14,
+                  buttonStyle: const [14, 14, 12, 80],
+
+                  onCancel: () {
+                    isDialogShowing = false;
+
+                    Navigator.pop(context);
+
+                    ref.read(comprehensionProvider.notifier).resetFinished();
+                  },
+                  onConfirm: () {
+                    isDialogShowing = false;
+
+                    Navigator.pop(context);
+
+                    ref.read(comprehensionProvider.notifier).resetFinished();
+
+                    Navigator.push(
+                      context,
+                      PageAnimationTransition(
+                        page: const MobileDigitalComprehensionScorePage(),
+                        pageAnimationType: RightToLeftTransition(),
+                      ),
+                    );
+                  },
+                ),
+          );
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedMaterial = ref.watch(selectedMaterialProvider);
+    final questionAsync = ref.watch(quizQuestionProvider);
+
+    if (selectedMaterial == null) {
+      return const CircularProgressIndicator();
+    }
+    final compState = ref.watch(comprehensionProvider);
+    final compNotifier = ref.read(comprehensionProvider.notifier);
+
+    final currentIndex = compState.currentQuestionIndex;
+
+    return Stack(
+      children: [
+        Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
+
+                const PageTitle(
+                  title: 'Digital Comprehension',
+                  size: 18,
+                  pad: 30,
+                ),
+
+                const SizedBox(height: 20),
+
+                questionAsync.when(
+                  data: (questions) {
+                    final totalQuestions = questions.length;
+                    debugPrint('totQ: $totalQuestions || ${currentIndex + 1}');
+                    debugPrint(
+                      'valuetotQ: ${(currentIndex + 1) / totalQuestions}',
+                    );
+                    return Column(
+                      children: [
+                        //Progress Indicator
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SizedBox(
+                            height: 20,
+                            width: MediaQuery.of(context).size.width * .8,
+                            child: LinearProgressIndicator(
+                              borderRadius: BorderRadius.circular(8),
+                              value: (currentIndex + 1) / totalQuestions,
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        //Questions
+                        Center(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * .8,
+                            height: MediaQuery.of(context).size.height * .25,
+                            child: Card(
+                              elevation: 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: Center(
+                                  child: Text(
+                                    questions[currentIndex].questionText,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+
+                        //Choices
+                        ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: questions[currentIndex].choices.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * .12,
+                                width: MediaQuery.of(context).size.width * .5,
+                                child: Card(
+                                  elevation: 3,
+                                  child: InkWell(
+                                    onTap: () {
+                                      compNotifier.selectAnswer(
+                                        totalQuestions: questions.length,
+                                        answer:
+                                            questions[currentIndex]
+                                                .choices[index]
+                                                .letter,
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Center(
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          questions[currentIndex]
+                                              .choices[index]
+                                              .choice,
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                  loading: () => const CircularProgressIndicator(),
+                  error: (e, _) => Text(e.toString()),
+                ),
+
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: 325,
+          right: 30,
+          child: CustomIconButton(
+            icon: Icons.keyboard_return_rounded,
+            radius: 20,
+            color: Colors.amber,
+            onTap: () {
+              ref.read(comprehensionProvider.notifier).undoAnswer();
+            },
+            iconSize: 16,
+            iconColor: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TabletDigitralComprehensionPage extends ConsumerStatefulWidget {
+  const TabletDigitralComprehensionPage({super.key});
+
+  @override
+  ConsumerState<TabletDigitralComprehensionPage> createState() =>
+      _TabletDigitralComprehensionPageState();
+}
+
+class _TabletDigitralComprehensionPageState
+    extends ConsumerState<TabletDigitralComprehensionPage> {
   bool isDialogShowing = false;
 
   @override
@@ -58,7 +279,7 @@ class _DigitralComprehensionPageState
                     Navigator.push(
                       context,
                       PageAnimationTransition(
-                        page: const DigitalComprehensionScorePage(),
+                        page: const TabletDigitalComprehensionScorePage(),
                         pageAnimationType: RightToLeftTransition(),
                       ),
                     );
@@ -111,6 +332,7 @@ class _DigitralComprehensionPageState
                           child: LinearProgressIndicator(
                             borderRadius: BorderRadius.circular(12),
                             value: (currentIndex + 1) / totalQuestions,
+                            backgroundColor: Colors.white,
                           ),
                         ),
                       ),

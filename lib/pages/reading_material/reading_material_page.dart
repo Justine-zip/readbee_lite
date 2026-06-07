@@ -37,87 +37,234 @@ class MobileReadingMaterialPage extends ConsumerStatefulWidget {
 class _MobileReadingMaterialPageState
     extends ConsumerState<MobileReadingMaterialPage> {
   DraggableScrollableController controller = DraggableScrollableController();
+
+  final GlobalKey materialKey = GlobalKey();
+  final GlobalKey filterKey = GlobalKey();
+  final GlobalKey searchKey = GlobalKey();
+  final GlobalKey addKey = GlobalKey();
+
+  Future<void> showShowcase(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final hasShown = prefs.getBool('hasShownMaterialShowcase') ?? false;
+
+    if (!hasShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ShowCaseWidget.of(
+          context,
+        ).startShowCase([materialKey, searchKey, filterKey, addKey]);
+      });
+
+      await prefs.setBool('hasShownMaterialShowcase', true);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    ref.read(evaluationProvider.notifier).reset();
-    ref.read(wordColorMaterialProvider.notifier).reset();
-    ref.read(miscueProvider.notifier).reset();
-    ref.read(comprehensionProvider.notifier).reset();
-    ref.read(timerProvider.notifier).reset();
-    ref.read(timerStartedProvider.notifier).state = false;
+    Future.microtask(() {
+      ref.invalidate(evaluationProvider);
+      ref.invalidate(wordColorMaterialProvider);
+      ref.invalidate(miscueProvider);
+      ref.invalidate(comprehensionProvider);
+      ref.read(timerProvider.notifier).reset();
+      ref.read(timerStartedProvider.notifier).state = false;
+      ref.read(miscueContentProvider.notifier).state = {};
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showShowcase(context);
+    });
+  }
+
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 25),
-            const Text(
-              'Reading Materials',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
+    final material = ref.watch(filteredReadingMaterialProvider);
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomTextfield(hint: 'Search...'),
-                IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return const FilterSheet(textSize: 1, sheetSize: .4);
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.filter_alt_rounded),
+                const SizedBox(height: 25),
+                const TitleBar(
+                  title: 'Reading Materials',
+                  description:
+                      'Select reading materials to assess students, ensuring accurate and organized evaluation of tjeir reading skills',
+                  titleSize: 16,
+                  descriptionSize: 12,
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: GridView.builder(
-                itemCount: 12,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.7,
-                ),
-                itemBuilder: (context, index) {
-                  return Column(
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            debugPrint('Book $index');
+                      Showcase(
+                        key: searchKey,
+                        title: 'Search Materials',
+                        description:
+                            'Search for reading materials by title, grade level, or language.',
+                        titleTextStyle: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        descTextStyle: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                        child: CustomTextfield(
+                          controller: searchController,
+                          hint: 'Search...',
+                          hintSize: 14,
+                          onChanged: (value) {
+                            ref.read(materialSearchProvider.notifier).state =
+                                value;
                           },
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) {
+                              return const FilterSheet(
+                                textSize: .9,
+                                sheetSize: .3,
+                              );
+                            },
+                          );
+                        },
+                        icon: Showcase(
+                          key: filterKey,
+                          title: 'Filter Materials',
+                          description:
+                              'Filter reading materials by grade level or language.',
+                          titleTextStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          descTextStyle: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                          child: const Icon(Icons.filter_alt_rounded, size: 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: material.when(
+                    loading:
+                        () => Center(
                           child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(12),
+                            color: Colors.transparent,
+                            child: const Center(
+                              child: Image(
+                                image: AssetImage(
+                                  'assets/splashscreen/LoadingBee.gif',
+                                ),
+                                width: 150,
+                                height: 150,
+                                gaplessPlayback: true,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Text('Book $index', textAlign: TextAlign.center),
-                    ],
+                    data: (data) {
+                      return Showcase(
+                        key: materialKey,
+                        title: 'Explore Reading Materials',
+                        description:
+                            'Tap a material to view details, assessments, and student performance.',
+                        titleTextStyle: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        descTextStyle: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                        child: ReadingMaterialBuilder(
+                          material: data,
+                          isMobile: true,
+                          axisCount: 2,
+                          titleSize: 12,
+                        ),
+                      );
+                    },
+                    error:
+                        (error, stackTrace) =>
+                            Center(child: Text(error.toString())),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 100,
+          right: 30,
+          child: SizedBox(
+            width: 50,
+            height: 50,
+            child: Showcase(
+              key: addKey,
+              title: 'Add Reading Material',
+              description: 'Add a new reading material.',
+              titleTextStyle: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+              descTextStyle: const TextStyle(fontSize: 14, color: Colors.black),
+              child: FloatingActionButton(
+                backgroundColor: Colors.amber,
+                onPressed: () {
+                  debugPrint('add Material');
+                  showDialog(
+                    context: context,
+                    builder:
+                        (_) => const StoryDialog(
+                          contSize: .65,
+                          titleSize: 18,
+                          hintSize: 12,
+                          errorSize: 10,
+                          iconSize: 14,
+                          buttonStyle: [8, 14, 6],
+
+                          quizOptionTitle: 16,
+                          quizOptionIcon: 24,
+                          quizOptionSubtitle: 14,
+
+                          quizTitleSize: 16,
+                          quizHintSize: 12,
+                          quizLabelSize: 12,
+                          quizButtonStyle: [8, 14, 6],
+                        ),
                   );
                 },
+                child: const Icon(Icons.add, size: 32, color: Colors.white),
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -312,7 +459,40 @@ class _TabletReadingMaterialPageState
 }
 
 class StoryDialog extends ConsumerStatefulWidget {
-  const StoryDialog({super.key});
+  final double? contSize;
+  final double? titleSize;
+  final double? hintSize;
+  final double? errorSize;
+  final double? iconSize;
+  final List<double>? buttonStyle;
+
+  final double? quizOptionTitle;
+  final double? quizOptionIcon;
+  final double? quizOptionSubtitle;
+
+  final double? quizTitleSize;
+  final double? quizHintSize;
+  final double? quizLabelSize;
+  final List<double>? quizButtonStyle;
+
+  const StoryDialog({
+    super.key,
+    this.contSize,
+    this.titleSize,
+    this.hintSize,
+    this.errorSize,
+    this.iconSize,
+    this.buttonStyle,
+
+    this.quizOptionTitle,
+    this.quizOptionIcon,
+    this.quizOptionSubtitle,
+
+    this.quizTitleSize,
+    this.quizHintSize,
+    this.quizLabelSize,
+    this.quizButtonStyle,
+  });
 
   @override
   ConsumerState<StoryDialog> createState() => _StoryDialogState();
@@ -410,34 +590,38 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
     }
 
     return AlertDialog(
-      title: const Text('Add Story'),
+      title: Text('Add Story', style: TextStyle(fontSize: widget.titleSize)),
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       content: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 550),
+        constraints: BoxConstraints(
+          maxHeight: widget.contSize != null ? 430 : 450,
+        ),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * .7,
+          height: MediaQuery.of(context).size.height * (widget.contSize ?? .7),
           width: MediaQuery.of(context).size.width * .3,
           child: Column(
             children: [
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Title',
-                  border: OutlineInputBorder(),
+                  hintStyle: TextStyle(fontSize: widget.hintSize),
+                  border: const OutlineInputBorder(),
                 ),
               ),
 
               const SizedBox(height: 15),
 
               SizedBox(
-                height: 200,
+                height: 150,
                 child: TextField(
                   controller: contentController,
                   maxLines: null,
                   expands: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Story Content',
-                    border: OutlineInputBorder(),
+                    hintStyle: TextStyle(fontSize: widget.hintSize),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
               ),
@@ -457,7 +641,14 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                               draft.gradeLevelId!.isEmpty)
                           ? null
                           : draft.gradeLevelId,
-                  hint: const Text('Select Grade Level'),
+                  hint: Text(
+                    'Select Grade Level',
+                    style: TextStyle(fontSize: widget.hintSize),
+                  ),
+                  style: TextStyle(
+                    fontSize: widget.hintSize,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   items: const [
                     DropdownMenuItem(value: '3', child: Text('Grade 3')),
                     DropdownMenuItem(value: '4', child: Text('Grade 4')),
@@ -483,9 +674,10 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                     child: TextField(
                       controller: wordController,
                       readOnly: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Words',
-                        border: OutlineInputBorder(),
+                        hintStyle: TextStyle(fontSize: widget.hintSize),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -498,18 +690,31 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                           languageController.text.isEmpty
                               ? null
                               : languageController.text,
-                      decoration: const InputDecoration(
-                        hintText: 'Language',
-                        border: OutlineInputBorder(),
+                      style: TextStyle(
+                        fontSize: widget.hintSize,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
-                      items: const [
+
+                      decoration: InputDecoration(
+                        hintText: 'Language',
+                        hintStyle: TextStyle(fontSize: widget.hintSize),
+
+                        border: const OutlineInputBorder(),
+                      ),
+                      items: [
                         DropdownMenuItem(
                           value: 'English',
-                          child: Text('English'),
+                          child: Text(
+                            'English',
+                            style: TextStyle(fontSize: widget.hintSize),
+                          ),
                         ),
                         DropdownMenuItem(
                           value: 'Filipino',
-                          child: Text('Filipino'),
+                          child: Text(
+                            'Filipino',
+                            style: TextStyle(fontSize: widget.hintSize),
+                          ),
                         ),
                       ],
                       onChanged: (value) {
@@ -532,18 +737,18 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.warning_amber_rounded,
                         color: Colors.redAccent,
-                        size: 20,
+                        size: widget.iconSize ?? 20,
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           _errorMessage!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.redAccent,
-                            fontSize: 13,
+                            fontSize: widget.errorSize ?? 13,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -559,6 +764,9 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                   CustomButton(
                     title: 'Scan Img',
                     size: 100,
+                    pad: widget.buttonStyle?[0],
+                    tSize: widget.buttonStyle?[1],
+                    radius: widget.buttonStyle?[2],
                     onTap: () async {
                       debugPrint('Scan Image');
                       await pickImage();
@@ -566,7 +774,10 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                   ),
                   CustomButton(
                     title: 'Next',
-                    size: 100,
+                    size: 80,
+                    pad: widget.buttonStyle?[0],
+                    tSize: widget.buttonStyle?[1],
+                    radius: widget.buttonStyle?[2],
                     onTap: () {
                       final title = titleController.text.trim();
                       final content = contentController.text.trim();
@@ -603,7 +814,17 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                       showDialog(
                         context: context,
                         barrierDismissible: true,
-                        builder: (_) => const QuizDialogOption(),
+                        builder:
+                            (_) => QuizDialogOption(
+                              titleSize: widget.quizOptionTitle,
+                              iconSize: widget.quizOptionIcon,
+                              subtitleSize: widget.quizOptionSubtitle,
+
+                              quizTitleSize: widget.quizTitleSize,
+                              quizHintSize: widget.quizHintSize,
+                              quizLabelSize: widget.quizLabelSize,
+                              quizButtonStyle: widget.quizButtonStyle,
+                            ),
                       );
                     },
                   ),
@@ -618,7 +839,25 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
 }
 
 class QuizDialogOption extends StatelessWidget {
-  const QuizDialogOption({super.key});
+  final double? titleSize;
+  final double? iconSize;
+  final double? subtitleSize;
+
+  final double? quizTitleSize;
+  final double? quizHintSize;
+  final double? quizLabelSize;
+  final List<double>? quizButtonStyle;
+  const QuizDialogOption({
+    super.key,
+    this.titleSize,
+    this.iconSize,
+    this.subtitleSize,
+
+    this.quizTitleSize,
+    this.quizHintSize,
+    this.quizLabelSize,
+    this.quizButtonStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -706,16 +945,19 @@ class QuizDialogOption extends StatelessWidget {
     }
 
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       contentPadding: const EdgeInsets.all(24),
       content: SizedBox(
         width: 400,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'Choose Quiz Input Method',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: titleSize ?? 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
 
             const SizedBox(height: 24),
@@ -735,7 +977,14 @@ class QuizDialogOption extends StatelessWidget {
                         showDialog(
                           context: context,
                           barrierDismissible: true,
-                          builder: (_) => QuizDialog(quizItems: quizData),
+                          builder:
+                              (_) => QuizDialog(
+                                quizItems: quizData,
+                                quizTitleSize: quizTitleSize,
+                                quizHintSize: quizHintSize,
+                                quizLabelSize: quizLabelSize,
+                                quizButtonStyle: quizButtonStyle,
+                              ),
                         );
                       }
                     },
@@ -745,11 +994,14 @@ class QuizDialogOption extends StatelessWidget {
                         color: Colors.amber,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.image_search, size: 40),
-                          SizedBox(height: 8),
-                          Text('Scan Image'),
+                          Icon(Icons.image_search, size: iconSize ?? 40),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Scan Image',
+                            style: TextStyle(fontSize: subtitleSize),
+                          ),
                         ],
                       ),
                     ),
@@ -767,7 +1019,13 @@ class QuizDialogOption extends StatelessWidget {
                       showDialog(
                         context: context,
                         barrierDismissible: true,
-                        builder: (_) => const QuizDialog(),
+                        builder:
+                            (_) => QuizDialog(
+                              quizTitleSize: quizTitleSize,
+                              quizHintSize: quizHintSize,
+                              quizLabelSize: quizLabelSize,
+                              quizButtonStyle: quizButtonStyle,
+                            ),
                       );
                     },
                     child: Container(
@@ -776,11 +1034,14 @@ class QuizDialogOption extends StatelessWidget {
                         color: Colors.amber,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.edit_note, size: 40),
-                          SizedBox(height: 8),
-                          Text('Manual'),
+                          Icon(Icons.edit_note, size: iconSize ?? 40),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Manual',
+                            style: TextStyle(fontSize: subtitleSize),
+                          ),
                         ],
                       ),
                     ),
@@ -797,8 +1058,19 @@ class QuizDialogOption extends StatelessWidget {
 
 class QuizDialog extends ConsumerStatefulWidget {
   final List<Map<String, dynamic>>? quizItems;
+  final double? quizTitleSize;
+  final double? quizHintSize;
+  final double? quizLabelSize;
+  final List<double>? quizButtonStyle;
 
-  const QuizDialog({super.key, this.quizItems});
+  const QuizDialog({
+    super.key,
+    this.quizItems,
+    this.quizTitleSize,
+    this.quizHintSize,
+    this.quizLabelSize,
+    this.quizButtonStyle,
+  });
 
   @override
   ConsumerState<QuizDialog> createState() => _QuizDialogState();
@@ -917,8 +1189,12 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
             ? 'Add Quiz Question (${_currentIndex + 1} of ${widget.quizItems!.length})'
             : 'Add Quiz Question';
 
+    debugPrint(
+      'QuizData: ${[widget.quizTitleSize, widget.quizHintSize, widget.quizLabelSize]}',
+    );
+
     return AlertDialog(
-      title: Text(titleText),
+      title: Text(titleText, style: TextStyle(fontSize: widget.quizTitleSize)),
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       content: SizedBox(
         width: 500,
@@ -928,33 +1204,37 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
             children: [
               TextField(
                 controller: questionController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Question',
-                  border: OutlineInputBorder(),
+                  hintStyle: TextStyle(fontSize: widget.quizHintSize),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 15),
               TextField(
                 controller: aController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Choice A',
-                  border: OutlineInputBorder(),
+                  hintStyle: TextStyle(fontSize: widget.quizHintSize),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 15),
               TextField(
                 controller: bController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Choice B',
-                  border: OutlineInputBorder(),
+                  hintStyle: TextStyle(fontSize: widget.quizHintSize),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 15),
               TextField(
                 controller: cController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Choice C',
-                  border: OutlineInputBorder(),
+                  hintStyle: TextStyle(fontSize: widget.quizHintSize),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 15),
@@ -962,9 +1242,10 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
               if (_isChoiceDVisible) ...[
                 TextField(
                   controller: dController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Choice D',
-                    border: OutlineInputBorder(),
+                    hintStyle: TextStyle(fontSize: widget.quizHintSize),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -978,7 +1259,10 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
                       });
                     },
                     icon: const Icon(Icons.add, size: 18),
-                    label: const Text('Add Choice D'),
+                    label: Text(
+                      'Add Choice D',
+                      style: TextStyle(fontSize: widget.quizLabelSize),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -986,9 +1270,10 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
 
               TextField(
                 controller: answerController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Correct Answer (A/B/C/D)',
-                  border: OutlineInputBorder(),
+                  hintStyle: TextStyle(fontSize: widget.quizHintSize),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 20),
@@ -1010,14 +1295,20 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
                         }
                       },
                       icon: const Icon(Icons.add_box),
-                      label: const Text('New Question'),
+                      label: Text(
+                        'New Question',
+                        style: TextStyle(fontSize: widget.quizLabelSize),
+                      ),
                     )
                   else
                     const SizedBox.shrink(),
 
                   CustomButton(
                     title: _hasMoreItems ? 'Next' : 'Submit',
-                    size: 100,
+                    size: 80,
+                    radius: widget.quizButtonStyle?[0],
+                    tSize: widget.quizButtonStyle?[1],
+                    pad: widget.quizButtonStyle?[2],
                     onTap: () async {
                       _saveCurrentToDraft();
 

@@ -4,11 +4,23 @@ class MaterialTitleBar extends StatelessWidget {
   final String name;
   final String gradeSection;
   final String teacher;
+
+  final double? nameSize;
+  final double? gradeSectionSize;
+  final double? teacherSize;
+
+  final double? pad;
   const MaterialTitleBar({
     super.key,
     required this.name,
     required this.gradeSection,
     this.teacher = '',
+
+    this.nameSize,
+    this.gradeSectionSize,
+    this.teacherSize,
+
+    this.pad,
   });
 
   @override
@@ -16,11 +28,12 @@ class MaterialTitleBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
+        // ignore: deprecated_member_use
         color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(36),
+        padding: EdgeInsets.all(pad ?? 36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -28,24 +41,24 @@ class MaterialTitleBar extends StatelessWidget {
               name,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 22,
+                fontSize: nameSize ?? 22,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               gradeSection,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 22,
+                fontSize: gradeSectionSize ?? 22,
               ),
             ),
             if (teacher != '') ...[
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Text(
                 teacher,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  fontSize: 22,
+                  fontSize: teacherSize ?? 22,
                 ),
               ),
             ],

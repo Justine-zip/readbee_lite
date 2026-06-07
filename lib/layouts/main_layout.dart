@@ -9,7 +9,8 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MobileMainLayout extends StatefulWidget {
-  const MobileMainLayout({super.key});
+  final int? initialIndex;
+  const MobileMainLayout({super.key, this.initialIndex = 0});
 
   @override
   State<MobileMainLayout> createState() => _MobileMainLayoutState();
@@ -31,58 +32,63 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
               ),
         );
       },
-      child: DefaultTabController(
-        length: 5,
-        child: Stack(
-          children: [
-            Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-
-              body: const TabBarView(
+      child: ShowCaseWidget(
+        builder:
+            (context) => DefaultTabController(
+              initialIndex: widget.initialIndex ?? 0,
+              length: 5,
+              child: Stack(
                 children: [
-                  MobileHomePage(),
-                  MobileRecordPage(),
-                  MobileReadingMaterialPage(),
-                  Center(
-                    child: Text(
-                      'E V E N T',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.amber,
+                  Scaffold(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+
+                    body: const TabBarView(
+                      children: [
+                        MobileHomePage(),
+                        MobileRecordPage(),
+                        MobileReadingMaterialPage(),
+                        Center(
+                          child: Text(
+                            'E V E N T',
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ),
+                        MobileProfilePage(),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 30,
+                    right: 30,
+                    left: 30,
+                    child: Material(
+                      color: Theme.of(context).colorScheme.surfaceContainer,
+                      elevation: 3,
+                      borderRadius: BorderRadius.circular(12),
+                      child: TabBar(
+                        dividerColor: Colors.transparent,
+                        labelColor: Colors.amber,
+                        unselectedLabelColor:
+                            Theme.of(context).colorScheme.secondary,
+                        indicatorColor: Theme.of(context).colorScheme.surface,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        tabs: const [
+                          Tab(icon: Icon(Icons.home)),
+                          Tab(icon: Icon(Icons.file_copy_rounded)),
+                          Tab(icon: Icon(Icons.book_online_rounded)),
+                          Tab(icon: Icon(Icons.calendar_month_rounded)),
+                          Tab(icon: Icon(Icons.person_2_rounded)),
+                        ],
                       ),
                     ),
                   ),
-                  MobileProfilePage(),
                 ],
               ),
             ),
-            Positioned(
-              bottom: 30,
-              right: 30,
-              left: 30,
-              child: Material(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                elevation: 3,
-                borderRadius: BorderRadius.circular(12),
-                child: TabBar(
-                  dividerColor: Colors.transparent,
-                  labelColor: Colors.amber,
-                  unselectedLabelColor: Theme.of(context).colorScheme.secondary,
-                  indicatorColor: Theme.of(context).colorScheme.surface,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  tabs: const [
-                    Tab(icon: Icon(Icons.home)),
-                    Tab(icon: Icon(Icons.file_copy_rounded)),
-                    Tab(icon: Icon(Icons.book_online_rounded)),
-                    Tab(icon: Icon(Icons.calendar_month_rounded)),
-                    Tab(icon: Icon(Icons.person_2_rounded)),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

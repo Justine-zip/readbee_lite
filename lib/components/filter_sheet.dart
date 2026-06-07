@@ -18,92 +18,96 @@ class FilterSheet extends ConsumerWidget {
     final filter = ref.watch(materialFilterProvider);
     return DraggableScrollableSheet(
       initialChildSize: sheetSize,
-      maxChildSize: sheetSize * 1.1,
+      minChildSize: sheetSize * 1,
+      maxChildSize: sheetSize * 1.5,
       expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           width: double.infinity,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surfaceContainer,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Filter & Layout Settings',
-                  style: TextStyle(
-                    fontSize: 18 * textSize,
-                    fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Filter & Layout Settings',
+                    style: TextStyle(
+                      fontSize: 18 * textSize,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Grade Level',
-                            style: TextStyle(fontSize: 16 * textSize),
-                          ),
-                          CustomDropdown(
-                            option: ['3', '4', '5', '6'],
-                            value: filter.gradeLevel,
-                            onChanged: (value) {
-                              ref
-                                  .read(materialFilterProvider.notifier)
-                                  .state = filter.copyWith(gradeLevel: value);
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Grade Level',
+                              style: TextStyle(fontSize: 16 * textSize),
+                            ),
+                            CustomDropdown(
+                              option: const ['3', '4', '5', '6'],
+                              value: filter.gradeLevel,
+                              onChanged: (value) {
+                                ref
+                                    .read(materialFilterProvider.notifier)
+                                    .state = filter.copyWith(gradeLevel: value);
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Language',
+                              style: TextStyle(fontSize: 16 * textSize),
+                            ),
+                            CustomDropdown(
+                              option: const ['Filipino', 'English'],
+                              value: filter.language,
+                              onChanged: (value) {
+                                ref
+                                    .read(materialFilterProvider.notifier)
+                                    .state = filter.copyWith(language: value);
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              ref.read(materialFilterProvider.notifier).state =
+                                  MaterialFilter.empty;
                             },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Language',
-                            style: TextStyle(fontSize: 16 * textSize),
-                          ),
-                          CustomDropdown(
-                            option: ['Filipino', 'English'],
-                            value: filter.language,
-                            onChanged: (value) {
-                              ref
-                                  .read(materialFilterProvider.notifier)
-                                  .state = filter.copyWith(language: value);
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            ref.read(materialFilterProvider.notifier).state =
-                                MaterialFilter.empty;
-                          },
-                          child: Text(
-                            'Reset Filter',
-                            style: TextStyle(
-                              color: Colors.amber,
-                              fontSize: 18 * textSize,
-                              fontWeight: FontWeight.bold,
+                            child: Text(
+                              'Reset Filter',
+                              style: TextStyle(
+                                color: Colors.amber,
+                                fontSize: 18 * textSize,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                    ],
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

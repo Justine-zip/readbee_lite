@@ -70,6 +70,14 @@ class _MobileHomePageState extends ConsumerState<MobileHomePage> {
                 Showcase(
                   key: nameKey,
                   title: 'Welcome to ReadBee!',
+                  titleTextStyle: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                  descTextStyle: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
                   description:
                       'This is your username and a motivational quote to keep you inspired.',
                   child: Container(
@@ -197,6 +205,14 @@ class _MobileHomePageState extends ConsumerState<MobileHomePage> {
                             title: 'Reading Speed',
                             description:
                                 'This section shows the distribution of reading speeds among students.',
+                            titleTextStyle: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            descTextStyle: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
                             child: SizedBox(
                               width: double.infinity,
                               height: 220,
@@ -318,7 +334,15 @@ class _MobileHomePageState extends ConsumerState<MobileHomePage> {
                         key: chartKey,
                         title: 'Reading & Comprehension Levels',
                         description:
-                            'These charts show the distribution of reading and comprehension levels among students. It helps you understand how your students are performing and identify those who may need extra support.',
+                            'These charts show the distribution of reading and comprehension levels among students. It helps you understand how your students are performing and identify how many need extra support.',
+                        titleTextStyle: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        descTextStyle: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(
                             minHeight: 375,

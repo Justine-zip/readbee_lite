@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 class CustomReadingScoreRow extends StatelessWidget {
   final String title;
   final String value;
+
+  final double? titleSize;
+  final double? valueSize;
   const CustomReadingScoreRow({
     super.key,
     required this.title,
     required this.value,
+
+    this.titleSize,
+    this.valueSize,
   });
 
   @override
@@ -16,11 +22,17 @@ class CustomReadingScoreRow extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: titleSize ?? 28,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: valueSize ?? 28,
+            fontWeight: FontWeight.normal,
+          ),
         ),
       ],
     );

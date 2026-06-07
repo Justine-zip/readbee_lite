@@ -10,7 +10,16 @@ import 'package:readbee_lite/providers/selected_material_provider.dart';
 
 class ReadingMaterialBuilder extends ConsumerWidget {
   final List<ReadingMaterial> material;
-  const ReadingMaterialBuilder({super.key, required this.material});
+  final bool? isMobile;
+  final int? axisCount;
+  final double? titleSize;
+  const ReadingMaterialBuilder({
+    super.key,
+    required this.material,
+    this.isMobile,
+    this.axisCount,
+    this.titleSize,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,8 +27,8 @@ class ReadingMaterialBuilder extends ConsumerWidget {
       padding: const EdgeInsets.only(left: 24, right: 24, top: 12),
       child: GridView.builder(
         itemCount: material.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: axisCount ?? 5,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
           childAspectRatio: 0.7,
@@ -45,7 +54,10 @@ class ReadingMaterialBuilder extends ConsumerWidget {
                     Navigator.push(
                       context,
                       PageAnimationTransition(
-                        page: const ReadingMaterialDetailsPage(),
+                        page:
+                            isMobile != null
+                                ? const MobileReadingMaterialDetailsPage()
+                                : const TabletReadingMaterialDetailsPage(),
                         pageAnimationType: RightToLeftTransition(),
                       ),
                     );
@@ -75,7 +87,7 @@ class ReadingMaterialBuilder extends ConsumerWidget {
               Text(
                 item.title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 22),
+                style: TextStyle(fontSize: titleSize ?? 22),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

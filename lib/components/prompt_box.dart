@@ -9,6 +9,11 @@ class PromptBox extends StatelessWidget {
   final VoidCallback? onConfirm;
   final VoidCallback? onCancel;
 
+  final double? contPad;
+  final double? titleSize;
+  final double? subtitleSize;
+  final List<double>? buttonStyle;
+
   const PromptBox({
     super.key,
     required this.title,
@@ -17,13 +22,18 @@ class PromptBox extends StatelessWidget {
     this.cancelText,
     this.onConfirm,
     this.onCancel,
+
+    this.contPad,
+    this.titleSize,
+    this.subtitleSize,
+    this.buttonStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      insetPadding: const EdgeInsets.all(20),
+      insetPadding: EdgeInsets.all(contPad ?? 20),
       child: SizedBox(
         width: 400,
         child: Padding(
@@ -33,14 +43,17 @@ class PromptBox extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 22,
+                style: TextStyle(
+                  fontSize: titleSize ?? 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 10),
               if (subtitle != null) ...[
-                Text(subtitle ?? '', style: const TextStyle(fontSize: 20)),
+                Text(
+                  subtitle ?? '',
+                  style: TextStyle(fontSize: subtitleSize ?? 20),
+                ),
                 const SizedBox(height: 30),
               ],
               Row(
@@ -49,13 +62,17 @@ class PromptBox extends StatelessWidget {
                   CustomButton(
                     onTap: onCancel,
                     title: cancelText ?? 'Not Yet',
-                    size: 150,
+                    tSize: buttonStyle?[0],
+                    pad: buttonStyle?[2],
+                    size: buttonStyle?[3] ?? 150,
                   ),
                   const SizedBox(width: 10),
                   CustomButton(
                     onTap: onConfirm,
                     title: confirmText ?? 'Submit',
-                    size: 150,
+                    tSize: buttonStyle?[1],
+                    pad: buttonStyle?[2],
+                    size: buttonStyle?[3] ?? 150,
                   ),
                 ],
               ),

@@ -4,9 +4,11 @@ class CustomTextfield extends StatelessWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final String hint;
+  final double? hintSize;
   const CustomTextfield({
     super.key,
     required this.hint,
+    this.hintSize,
     this.controller,
     this.onChanged,
   });
@@ -24,7 +26,10 @@ class CustomTextfield extends StatelessWidget {
         child: TextField(
           controller: controller,
           onChanged: onChanged,
-          decoration: InputDecoration(hintText: hint),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(fontSize: hintSize),
+          ),
         ),
       ),
     );

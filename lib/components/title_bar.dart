@@ -4,11 +4,17 @@ class TitleBar extends StatelessWidget {
   final String title;
   final String description;
   final String secondDescription;
+  final double? titleSize;
+  final double? descriptionSize;
+  final double? secondDescriptionSize;
   const TitleBar({
     super.key,
     required this.title,
     required this.description,
     this.secondDescription = '',
+    this.titleSize,
+    this.descriptionSize,
+    this.secondDescriptionSize,
   });
 
   @override
@@ -16,6 +22,7 @@ class TitleBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
+        // ignore: deprecated_member_use
         color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(12),
       ),
@@ -28,25 +35,25 @@ class TitleBar extends StatelessWidget {
               title,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 26,
+                fontSize: titleSize ?? 26,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               description,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 18,
+                fontSize: descriptionSize ?? 18,
               ),
             ),
             if (secondDescription != '') ...[
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Text(
                 secondDescription,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  fontSize: 18,
+                  fontSize: secondDescriptionSize ?? 18,
                 ),
               ),
             ],
