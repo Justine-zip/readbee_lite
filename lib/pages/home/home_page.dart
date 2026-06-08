@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/providers/analytics_provider.dart';
 import 'package:readbee_lite/providers/profile_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,50 +81,32 @@ class _MobileHomePageState extends ConsumerState<MobileHomePage> {
                   ),
                   description:
                       'This is your username and a motivational quote to keep you inspired.',
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        profileAsync.when(
-                          data: (profile) {
-                            debugPrint('ProfileName: ${profile?.fullName}');
-                            return Text(
-                              profile?.fullName ?? 'Guest',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
-                          loading:
-                              () => Shimmer.fromColors(
-                                baseColor: Colors.white,
-                                highlightColor: Colors.amber,
-                                child: const Text(
-                                  'ReadBee',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                          error: (e, _) => const Text('Error'),
+                  child: profileAsync.when(
+                    data: (profile) {
+                      debugPrint('ProfileName: ${profile?.fullName}');
+                      return TitleBar(
+                        title: profile?.fullName ?? 'Guest',
+                        description:
+                            'Every word read is a step toward a brighter mind. Let\'s keep going!',
+
+                        titleSize: 16,
+                        descriptionSize: 12,
+                      );
+                    },
+                    loading:
+                        () => Shimmer.fromColors(
+                          baseColor: Colors.white,
+                          highlightColor: Colors.amber,
+                          child: const Text(
+                            'ReadBee',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Every word read is a step toward a brighter mind. Let\'s keep going!',
-                          style: TextStyle(color: Colors.white70, fontSize: 12),
-                        ),
-                      ],
-                    ),
+                    error: (e, _) => const Text('Error'),
                   ),
                 ),
 

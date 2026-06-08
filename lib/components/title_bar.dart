@@ -23,7 +23,7 @@ class TitleBar extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         // ignore: deprecated_member_use
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Colors.black,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -34,7 +34,7 @@ class TitleBar extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
+                color: Colors.white,
                 fontSize: titleSize ?? 26,
                 fontWeight: FontWeight.bold,
               ),

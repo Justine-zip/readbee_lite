@@ -287,107 +287,100 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
             child: Material(
               elevation: 8,
               borderRadius: BorderRadius.circular(30),
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainer,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Email', style: TextStyle(fontSize: 20)),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      height: 70,
-                      child: TextField(
-                        controller: emailController,
-                        style: const TextStyle(fontSize: 20),
-                        decoration: const InputDecoration(
-                          hintText: 'ex: guest@gmail.com',
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 16,
-                          ),
-                          border: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 500),
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Password', style: TextStyle(fontSize: 20)),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      height: 70,
-                      child: TextField(
-                        controller: passwordController,
-                        obscureText: _obscurePassword,
-                        style: const TextStyle(fontSize: 20),
-                        decoration: InputDecoration(
-                          hintText: '********',
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 16,
-                          ),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                      const SizedBox(height: 32),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Email', style: TextStyle(fontSize: 20)),
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 70,
+                        child: TextField(
+                          controller: emailController,
+                          style: const TextStyle(fontSize: 20),
+                          decoration: const InputDecoration(
+                            hintText: 'ex: guest@gmail.com',
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 16,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
+                            border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Checkbox(value: false, onChanged: (_) {}),
-                        const Text(
-                          'Remember me',
-                          style: TextStyle(fontSize: 16),
+                      const SizedBox(height: 16),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Password', style: TextStyle(fontSize: 20)),
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 70,
+                        child: TextField(
+                          controller: passwordController,
+                          obscureText: _obscurePassword,
+                          style: const TextStyle(fontSize: 20),
+                          decoration: InputDecoration(
+                            hintText: '********',
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 16,
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    CustomButton(onTap: _handleLogin, title: 'Login'),
-                  ],
+                      ),
+                      const SizedBox(height: 16),
+                      CustomButton(onTap: _handleLogin, title: 'Login'),
+                    ],
+                  ),
                 ),
               ),
             ),

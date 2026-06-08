@@ -93,11 +93,11 @@ class _MobileReadingMaterialPageState
         Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 25),
+                const SizedBox(height: 30),
                 const TitleBar(
                   title: 'Reading Materials',
                   description:
