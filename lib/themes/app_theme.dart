@@ -6,14 +6,13 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       surface: Colors.white,
       surfaceContainer: Colors.white,
-      surfaceVariant: Colors.black,
       primary: Colors.amber,
       primaryContainer: Colors.grey[100],
       inversePrimary: Colors.white,
       tertiary: Colors.black,
       secondary: Colors.grey[400],
       seedColor: Colors.amber,
-      secondaryContainer: Colors.amber,
+      secondaryContainer: Colors.amber[300],
 
       brightness: Brightness.light,
     ),
@@ -24,7 +23,6 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       surface: Colors.grey[900],
       surfaceContainer: Colors.grey[800],
-      surfaceVariant: Colors.grey[800],
       primary: Colors.amber,
       primaryContainer: Colors.grey[800],
       inversePrimary: Colors.grey[400],

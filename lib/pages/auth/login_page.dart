@@ -70,7 +70,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
           const SnackBar(content: Text('Invalid login credentials')),
         );
       }
-      print('Login failed: $e');
+      debugPrint('Login failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -271,7 +271,7 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
           const SnackBar(content: Text('Invalid login credentials')),
         );
       }
-      print('Login failed: $e');
+      debugPrint('Login failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

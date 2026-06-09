@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthServices {
@@ -54,10 +55,10 @@ class AuthServices {
       final user = await _supabase.auth.updateUser(
         UserAttributes(password: newPassword),
       );
-      print('Password updated for: ${user.user!.email}');
+      debugPrint('Password updated for: ${user.user!.email}');
       return true;
     } catch (e) {
-      print('Failed to update password: $e');
+      debugPrint('Failed to update password: $e');
       return false;
     }
   }
@@ -65,9 +66,9 @@ class AuthServices {
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _supabase.auth.resetPasswordForEmail(email);
-      print('Password reset email sent to $email');
+      debugPrint('Password reset email sent to $email');
     } catch (e) {
-      print('Failed to send reset email: $e');
+      debugPrint('Failed to send reset email: $e');
     }
   }
 }

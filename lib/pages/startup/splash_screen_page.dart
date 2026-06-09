@@ -56,6 +56,7 @@ class _MobileSplashScreenPageState extends State<MobileSplashScreenPage>
 
           Widget nextPage =
               hasShown ? const MainPage() : const MobileOnboardingPage();
+          if (!mounted) return;
 
           Navigator.pushReplacement(
             context,
@@ -174,6 +175,7 @@ class _TabletSplashScreenPageState extends State<TabletSplashScreenPage>
 
           Widget nextPage =
               hasShown ? const MainPage() : const TabletOnboardingPage();
+          if (!mounted) return;
 
           Navigator.pushReplacement(
             context,

@@ -971,6 +971,8 @@ class QuizDialogOption extends StatelessWidget {
                       debugPrint('Scan Quiz Image');
                       final quizData = await pickImage();
 
+                      if (!context.mounted) return;
+
                       Navigator.pop(context);
 
                       if (quizData.isNotEmpty) {

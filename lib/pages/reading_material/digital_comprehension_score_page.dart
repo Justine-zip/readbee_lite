@@ -340,7 +340,7 @@ class _MobileDigitalComprehensionScorePageState
                         miscueContent: miscueContent,
                       );
 
-                      if (!mounted) return;
+                      if (!context.mounted) return;
 
                       showDialog(
                         context: context,
@@ -372,17 +372,19 @@ class _MobileDigitalComprehensionScorePageState
                         },
                       );
 
-                      Future.delayed(const Duration(seconds: 3), () {
-                        Navigator.pop(context);
+                      await Future.delayed(const Duration(seconds: 3));
 
-                        Navigator.push(
-                          context,
-                          PageAnimationTransition(
-                            page: const MobileMainLayout(initialIndex: 2),
-                            pageAnimationType: RightToLeftTransition(),
-                          ),
-                        );
-                      });
+                      if (!context.mounted) return;
+
+                      Navigator.pop(context);
+
+                      Navigator.push(
+                        context,
+                        PageAnimationTransition(
+                          page: const MobileMainLayout(initialIndex: 2),
+                          pageAnimationType: RightToLeftTransition(),
+                        ),
+                      );
                     } catch (e) {
                       debugPrint(e.toString());
 
@@ -720,7 +722,7 @@ class _TabletDigitalComprehensionScorePageState
                         miscueContent: miscueContent,
                       );
 
-                      if (!mounted) return;
+                      if (!context.mounted) return;
 
                       showDialog(
                         context: context,
@@ -752,17 +754,18 @@ class _TabletDigitalComprehensionScorePageState
                         },
                       );
 
-                      Future.delayed(const Duration(seconds: 3), () {
-                        Navigator.pop(context);
+                      await Future.delayed(const Duration(seconds: 3));
+                      if (!context.mounted) return;
 
-                        Navigator.push(
-                          context,
-                          PageAnimationTransition(
-                            page: const TabletMainLayout(initialIndex: 2),
-                            pageAnimationType: RightToLeftTransition(),
-                          ),
-                        );
-                      });
+                      Navigator.pop(context);
+
+                      Navigator.push(
+                        context,
+                        PageAnimationTransition(
+                          page: const TabletMainLayout(initialIndex: 2),
+                          pageAnimationType: RightToLeftTransition(),
+                        ),
+                      );
                     } catch (e) {
                       debugPrint(e.toString());
 
