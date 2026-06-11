@@ -4,6 +4,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/pages/auth/login_page.dart';
 
+import '../../helpers/test_helper.dart';
+
 class MockAuthServices extends Mock implements AuthServices {}
 
 void main() {
@@ -14,7 +16,7 @@ void main() {
   });
 
   Widget createWidget() {
-    return MaterialApp(home: MobileLoginPage(authServices: mockAuth));
+    return createTestWidget(child: MobileLoginPage(authServices: mockAuth));
   }
 
   group('MobileLoginPage', () {
