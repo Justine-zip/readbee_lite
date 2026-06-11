@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/layouts/responsive.dart';
 import 'package:readbee_lite/pages/auth/login_page.dart';
 import 'package:readbee_lite/pages/auth/status_page.dart';
@@ -13,6 +14,8 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthServices supabase = AuthServices();
+
     return StreamBuilder<AuthState>(
       stream: Supabase.instance.client.auth.onAuthStateChange,
       builder: (context, snapshot) {
@@ -27,9 +30,9 @@ class AuthGate extends StatelessWidget {
         if (session != null) {
           return const StatusPage();
         } else {
-          return const Responsive(
-            mobile: MobileLoginPage(),
-            tablet: TabletLoginPage(),
+          return Responsive(
+            mobile: MobileLoginPage(authServices: supabase),
+            tablet: const TabletLoginPage(),
           );
         }
       },

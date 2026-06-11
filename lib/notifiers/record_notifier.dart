@@ -100,7 +100,9 @@ class RecordNotifier extends Notifier<RecordState> {
     if (state.currentStep == RecordStep.section) {
       final section = ref.read(sectionProvider).value ?? [];
 
-      section.forEach((s) => debugPrint('SectionIdx: ${s.sectionId}'));
+      for (var s in section) {
+        debugPrint('SectionIdx: ${s.sectionId}');
+      }
 
       final selectedSectionData = section.firstWhere(
         (s) => s.sectionName == value,

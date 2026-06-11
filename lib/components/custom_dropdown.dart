@@ -18,7 +18,7 @@ class CustomDropdown extends StatelessWidget {
       height: 35,
       width: 150,
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         isExpanded: true,
         alignment: Alignment.center,
         decoration: InputDecoration(

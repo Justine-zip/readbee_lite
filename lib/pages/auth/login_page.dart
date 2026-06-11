@@ -6,14 +6,15 @@ import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/layouts/main_layout.dart';
 
 class MobileLoginPage extends StatefulWidget {
-  const MobileLoginPage({super.key});
+  final AuthServices authServices;
+
+  const MobileLoginPage({super.key, required this.authServices});
 
   @override
   State<MobileLoginPage> createState() => _MobileLoginPageState();
 }
 
 class _MobileLoginPageState extends State<MobileLoginPage> {
-  AuthServices supabase = AuthServices();
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -43,7 +44,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
 
     try {
       final minimumDelay = Future.delayed(const Duration(seconds: 1));
-      final loginFuture = supabase.signInWithEmailPassword(
+      final loginFuture = widget.authServices.signInWithEmailPassword(
         emailController.text.trim(),
         passwordController.text.trim(),
       );
@@ -70,7 +71,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
           const SnackBar(content: Text('Invalid login credentials')),
         );
       }
-      print('Login failed: $e');
+      debugPrint('Login failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -178,6 +179,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                       ),
                       const SizedBox(height: 24),
                       CustomButton(
+                        key: const Key('login_button'),
                         onTap: _handleLogin,
                         title: 'Login',
                         size: 200,
@@ -271,7 +273,7 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
           const SnackBar(content: Text('Invalid login credentials')),
         );
       }
-      print('Login failed: $e');
+      debugPrint('Login failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

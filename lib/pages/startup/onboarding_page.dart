@@ -34,6 +34,8 @@ class _MobileOnboardingPageState extends State<MobileOnboardingPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       prefs = await SharedPreferences.getInstance();
 
+      if (!mounted) return;
+
       await showOnBoarding(context);
     });
   }
@@ -189,6 +191,7 @@ class _TabletOnboardingPageState extends State<TabletOnboardingPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       prefs = await SharedPreferences.getInstance();
+      if (!mounted) return;
 
       await showOnBoarding(context);
     });

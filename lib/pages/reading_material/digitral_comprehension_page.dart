@@ -35,6 +35,8 @@ class _MobileDigitralComprehensionPageState
         isDialogShowing = true;
 
         Future.microtask(() {
+          if (!mounted) return;
+
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -255,6 +257,8 @@ class _TabletDigitralComprehensionPageState
         isDialogShowing = true;
 
         Future.microtask(() {
+          if (!mounted) return;
+
           showDialog(
             context: context,
             barrierDismissible: false,
