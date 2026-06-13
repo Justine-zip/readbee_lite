@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:readbee_lite/core/services/auth_services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/layouts/responsive.dart';
 import 'package:readbee_lite/pages/auth/login_page.dart';
 import 'package:readbee_lite/pages/auth/status_page.dart';
+import 'package:readbee_lite/providers/auth_service_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthGate extends StatelessWidget {
+class AuthGate extends ConsumerWidget {
   const AuthGate({super.key});
 
   bool isTablet(BuildContext context) {
@@ -13,11 +14,11 @@ class AuthGate extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    AuthServices supabase = AuthServices();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final supabase = ref.watch(authServicesProvider);
 
     return StreamBuilder<AuthState>(
-      stream: Supabase.instance.client.auth.onAuthStateChange,
+      stream: supabase.authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(

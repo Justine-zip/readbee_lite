@@ -30,8 +30,6 @@ class _StatusPageState extends ConsumerState<StatusPage> {
     ref.watch(sectionProvider);
     ref.watch(gradeRateProvider);
 
-    debugPrint('userxdata: ${Supabase.instance.client.auth.currentUser!.id}');
-
     assignmentAsync.whenData((assignments) {
       if (assignments == null) return;
 

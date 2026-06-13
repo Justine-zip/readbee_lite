@@ -71,4 +71,7 @@ class AuthServices {
       debugPrint('Failed to send reset email: $e');
     }
   }
+
+  Stream<AuthState> get authStateChanges =>
+      Supabase.instance.client.auth.onAuthStateChange;
 }

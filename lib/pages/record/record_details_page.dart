@@ -46,7 +46,7 @@ class _MobileRecordDetailsPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${record.selectedGrade} • ${record.selectedSection} • ${record.selectedLanguage} • ${record.selectedStudent!.name}',
+                  '${record.selectedGrade} • ${record.selectedSection} • ${record.selectedLanguage} • ${record.selectedStudent?.name}',
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
