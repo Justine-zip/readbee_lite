@@ -47,10 +47,12 @@ class ComprehensionScoreBox extends StatelessWidget {
                   ),
                   if (subtitle != null) ...[
                     const SizedBox(height: 10),
-                    Text(
-                      subtitle!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: subTextSize ?? 18),
+                    Flexible(
+                      child: Text(
+                        subtitle!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: subTextSize ?? 18),
+                      ),
                     ),
                   ],
                 ],
