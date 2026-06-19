@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:readbee_lite/notifiers/miscue_notifier.dart';
-import 'package:readbee_lite/providers/miscue_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/miscue_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_provider.dart';
 
 void main() {
   late ProviderContainer container;

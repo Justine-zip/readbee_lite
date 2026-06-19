@@ -7,14 +7,14 @@ import 'package:readbee_lite/components/custom_reading_score_row.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/utils/digital_reading_score.dart';
-import 'package:readbee_lite/pages/reading_material/digitral_comprehension_page.dart';
-import 'package:readbee_lite/providers/evaluation_list_provider.dart';
-import 'package:readbee_lite/providers/miscue_content_provider.dart';
-import 'package:readbee_lite/providers/miscue_provider.dart';
-import 'package:readbee_lite/providers/reading_score_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
-import 'package:readbee_lite/providers/timer_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_content_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/reading_score_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/timer_provider.dart';
+import 'package:readbee_lite/views/reading_material/digitral_comprehension_page.dart';
 
 class MobileDigitalReadingScorePage extends ConsumerStatefulWidget {
   const MobileDigitalReadingScorePage({super.key});

@@ -3,12 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/models/miscue.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 import 'package:readbee_lite/models/story.dart';
-import 'package:readbee_lite/notifiers/miscue_notifier.dart';
-import 'package:readbee_lite/pages/reading_material/digital_reading_score_page.dart';
-import 'package:readbee_lite/providers/miscue_content_provider.dart';
-import 'package:readbee_lite/providers/miscue_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/miscue_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_content_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/views/reading_material/digital_reading_score_page.dart';
 
 import '../../helpers/test_helper.dart';
 

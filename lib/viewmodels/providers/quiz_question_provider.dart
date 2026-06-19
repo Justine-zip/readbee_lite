@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/choice_item.dart';
 import 'package:readbee_lite/models/quiz_question.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
 
 final quizQuestionProvider = FutureProvider<List<QuizQuestion>>((ref) async {
   final supabase = Supabase.instance.client;

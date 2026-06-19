@@ -6,13 +6,13 @@ import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
-import 'package:readbee_lite/pages/reading_material/digital_reading_score_page.dart';
-import 'package:readbee_lite/providers/miscue_content_provider.dart';
-import 'package:readbee_lite/providers/miscue_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
-import 'package:readbee_lite/providers/timer_provider.dart';
-import 'package:readbee_lite/providers/word_color_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_content_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/timer_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/word_color_provider.dart';
+import 'package:readbee_lite/views/reading_material/digital_reading_score_page.dart';
 
 class MobileDigitalReadingPage extends ConsumerStatefulWidget {
   const MobileDigitalReadingPage({super.key});

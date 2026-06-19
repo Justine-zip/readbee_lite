@@ -2,11 +2,11 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readbee_lite/layouts/orientation_manager.dart';
-import 'package:readbee_lite/layouts/responsive.dart';
-import 'package:readbee_lite/pages/startup/splash_screen_page.dart';
-import 'package:readbee_lite/providers/theme_provider.dart';
-import 'package:readbee_lite/themes/app_theme.dart';
+import 'package:readbee_lite/core/layouts/orientation_manager.dart';
+import 'package:readbee_lite/core/layouts/responsive.dart';
+import 'package:readbee_lite/core/themes/app_theme.dart';
+import 'package:readbee_lite/viewmodels/providers/theme_provider.dart';
+import 'package:readbee_lite/views/startup/splash_screen_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {

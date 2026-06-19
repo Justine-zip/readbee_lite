@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/models/student.dart';
-import 'package:readbee_lite/notifiers/evaluation_list_notifier.dart';
-import 'package:readbee_lite/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/evaluation_list_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/evaluation_list_provider.dart';
 
 void main() {
   late ProviderContainer container;

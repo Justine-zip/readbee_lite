@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/grade_level.dart';
-import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final gradeLevelProvider = FutureProvider<List<GradeLevel>>((ref) async {

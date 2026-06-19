@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readbee_lite/providers/assignment_provider.dart';
-import 'package:readbee_lite/providers/grade_level_provider.dart';
-import 'package:readbee_lite/providers/pupil_provider.dart';
-import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/assignment_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/grade_level_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/pupil_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final gradeRateProvider = FutureProvider<Map<String, double>>((ref) async {

@@ -2,10 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/components/record_list_builder.dart';
 import 'package:readbee_lite/models/grade_level.dart';
-import 'package:readbee_lite/pages/record/record_page.dart';
-import 'package:readbee_lite/providers/completion_rate_provider.dart';
-import 'package:readbee_lite/providers/grade_level_provider.dart';
-import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/completion_rate_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/grade_level_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
+import 'package:readbee_lite/views/record/record_page.dart';
 
 import '../../helpers/test_helper.dart';
 

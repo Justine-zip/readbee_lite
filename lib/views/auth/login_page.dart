@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:page_animation_transition/animations/right_to_left_faded_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
+import 'package:readbee_lite/core/layouts/main_layout.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
-import 'package:readbee_lite/layouts/main_layout.dart';
 
 class MobileLoginPage extends StatefulWidget {
   final AuthServices authServices;

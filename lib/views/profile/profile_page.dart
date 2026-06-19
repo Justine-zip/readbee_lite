@@ -4,11 +4,11 @@ import 'package:page_animation_transition/animations/right_to_left_transition.da
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/profile_general_option.dart';
-import 'package:readbee_lite/pages/profile/account_details_page.dart';
-import 'package:readbee_lite/providers/auth_service_provider.dart';
-import 'package:readbee_lite/providers/dark_mode_provider.dart';
-import 'package:readbee_lite/providers/profile_provider.dart';
-import 'package:readbee_lite/providers/theme_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/auth_service_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/dark_mode_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/profile_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/theme_provider.dart';
+import 'package:readbee_lite/views/profile/account_details_page.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MobileProfilePage extends ConsumerWidget {

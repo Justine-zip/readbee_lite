@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/models/grade_level.dart';
 import 'package:readbee_lite/models/section.dart';
-import 'package:readbee_lite/notifiers/record_notifier.dart';
-import 'package:readbee_lite/providers/grade_level_provider.dart';
-import 'package:readbee_lite/providers/record_provider.dart';
-import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/record_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/grade_level_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
 
 void main() {
   late ProviderContainer container;

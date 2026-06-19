@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:readbee_lite/notifiers/comprehension_notifier.dart';
+import 'package:readbee_lite/viewmodels/notifiers/comprehension_notifier.dart';
 
 void main() {
   late ComprehensionNotifier notifier;

@@ -6,18 +6,18 @@ import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
+import 'package:readbee_lite/core/layouts/main_layout.dart';
 import 'package:readbee_lite/core/services/assessment_record_service.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
-import 'package:readbee_lite/layouts/main_layout.dart';
-import 'package:readbee_lite/providers/assessment_record_provider.dart';
-import 'package:readbee_lite/providers/assignment_provider.dart';
-import 'package:readbee_lite/providers/comprehension_provider.dart';
-import 'package:readbee_lite/providers/evaluation_list_provider.dart';
-import 'package:readbee_lite/providers/miscue_content_provider.dart';
-import 'package:readbee_lite/providers/quiz_question_provider.dart';
-import 'package:readbee_lite/providers/reading_score_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/word_color_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/assessment_record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/assignment_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/comprehension_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/miscue_content_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/reading_score_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/word_color_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MobileDigitalComprehensionScorePage extends ConsumerStatefulWidget {

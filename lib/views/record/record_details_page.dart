@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_story_container.dart';
-import 'package:readbee_lite/providers/assessment_record_provider.dart';
-import 'package:readbee_lite/providers/quiz_question_provider.dart';
-import 'package:readbee_lite/providers/reading_material_provider.dart';
-import 'package:readbee_lite/providers/record_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/assessment_record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/reading_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
 
 class MobileRecordDetailsPage extends ConsumerStatefulWidget {
   const MobileRecordDetailsPage({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
-import 'package:readbee_lite/pages/event/event_page.dart';
-import 'package:readbee_lite/pages/home/home_page.dart';
-import 'package:readbee_lite/pages/profile/profile_page.dart';
-import 'package:readbee_lite/pages/reading_material/reading_material_page.dart';
-import 'package:readbee_lite/pages/record/record_page.dart';
+import 'package:readbee_lite/views/event/event_page.dart';
+import 'package:readbee_lite/views/home/home_page.dart';
+import 'package:readbee_lite/views/profile/profile_page.dart';
+import 'package:readbee_lite/views/reading_material/reading_material_page.dart';
+import 'package:readbee_lite/views/record/record_page.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class MobileMainLayout extends StatefulWidget {

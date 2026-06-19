@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readbee_lite/layouts/responsive.dart';
-import 'package:readbee_lite/pages/auth/login_page.dart';
-import 'package:readbee_lite/pages/auth/status_page.dart';
-import 'package:readbee_lite/providers/auth_service_provider.dart';
+import 'package:readbee_lite/core/layouts/responsive.dart';
+import 'package:readbee_lite/viewmodels/providers/auth_service_provider.dart';
+import 'package:readbee_lite/views/auth/login_page.dart';
+import 'package:readbee_lite/views/auth/status_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthGate extends ConsumerWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/models/profile.dart';
-import 'package:readbee_lite/pages/home/home_page.dart';
-import 'package:readbee_lite/providers/analytics_provider.dart';
-import 'package:readbee_lite/providers/profile_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/analytics_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/profile_provider.dart';
+import 'package:readbee_lite/views/home/home_page.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../helpers/test_helper.dart';

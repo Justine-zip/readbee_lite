@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:page_animation_transition/animations/right_to_left_faded_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
-import 'package:readbee_lite/pages/main_page.dart';
+import 'package:readbee_lite/views/main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MobileOnboardingPage extends StatefulWidget {

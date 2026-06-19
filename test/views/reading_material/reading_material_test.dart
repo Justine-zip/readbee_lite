@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:readbee_lite/pages/reading_material/reading_material_page.dart';
+import 'package:readbee_lite/views/reading_material/reading_material_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/test_helper.dart';

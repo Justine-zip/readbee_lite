@@ -5,11 +5,11 @@ import 'package:mocktail/mocktail.dart';
 import 'package:readbee_lite/components/profile_general_option.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/models/profile.dart';
-import 'package:readbee_lite/pages/profile/profile_page.dart';
-import 'package:readbee_lite/providers/auth_service_provider.dart';
-import 'package:readbee_lite/providers/dark_mode_provider.dart';
-import 'package:readbee_lite/providers/profile_provider.dart';
-import 'package:readbee_lite/providers/theme_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/auth_service_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/dark_mode_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/profile_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/theme_provider.dart';
+import 'package:readbee_lite/views/profile/profile_page.dart';
 
 import '../../helpers/test_helper.dart';
 

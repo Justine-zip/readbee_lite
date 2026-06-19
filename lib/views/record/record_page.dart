@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/record_list_builder.dart';
 import 'package:readbee_lite/components/student_list_dialog.dart';
 import 'package:readbee_lite/components/title_bar.dart';
-import 'package:readbee_lite/notifiers/record_notifier.dart';
-import 'package:readbee_lite/providers/record_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/record_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/record_provider.dart';
 
 class MobileRecordPage extends ConsumerWidget {
   const MobileRecordPage({super.key});

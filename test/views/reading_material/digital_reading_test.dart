@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 import 'package:readbee_lite/models/story.dart';
-import 'package:readbee_lite/notifiers/timer_notifier.dart';
-import 'package:readbee_lite/pages/reading_material/digital_reading_page.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
-import 'package:readbee_lite/providers/timer_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/timer_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/timer_provider.dart';
+import 'package:readbee_lite/views/reading_material/digital_reading_page.dart';
 
 import '../../helpers/test_helper.dart';
 

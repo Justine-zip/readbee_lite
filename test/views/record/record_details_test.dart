@@ -6,13 +6,13 @@ import 'package:readbee_lite/models/assessment_record.dart';
 import 'package:readbee_lite/models/quiz_question.dart';
 import 'package:readbee_lite/models/reading_material.dart';
 import 'package:readbee_lite/models/student.dart';
-import 'package:readbee_lite/notifiers/record_notifier.dart';
-import 'package:readbee_lite/pages/record/record_details_page.dart';
-import 'package:readbee_lite/providers/assessment_record_provider.dart';
-import 'package:readbee_lite/providers/quiz_question_provider.dart';
-import 'package:readbee_lite/providers/record_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/record_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/assessment_record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/views/record/record_details_page.dart';
 
 import '../../helpers/test_helper.dart';
 

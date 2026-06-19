@@ -7,15 +7,15 @@ import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/title_bar.dart';
 import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/models/student.dart';
-import 'package:readbee_lite/pages/reading_material/digital_reading_page.dart';
-import 'package:readbee_lite/providers/assessment_record_provider.dart';
-import 'package:readbee_lite/providers/calendar_event_provider.dart';
-import 'package:readbee_lite/providers/evaluation_list_provider.dart';
-import 'package:readbee_lite/providers/pupil_provider.dart';
-import 'package:readbee_lite/providers/quiz_question_provider.dart';
-import 'package:readbee_lite/providers/section_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/assessment_record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/calendar_event_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/evaluation_list_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/pupil_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/views/reading_material/digital_reading_page.dart';
 
 class MobileReadingMaterialDetailsPage extends ConsumerStatefulWidget {
   const MobileReadingMaterialDetailsPage({super.key});

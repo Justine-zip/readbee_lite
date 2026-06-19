@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:page_animation_transition/animations/right_to_left_faded_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
-import 'package:readbee_lite/pages/main_page.dart';
-import 'package:readbee_lite/pages/startup/onboarding_page.dart';
+import 'package:readbee_lite/views/main_page.dart';
+import 'package:readbee_lite/views/startup/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MobileSplashScreenPage extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/custom_dropdown.dart';
 import 'package:readbee_lite/models/material_filter.dart';
-import 'package:readbee_lite/providers/material_filter_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/material_filter_provider.dart';
 
 class FilterSheet extends ConsumerWidget {
   final double sheetSize;

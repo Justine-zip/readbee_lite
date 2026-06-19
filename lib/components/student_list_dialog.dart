@@ -4,9 +4,9 @@ import 'package:page_animation_transition/animations/right_to_left_transition.da
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/models/student.dart';
-import 'package:readbee_lite/pages/record/record_details_page.dart';
-import 'package:readbee_lite/providers/pupil_provider.dart';
-import 'package:readbee_lite/providers/record_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/pupil_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/record_provider.dart';
+import 'package:readbee_lite/views/record/record_details_page.dart';
 
 class MobileStudentListDialog extends ConsumerWidget {
   const MobileStudentListDialog({super.key});

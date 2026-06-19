@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/models/story.dart';
-import 'package:readbee_lite/notifiers/word_color_material_notifier.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
-import 'package:readbee_lite/providers/word_color_provider.dart';
+import 'package:readbee_lite/viewmodels/notifiers/word_color_material_notifier.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/word_color_provider.dart';
 
 void main() {
   late ProviderContainer container;

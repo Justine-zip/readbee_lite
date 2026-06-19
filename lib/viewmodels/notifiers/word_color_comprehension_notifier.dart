@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readbee_lite/providers/quiz_question_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
 
 class WordColorComprehensionState {
   final List<int> key;

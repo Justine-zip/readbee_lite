@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/models/story.dart';
-import 'package:readbee_lite/pages/reading_material/reading_material_details_page.dart';
-import 'package:readbee_lite/providers/calendar_event_provider.dart';
-import 'package:readbee_lite/providers/story_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/calendar_event_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/story_provider.dart';
+import 'package:readbee_lite/views/reading_material/reading_material_details_page.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../helpers/test_helper.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/student.dart';
-import 'package:readbee_lite/providers/grade_level_provider.dart';
-import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/grade_level_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
 
 enum RecordStep { grade, section, language }
 

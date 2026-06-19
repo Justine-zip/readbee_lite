@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/section.dart';
-import 'package:readbee_lite/providers/assignment_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/assignment_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final sectionProvider = FutureProvider<List<Section>>((ref) async {

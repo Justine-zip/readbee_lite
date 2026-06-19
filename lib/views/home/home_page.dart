@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/title_bar.dart';
-import 'package:readbee_lite/providers/analytics_provider.dart';
-import 'package:readbee_lite/providers/profile_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/analytics_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/profile_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:showcaseview/showcaseview.dart';

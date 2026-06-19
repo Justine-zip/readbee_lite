@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/components/custom_circular_progress_indicator.dart';
-import 'package:readbee_lite/providers/completion_rate_provider.dart';
-import 'package:readbee_lite/providers/grade_level_provider.dart';
-import 'package:readbee_lite/providers/section_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/completion_rate_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/grade_level_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 

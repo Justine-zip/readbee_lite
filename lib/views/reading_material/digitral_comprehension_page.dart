@@ -6,10 +6,10 @@ import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/custom_icon_button.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/components/prompt_box.dart';
-import 'package:readbee_lite/pages/reading_material/digital_comprehension_score_page.dart';
-import 'package:readbee_lite/providers/comprehension_provider.dart';
-import 'package:readbee_lite/providers/quiz_question_provider.dart';
-import 'package:readbee_lite/providers/selected_material_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/comprehension_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/quiz_question_provider.dart';
+import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
+import 'package:readbee_lite/views/reading_material/digital_comprehension_score_page.dart';
 
 class MobileDigitralComprehensionPage extends ConsumerStatefulWidget {
   const MobileDigitralComprehensionPage({super.key});
