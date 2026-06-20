@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/assignment.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,8 +9,6 @@ final assignmentProvider = FutureProvider<List<Assignment>?>((ref) async {
       .from('assigned_evaluators')
       .select('*')
       .eq('evaluator_user_id', supabase.auth.currentUser!.id);
-
-  debugPrint('AssignmentData: $response');
 
   return response.map<Assignment>((item) {
     return Assignment(

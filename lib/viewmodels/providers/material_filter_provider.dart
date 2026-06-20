@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/material_filter.dart';
 import 'package:readbee_lite/models/reading_material.dart';
@@ -11,41 +10,36 @@ final materialFilterProvider = StateProvider<MaterialFilter>((ref) {
 
 final materialSearchProvider = StateProvider<String>((ref) => '');
 
-final filteredReadingMaterialProvider = Provider<
-  AsyncValue<List<ReadingMaterial>>
->((ref) {
-  final materialsAsync = ref.watch(readingMaterialProvider);
-  final gradeLevelAsync = ref.watch(gradeLevelProvider);
-  final filter = ref.watch(materialFilterProvider);
-  final search = ref.watch(materialSearchProvider).trim().toLowerCase();
+final filteredReadingMaterialProvider =
+    Provider<AsyncValue<List<ReadingMaterial>>>((ref) {
+      final materialsAsync = ref.watch(readingMaterialProvider);
+      final gradeLevelAsync = ref.watch(gradeLevelProvider);
+      final filter = ref.watch(materialFilterProvider);
+      final search = ref.watch(materialSearchProvider).trim().toLowerCase();
 
-  return materialsAsync.whenData((materials) {
-    final gradeLevels = gradeLevelAsync.value ?? [];
+      return materialsAsync.whenData((materials) {
+        final gradeLevels = gradeLevelAsync.value ?? [];
 
-    final selectedGrade = filter.gradeLevel ?? '3';
+        final selectedGrade = filter.gradeLevel ?? '3';
 
-    final selectedGradeLevelId =
-        gradeLevels
-            .where((g) => g.gradeNumber.toString() == selectedGrade)
-            .firstOrNull
-            ?.gradeLevelId;
+        final selectedGradeLevelId =
+            gradeLevels
+                .where((g) => g.gradeNumber.toString() == selectedGrade)
+                .firstOrNull
+                ?.gradeLevelId;
 
-    return materials.where((material) {
-      final gradeMatch = material.gradeLevelId == selectedGradeLevelId;
+        return materials.where((material) {
+          final gradeMatch = material.gradeLevelId == selectedGradeLevelId;
 
-      final languageMatch =
-          filter.language == null || material.language == filter.language;
+          final languageMatch =
+              filter.language == null || material.language == filter.language;
 
-      final searchMatch =
-          search.isEmpty ||
-          material.title.toLowerCase().contains(search) ||
-          material.language.toLowerCase().contains(search);
+          final searchMatch =
+              search.isEmpty ||
+              material.title.toLowerCase().contains(search) ||
+              material.language.toLowerCase().contains(search);
 
-      debugPrint(
-        'Search: $search | Material: ${material.title} | Match: $searchMatch',
-      );
-
-      return gradeMatch && languageMatch && searchMatch;
-    }).toList();
-  });
-});
+          return gradeMatch && languageMatch && searchMatch;
+        }).toList();
+      });
+    });

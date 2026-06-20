@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/quiz.dart';
 import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
@@ -19,8 +18,6 @@ final quizProvider = FutureProvider<Quiz?>((ref) async {
           .select('*')
           .eq('quiz_id', selectedMaterial.quizId)
           .single();
-
-  debugPrint('QuizData: $response');
 
   return Quiz(
     quizId: response['quiz_id'] ?? '',

@@ -90,8 +90,6 @@ class _MobileEventPageState extends ConsumerState<MobileEventPage> {
                         final appts = details.appointments;
                         final today = DateTime.now();
 
-                        // debugPrint('details: $details');
-
                         final isToday =
                             details.date.year == today.year &&
                             details.date.month == today.month &&
@@ -335,8 +333,6 @@ class _TabletEventPageState extends ConsumerState<TabletEventPage> {
                       monthCellBuilder: (context, details) {
                         final appts = details.appointments;
                         final today = DateTime.now();
-
-                        // debugPrint('details: $details');
 
                         final isToday =
                             details.date.year == today.year &&

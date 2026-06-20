@@ -26,8 +26,6 @@ final appointmentsProvider = FutureProvider<List<Appointment>>((ref) async {
       .inFilter('schedule_id', scheduleIds)
       .eq('assigned_evaluators.confirmation_status', 'confirmed');
 
-  debugPrint('calendarData: $response');
-
   final data = response as List<dynamic>? ?? [];
 
   return data.map((item) {

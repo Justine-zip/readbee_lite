@@ -200,10 +200,6 @@ class _MobileRecordDetailsPageState
                                       }
                                     });
 
-                                    debugPrint(
-                                      'misContent: ${item.miscueContent}',
-                                    );
-
                                     final miscues =
                                         (readingScore['miscueSummary'] is List)
                                             ? List<Map<String, dynamic>>.from(
@@ -786,9 +782,6 @@ class _TabletRecordDetailsPageState
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        debugPrint(
-                                          'xData: ${filtered[index].title}',
-                                        );
                                         ref
                                             .read(
                                               selectedMaterialProvider.notifier,
@@ -895,10 +888,6 @@ class _TabletRecordDetailsPageState
                                         wordColors[index] = color;
                                       }
                                     });
-
-                                    debugPrint(
-                                      'misContent: ${item.miscueContent}',
-                                    );
 
                                     final miscues =
                                         (readingScore['miscueSummary'] is List)

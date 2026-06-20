@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/material_draft.dart';
 
@@ -27,11 +26,7 @@ class ReadingMaterialNotifier extends StateNotifier<ReadingMaterialDraft> {
   }
 
   void setGradeLevel(String? value) {
-    debugPrint('setGradeLevel CALLED WITHsx: "$value"');
-
     state = state.copyWith(gradeLevelId: value);
-
-    debugPrint('STATE AFTER UPDATEsx: ${state.gradeLevelId}');
   }
 
   void addQuestion(QuizQuestionDraft question) {

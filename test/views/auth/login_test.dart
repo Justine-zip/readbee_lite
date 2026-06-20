@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:readbee_lite/components/show_global_snack_bar.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
 import 'package:readbee_lite/views/auth/login_page.dart';
 
@@ -16,7 +17,12 @@ void main() {
   });
 
   Widget createWidget() {
-    return createTestWidget(child: MobileLoginPage(authServices: mockAuth));
+    return createTestWidget(
+      child: MaterialApp(
+        scaffoldMessengerKey: snackbarKey,
+        home: MobileLoginPage(authServices: mockAuth),
+      ),
+    );
   }
 
   group('MobileLoginPage', () {
@@ -83,7 +89,10 @@ void main() {
         () => mockAuth.signInWithEmailPassword('test@gmail.com', 'password123'),
       ).called(1);
 
-      expect(find.text('Invalid login credentials'), findsOneWidget);
+      expect(
+        find.widgetWithText(SnackBar, 'Invalid login credentials'),
+        findsOneWidget,
+      );
     });
   });
 }

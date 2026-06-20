@@ -112,10 +112,6 @@ class _MobileDigitralComprehensionPageState
                 questionAsync.when(
                   data: (questions) {
                     final totalQuestions = questions.length;
-                    debugPrint('totQ: $totalQuestions || ${currentIndex + 1}');
-                    debugPrint(
-                      'valuetotQ: ${(currentIndex + 1) / totalQuestions}',
-                    );
                     return Column(
                       children: [
                         //Progress Indicator

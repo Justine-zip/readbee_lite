@@ -166,8 +166,6 @@ class _StatusPageState extends ConsumerState<StatusPage> {
 
     StatusPage._notifications.add(overlayEntry);
 
-    debugPrint('SHOWING NOTIFICATION Assignment');
-
     Overlay.of(context, rootOverlay: true).insert(overlayEntry);
   }
 }

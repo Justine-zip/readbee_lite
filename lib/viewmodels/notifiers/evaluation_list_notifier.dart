@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/student.dart';
 
@@ -49,12 +48,6 @@ class EvaluationNotifier extends Notifier<EvaluationState> {
     return students
         .where((s) => s.sectionId == state.selectedSectionId)
         .toList();
-  }
-
-  void evaluate() {
-    if (state.selectedStudent != null) {
-      debugPrint("Evaluating: ${state.selectedStudent!.name}");
-    }
   }
 
   void reset() {

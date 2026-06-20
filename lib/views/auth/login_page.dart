@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:page_animation_transition/animations/right_to_left_faded_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
+import 'package:readbee_lite/components/show_global_snack_bar.dart';
 import 'package:readbee_lite/core/layouts/main_layout.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
 
@@ -67,11 +68,8 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid login credentials')),
-        );
+        showGlobalSnackBar('Invalid login credentials');
       }
-      debugPrint('Login failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -269,11 +267,8 @@ class _TabletLoginPageState extends State<TabletLoginPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid login credentials')),
-        );
+        showGlobalSnackBar('Invalid login credentials');
       }
-      debugPrint('Login failed: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

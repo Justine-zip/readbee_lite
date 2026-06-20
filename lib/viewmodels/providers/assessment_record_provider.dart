@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/assessment_record.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,10 +11,6 @@ final assessmentRecordProvider = FutureProvider<List<AssessmentRecord>?>((
       .from('assessment_records')
       .select('*')
       .eq('evaluator_user_id', supabase.auth.currentUser!.id);
-
-  debugPrint(
-    'AssessmentRecordData: ${response.map((r) => r['assessment_record_id'])}',
-  );
 
   return response.map<AssessmentRecord>((assessment) {
     return AssessmentRecord(

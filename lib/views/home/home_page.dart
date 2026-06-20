@@ -83,7 +83,6 @@ class _MobileHomePageState extends ConsumerState<MobileHomePage> {
                       'This is your username and a motivational quote to keep you inspired.',
                   child: profileAsync.when(
                     data: (profile) {
-                      debugPrint('ProfileName: ${profile?.fullName}');
                       return TitleBar(
                         title: profile?.fullName ?? 'Guest',
                         description:
@@ -877,7 +876,6 @@ class _TabletHomePageState extends ConsumerState<TabletHomePage> {
                       children: [
                         profileAsync.when(
                           data: (profile) {
-                            debugPrint('ProfileName: ${profile?.fullName}');
                             return Text(
                               profile?.fullName ?? 'Guest',
                               style: const TextStyle(

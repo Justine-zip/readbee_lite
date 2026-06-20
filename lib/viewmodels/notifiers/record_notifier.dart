@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/student.dart';
 import 'package:readbee_lite/viewmodels/providers/grade_level_provider.dart';
@@ -100,16 +99,10 @@ class RecordNotifier extends Notifier<RecordState> {
     if (state.currentStep == RecordStep.section) {
       final section = ref.read(sectionProvider).value ?? [];
 
-      for (var s in section) {
-        debugPrint('SectionIdx: ${s.sectionId}');
-      }
-
       final selectedSectionData = section.firstWhere(
         (s) => s.sectionName == value,
       );
       selectSection(value, selectedSectionData.sectionId);
-
-      debugPrint('SectionId: ${state.selectedSectionId}');
 
       return false;
     }
@@ -125,9 +118,6 @@ class RecordNotifier extends Notifier<RecordState> {
   List<String> get currentOptions {
     final sectionsAsync = ref.watch(sectionProvider);
     final gradeLevelsAsync = ref.watch(gradeLevelProvider);
-
-    debugPrint('SelectedGrade: ${state.selectedGrade}');
-    debugPrint('SelectedGradeLevelId: ${state.selectedGradeLevelId}');
 
     return switch (state.currentStep) {
       RecordStep.grade => gradeLevelsAsync.when(

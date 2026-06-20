@@ -18,7 +18,6 @@ class MobileMainLayout extends StatefulWidget {
 class _MobileMainLayoutState extends State<MobileMainLayout> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('Layout: Mobilexs');
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -27,7 +26,7 @@ class _MobileMainLayoutState extends State<MobileMainLayout> {
           builder:
               (context) => PromptBox(
                 title: 'Are you sure you want to Exit?',
-                onConfirm: () => debugPrint('Exited'),
+                onConfirm: () {},
               ),
         );
       },
@@ -96,8 +95,6 @@ class TabletMainLayout extends StatefulWidget {
 class _TabletMainLayoutState extends State<TabletMainLayout> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('Layout: Tablet');
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -106,7 +103,7 @@ class _TabletMainLayoutState extends State<TabletMainLayout> {
           builder:
               (context) => PromptBox(
                 title: 'Are you sure you want to Exit?',
-                onConfirm: () => debugPrint('Exited'),
+                onConfirm: () {},
               ),
         );
       },

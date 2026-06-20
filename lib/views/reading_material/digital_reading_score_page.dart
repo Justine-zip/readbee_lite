@@ -8,7 +8,6 @@ import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
 import 'package:readbee_lite/core/utils/digital_reading_score.dart';
 import 'package:readbee_lite/viewmodels/providers/evaluation_list_provider.dart';
-import 'package:readbee_lite/viewmodels/providers/miscue_content_provider.dart';
 import 'package:readbee_lite/viewmodels/providers/miscue_provider.dart';
 import 'package:readbee_lite/viewmodels/providers/reading_score_provider.dart';
 import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
@@ -37,11 +36,6 @@ class _MobileDigitalReadingScorePageState
       return const CircularProgressIndicator();
     }
 
-    final miscueMap = ref.watch(miscueContentProvider);
-
-    debugPrint('mismap: $miscueMap');
-    // debugPrint('mismap: {Omission} - ${miscueMap["Omission"]}');
-    // debugPrint('mismap: {Substitution} - ${miscueMap["Substitution"]}');
     return Stack(
       children: [
         Scaffold(
@@ -359,11 +353,6 @@ class _TabletDigitalReadingScorePageState
       return const CircularProgressIndicator();
     }
 
-    final miscueMap = ref.watch(miscueContentProvider);
-
-    debugPrint('mismap: $miscueMap');
-    // debugPrint('mismap: {Omission} - ${miscueMap["Omission"]}');
-    // debugPrint('mismap: {Substitution} - ${miscueMap["Substitution"]}');
     return Stack(
       children: [
         Scaffold(

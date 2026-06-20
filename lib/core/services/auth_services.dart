@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:readbee_lite/components/show_global_snack_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthServices {
@@ -55,10 +55,10 @@ class AuthServices {
       final user = await _supabase.auth.updateUser(
         UserAttributes(password: newPassword),
       );
-      debugPrint('Password updated for: ${user.user!.email}');
+      showGlobalSnackBar('Password updated for: ${user.user!.email}');
       return true;
     } catch (e) {
-      debugPrint('Failed to update password: $e');
+      showGlobalSnackBar('Failed to update password: $e');
       return false;
     }
   }
@@ -66,9 +66,9 @@ class AuthServices {
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _supabase.auth.resetPasswordForEmail(email);
-      debugPrint('Password reset email sent to $email');
+      showGlobalSnackBar('Password reset email sent to $email');
     } catch (e) {
-      debugPrint('Failed to send reset email: $e');
+      showGlobalSnackBar('Failed to send reset email: $e');
     }
   }
 

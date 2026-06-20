@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 String comprehensionLevel(int score) {
   return (score >= 4
       ? 'Independent'
@@ -20,11 +18,6 @@ int totalCorrect({
   selectedAnswers.forEach((questionIndex, studentAnswer) {
     final correctIndex = answerKey[questionIndex];
     final studentIndex = studentAnswer.codeUnitAt(0) - 65;
-
-    debugPrint('correctchoicesDebug: ${choices[questionIndex][correctIndex]}');
-    debugPrint('correctIndexDebug: $correctIndex');
-    debugPrint('studentAnswerDebug: $studentAnswer');
-    debugPrint('studentRealAnswerDebug: $studentIndex');
 
     if (studentIndex == correctIndex) {
       correct++;

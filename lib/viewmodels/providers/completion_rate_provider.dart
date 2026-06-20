@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/viewmodels/providers/assignment_provider.dart';
 import 'package:readbee_lite/viewmodels/providers/grade_level_provider.dart';
@@ -79,15 +78,6 @@ final gradeRateProvider = FutureProvider<Map<String, double>>((ref) async {
     final rate = pupilCount == 0 ? 0 : assessmentCount / (pupilCount * 2);
 
     completionRates[gradeId] = rate.toDouble();
-
-    debugPrint(
-      'GradeLevel: $gradeId || '
-      'Assessments: $assessmentCount || '
-      'Pupils: $pupilCount || '
-      'Rate: $rate',
-    );
-
-    debugPrint('CompletionRate: $completionRates');
   }
 
   return completionRates;
@@ -163,16 +153,7 @@ final sectionRateProvider = FutureProvider<Map<String, double>>((ref) async {
     final rate = pupilCount == 0 ? 0 : assessmentCount / (pupilCount * 2);
 
     completionRates[sectionId] = rate.toDouble();
-
-    debugPrint(
-      'Section: $sectionId || '
-      'Assessments: $assessmentCount || '
-      'Pupils: $pupilCount || '
-      'Rate: $rate',
-    );
   }
-
-  debugPrint('CompletionRates: $completionRates');
 
   return completionRates;
 });

@@ -1,5 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/miscue.dart';
 
 class MiscueNotifier extends AutoDisposeNotifier<List<Miscue>> {
@@ -25,7 +25,6 @@ class MiscueNotifier extends AutoDisposeNotifier<List<Miscue>> {
         else
           state[i],
     ];
-    debugPrint('Miscue/ ${state[index].name}: ${state[index].count}');
   }
 
   void reset() {

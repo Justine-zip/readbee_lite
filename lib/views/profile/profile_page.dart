@@ -216,8 +216,6 @@ class TabletProfilePage extends ConsumerWidget {
         child: Center(
           child: profileAsync.when(
             data: (profile) {
-              debugPrint('ProfileName: ${profile?.fullName}');
-
               return Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,

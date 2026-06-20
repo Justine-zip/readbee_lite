@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/pupil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -7,8 +6,6 @@ final pupilProvider = FutureProvider<List<Pupil>?>((ref) async {
   final supabase = Supabase.instance.client;
 
   final response = await supabase.from('pupils').select('*');
-
-  debugPrint('PupilData: $response');
 
   return response.map<Pupil>((pupil) {
     return Pupil(

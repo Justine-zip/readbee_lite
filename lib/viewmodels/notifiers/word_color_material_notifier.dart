@@ -84,7 +84,6 @@ class WordColorMaterialNotifier
 
     if (finished) {
       ref.read(timerProvider.notifier).stop();
-      debugPrint('TimeElapsed: ${ref.read(timerProvider.notifier).elapsed}');
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/story.dart';
 import 'package:readbee_lite/viewmodels/providers/selected_material_provider.dart';
@@ -8,8 +7,6 @@ final storyProvider = FutureProvider<Story?>((ref) async {
   final supabase = Supabase.instance.client;
 
   final selectedMaterial = ref.watch(selectedMaterialProvider);
-
-  debugPrint('SelectedMaterial: $selectedMaterial');
 
   if (selectedMaterial == null) {
     return null;
@@ -21,8 +18,6 @@ final storyProvider = FutureProvider<Story?>((ref) async {
           .select('*')
           .eq('story_id', selectedMaterial.storyId)
           .single();
-
-  debugPrint('StoryData: $response');
 
   return Story(
     storyId: response['story_id'] ?? '',

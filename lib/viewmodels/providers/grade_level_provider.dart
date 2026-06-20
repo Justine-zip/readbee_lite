@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/grade_level.dart';
 import 'package:readbee_lite/viewmodels/providers/section_provider.dart';
@@ -18,16 +17,12 @@ final gradeLevelProvider = FutureProvider<List<GradeLevel>>((ref) async {
               .toSet()
               .toList();
 
-      debugPrint('GradeLevelID: $gradeLevelIds');
-
       if (gradeLevelIds.isEmpty) return [];
 
       final response = await supabase
           .from('grade_levels')
           .select('*')
           .inFilter('grade_level_id', gradeLevelIds);
-
-      debugPrint('GradeLevelData: $response');
 
       return (response as List).map((g) {
         return GradeLevel(
@@ -49,8 +44,6 @@ final gradeLevelUnfilteredProvider = FutureProvider<List<GradeLevel>>((
   final supabase = Supabase.instance.client;
 
   final response = await supabase.from('grade_levels').select('*');
-
-  debugPrint('GradeLevelData: $response');
 
   return (response as List).map((g) {
     return GradeLevel(

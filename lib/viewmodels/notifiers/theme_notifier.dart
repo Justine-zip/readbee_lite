@@ -29,8 +29,6 @@ class ThemeNotifier extends Notifier<ThemeMode> {
     state = state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
 
     await _saveTheme();
-
-    debugPrint('Theme Toggled');
   }
 
   Future<void> setLight() async {

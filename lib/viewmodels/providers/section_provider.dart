@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/section.dart';
 import 'package:readbee_lite/viewmodels/providers/assignment_provider.dart';
@@ -18,8 +17,6 @@ final sectionProvider = FutureProvider<List<Section>>((ref) async {
       .from('class_sections')
       .select('*')
       .inFilter('section_id', sectionIds);
-
-  debugPrint('SectionData: $response');
 
   return (response as List).map((sections) {
     return Section(

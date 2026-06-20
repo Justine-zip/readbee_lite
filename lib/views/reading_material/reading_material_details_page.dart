@@ -40,8 +40,6 @@ class _MobileReadingMaterialDetailsPageState
             vertSize: 50,
             tSize: 16,
             onTap: () async {
-              debugPrint('Tapped');
-
               final appointmentsAsync = ref.read(appointmentsProvider);
 
               final appointments = appointmentsAsync.value;
@@ -426,10 +424,6 @@ class MobileEvaluationListDialog extends ConsumerWidget {
                                                         notifier.selectStudent(
                                                           studentItem,
                                                         );
-
-                                                        debugPrint(
-                                                          'Student: ${studentItem.studentId}',
-                                                        );
                                                       },
                                                     );
                                                   },
@@ -451,8 +445,6 @@ class MobileEvaluationListDialog extends ConsumerWidget {
                                     state.selectedStudent == null
                                         ? null
                                         : () {
-                                          notifier.evaluate();
-
                                           Navigator.pop(context);
 
                                           Navigator.push(
@@ -684,8 +676,6 @@ class _TabletReadingMaterialDetailsPageState
 
                                       CustomButton(
                                         onTap: () async {
-                                          debugPrint('Tapped');
-
                                           final appointmentsAsync = ref.read(
                                             appointmentsProvider,
                                           );
@@ -946,10 +936,6 @@ class TabletEvaluationListDialog extends ConsumerWidget {
                                                         notifier.selectStudent(
                                                           studentItem,
                                                         );
-
-                                                        debugPrint(
-                                                          'Student: ${studentItem.studentId}',
-                                                        );
                                                       },
                                                     );
                                                   },
@@ -971,8 +957,6 @@ class TabletEvaluationListDialog extends ConsumerWidget {
                                     state.selectedStudent == null
                                         ? null
                                         : () {
-                                          notifier.evaluate();
-
                                           Navigator.pop(context);
 
                                           Navigator.push(

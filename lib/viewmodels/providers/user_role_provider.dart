@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readbee_lite/models/user_role.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,8 +11,6 @@ final userRoleProvider = FutureProvider<UserRole>((ref) async {
           .select('*')
           .eq('user_id', supabase.auth.currentUser!.id)
           .single();
-
-  debugPrint('UserRoleData: $response');
 
   return UserRole(
     userId: response['user_id'],

@@ -236,7 +236,6 @@ class _MobileReadingMaterialPageState
               child: FloatingActionButton(
                 backgroundColor: Colors.amber,
                 onPressed: () {
-                  debugPrint('add Material');
                   showDialog(
                     context: context,
                     builder:
@@ -442,7 +441,6 @@ class _TabletReadingMaterialPageState
               child: FloatingActionButton(
                 backgroundColor: Colors.amber,
                 onPressed: () {
-                  debugPrint('add Material');
                   showDialog(
                     context: context,
                     builder: (_) => const StoryDialog(),
@@ -554,10 +552,6 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
         inputImage,
       );
 
-      for (final block in recognizedText.blocks) {
-        debugPrint('Blockx: ${block.text}');
-      }
-
       await textRecognizer.close();
 
       return recognizedText.text;
@@ -571,8 +565,6 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
       final file = File(image.path);
 
       final extractedText = await extractTextFromImage(file);
-
-      debugPrint(extractedText);
 
       final lines =
           extractedText
@@ -722,9 +714,6 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                           _errorMessage = null;
                         });
                         languageController.text = value ?? '';
-                        debugPrint(
-                          'LanguageController: ${languageController.text}',
-                        );
                       },
                     ),
                   ),
@@ -768,7 +757,6 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                     tSize: widget.buttonStyle?[1],
                     radius: widget.buttonStyle?[2],
                     onTap: () async {
-                      debugPrint('Scan Image');
                       await pickImage();
                     },
                   ),
@@ -806,8 +794,6 @@ class _StoryDialogState extends ConsumerState<StoryDialog> {
                         int.tryParse(wordController.text) ?? 0,
                       );
                       notifier.setLanguage(language);
-
-                      debugPrint('draft.gradeLevelId =: ${draft.gradeLevelId}');
 
                       Navigator.pop(context);
 
@@ -873,10 +859,6 @@ class QuizDialogOption extends StatelessWidget {
       final RecognizedText recognizedText = await textRecognizer.processImage(
         inputImage,
       );
-
-      for (final block in recognizedText.blocks) {
-        debugPrint('QuizBlockx: ${block.text}');
-      }
 
       await textRecognizer.close();
 
@@ -968,7 +950,6 @@ class QuizDialogOption extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () async {
-                      debugPrint('Scan Quiz Image');
                       final quizData = await pickImage();
 
                       if (!context.mounted) return;
@@ -1191,10 +1172,6 @@ class _QuizDialogState extends ConsumerState<QuizDialog> {
             ? 'Add Quiz Question (${_currentIndex + 1} of ${widget.quizItems!.length})'
             : 'Add Quiz Question';
 
-    debugPrint(
-      'QuizData: ${[widget.quizTitleSize, widget.quizHintSize, widget.quizLabelSize]}',
-    );
-
     return AlertDialog(
       title: Text(titleText, style: TextStyle(fontSize: widget.quizTitleSize)),
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
@@ -1388,19 +1365,12 @@ Future<void> saveReadingMaterial({
   final supabase = Supabase.instance.client;
   final userSchoolId = userRole.schoolId;
 
-  debugPrint('draft.gradeLevelId = ${draft.gradeLevelId}');
-
-  for (final g in gradeLevels) {
-    debugPrint('gradeNumber=${g.gradeNumber}, gradeLevelId=${g.gradeLevelId}');
-  }
-
   final gradeLevel = gradeLevels.firstWhere(
     (g) => g.gradeNumber.toString() == draft.gradeLevelId,
     orElse:
         () => throw Exception('Invalid grade selected: ${draft.gradeLevelId}'),
   );
 
-  debugPrint('grIdx: ${gradeLevel.gradeLevelId}');
   final story =
       await supabase
           .from('stories')

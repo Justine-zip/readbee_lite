@@ -126,29 +126,26 @@ class _MobileDigitalReadingPageState
                                   RichText(
                                     textAlign: TextAlign.center,
                                     text: TextSpan(
-                                      children: List.generate(contentWords.length, (
-                                        index,
-                                      ) {
-                                        final contentIndex =
-                                            titleWords.length + index;
+                                      children: List.generate(
+                                        contentWords.length,
+                                        (index) {
+                                          final contentIndex =
+                                              titleWords.length + index;
 
-                                        debugPrint(
-                                          'ContentText: ${contentWords[index]}',
-                                        );
-
-                                        return TextSpan(
-                                          text: '${contentWords[index]} ',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color:
-                                                wordState
-                                                    .wordColors[contentIndex] ??
-                                                Theme.of(
-                                                  context,
-                                                ).colorScheme.tertiary,
-                                          ),
-                                        );
-                                      }),
+                                          return TextSpan(
+                                            text: '${contentWords[index]} ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color:
+                                                  wordState
+                                                      .wordColors[contentIndex] ??
+                                                  Theme.of(
+                                                    context,
+                                                  ).colorScheme.tertiary,
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -188,8 +185,6 @@ class _MobileDigitalReadingPageState
                               );
 
                               current.putIfAbsent(miscue.name, () => []);
-
-                              debugPrint('currentmismap: $current');
 
                               current[miscue.name]!.add(
                                 ref
@@ -484,10 +479,6 @@ class _TabletDigitalReadingPageState
                                         final contentIndex =
                                             titleWords.length + index;
 
-                                        debugPrint(
-                                          'ContentText: ${contentWords[index]}',
-                                        );
-
                                         return TextSpan(
                                           text: '${contentWords[index]} ',
                                           style: TextStyle(
@@ -540,8 +531,6 @@ class _TabletDigitalReadingPageState
                               );
 
                               current.putIfAbsent(miscue.name, () => []);
-
-                              debugPrint('currentmismap: $current');
 
                               current[miscue.name]!.add(
                                 ref

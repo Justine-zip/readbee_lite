@@ -6,6 +6,7 @@ import 'package:readbee_lite/components/comprehension_score_box.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/material_title_bar.dart';
 import 'package:readbee_lite/components/page_title.dart';
+import 'package:readbee_lite/components/show_global_snack_bar.dart';
 import 'package:readbee_lite/core/layouts/main_layout.dart';
 import 'package:readbee_lite/core/services/assessment_record_service.dart';
 import 'package:readbee_lite/core/utils/digital_comprehension_score.dart';
@@ -41,8 +42,6 @@ class _MobileDigitalComprehensionScorePageState
 
     final compState = ref.watch(comprehensionProvider);
     final answerKey = ref.watch(wordColorComprehensionProvider).key;
-
-    debugPrint('CompState: ${compState.selectedAnswers}');
 
     return questionAsync.when(
       data: (questions) {
@@ -386,13 +385,7 @@ class _MobileDigitalComprehensionScorePageState
                         ),
                       );
                     } catch (e) {
-                      debugPrint(e.toString());
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Failed to save assessment record'),
-                        ),
-                      );
+                      showGlobalSnackBar('Failed to save assessment record');
                     }
 
                     ref.invalidate(assessmentRecordProvider);
@@ -434,8 +427,6 @@ class _TabletDigitalComprehensionScorePageState
 
     final compState = ref.watch(comprehensionProvider);
     final answerKey = ref.watch(wordColorComprehensionProvider).key;
-
-    debugPrint('CompState: ${compState.selectedAnswers}');
 
     return questionAsync.when(
       data: (questions) {
@@ -767,13 +758,7 @@ class _TabletDigitalComprehensionScorePageState
                         ),
                       );
                     } catch (e) {
-                      debugPrint(e.toString());
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Failed to save assessment record'),
-                        ),
-                      );
+                      showGlobalSnackBar('Failed to save assessment record');
                     }
 
                     ref.invalidate(assessmentRecordProvider);
