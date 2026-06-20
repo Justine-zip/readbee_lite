@@ -28,8 +28,7 @@ class MaterialTitleBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        // ignore: deprecated_member_use
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Colors.grey[900],
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(

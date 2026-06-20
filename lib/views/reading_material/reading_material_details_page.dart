@@ -73,9 +73,9 @@ class _MobileReadingMaterialDetailsPageState
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
 
-                const PageTitle(title: 'Reading Material', size: 18),
+                const PageTitle(title: 'Reading Material', size: 18, pad: 24),
 
                 Padding(
                   padding: const EdgeInsets.all(12.0),

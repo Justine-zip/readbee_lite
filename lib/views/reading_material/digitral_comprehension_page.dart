@@ -99,7 +99,7 @@ class _MobileDigitralComprehensionPageState
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
 
                 const PageTitle(
                   title: 'Digital Comprehension',
@@ -139,6 +139,10 @@ class _MobileDigitralComprehensionPageState
                             width: MediaQuery.of(context).size.width * .8,
                             height: MediaQuery.of(context).size.height * .25,
                             child: Card(
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                               elevation: 3,
                               child: Padding(
                                 padding: const EdgeInsets.all(24.0),
@@ -169,6 +173,10 @@ class _MobileDigitralComprehensionPageState
                                     MediaQuery.of(context).size.height * .12,
                                 width: MediaQuery.of(context).size.width * .5,
                                 child: Card(
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer,
                                   elevation: 3,
                                   child: InkWell(
                                     onTap: () {
@@ -211,7 +219,7 @@ class _MobileDigitralComprehensionPageState
           ),
         ),
         Positioned(
-          top: 325,
+          top: 345,
           right: 30,
           child: CustomIconButton(
             icon: Icons.keyboard_return_rounded,

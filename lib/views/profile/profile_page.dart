@@ -4,6 +4,7 @@ import 'package:page_animation_transition/animations/right_to_left_transition.da
 import 'package:page_animation_transition/page_animation_transition.dart';
 import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/profile_general_option.dart';
+import 'package:readbee_lite/viewmodels/providers/app_version_provider.dart';
 import 'package:readbee_lite/viewmodels/providers/auth_service_provider.dart';
 import 'package:readbee_lite/viewmodels/providers/dark_mode_provider.dart';
 import 'package:readbee_lite/viewmodels/providers/profile_provider.dart';
@@ -18,6 +19,7 @@ class MobileProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authServices = ref.watch(authServicesProvider);
     final profileAsync = ref.watch(profileProvider);
+    final packageInfo = ref.watch(packageInfoProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -151,12 +153,17 @@ class MobileProfilePage extends ConsumerWidget {
                                   title: 'Logout',
                                 ),
                               ),
-                              const Text(
-                                'Version 0.11.14',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
+                              packageInfo.when(
+                                data:
+                                    (info) => Text(
+                                      'Version ${info.version} (${info.buildNumber})',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                loading: () => const SizedBox(),
+                                error: (_, __) => const SizedBox(),
                               ),
                               const Text(
                                 'Terms of Service',

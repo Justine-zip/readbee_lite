@@ -42,7 +42,7 @@ class _MobileDigitalReadingScorePageState
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
                 const PageTitle(
                   title: 'Digital Reading Score',
                   size: 18,

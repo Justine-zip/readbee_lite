@@ -55,7 +55,7 @@ class _MobileDigitalReadingPageState
             children: [
               Column(
                 children: [
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 50),
 
                   const PageTitle(title: 'Digital Reading', size: 18, pad: 30),
 
@@ -244,7 +244,7 @@ class _MobileDigitalReadingPageState
               ),
               //Flag & Reset Buttons
               Positioned(
-                top: 150,
+                top: 180,
                 right: 75,
                 child: CustomIconButton(
                   icon: Icons.flag,
@@ -289,7 +289,7 @@ class _MobileDigitalReadingPageState
                 ),
               ),
               Positioned(
-                top: 150,
+                top: 180,
                 right: 30,
                 child: CustomIconButton(
                   icon: Icons.restart_alt_rounded,
