@@ -39,7 +39,14 @@ The app aims to eliminate common reading struggles, helping students gain confid
 
 | Dashboard      | Reading Assessment | Results        |
 | -------------- | ------------------ | -------------- |
-| ![Dashboard](assets/screenshot/mobile_home_dark.jpg) | ![Material](assets/screenshot/mobile_reading_material_dark.jpg)     | ![ReadingScore](assets/screenshot/mobile_reading_score_dark.jpg) |
+| ![Dashboard](assets/screenshot/mobile_home_dark.jpg) | ![Assessment](assets/screenshot/mobile_reading_assessment_dark.jpg)     | ![ReadingScore](assets/screenshot/mobile_reading_score_dark.jpg) |
+
+
+# Light Mode
+
+| Dashboard      | Reading Assessment | Results        |
+| -------------- | ------------------ | -------------- |
+| ![Dashboard](assets/screenshot/mobile_home_light.jpg) | ![Assessment](assets/screenshot/mobile_reading_assessment_light.jpg)     | ![ReadingScore](assets/screenshot/mobile_reading_score_light.jpg) |
 
 ---
 
@@ -81,21 +88,32 @@ The app aims to eliminate common reading struggles, helping students gain confid
 
 ---
 
-## Architecture
 
-The project follows a feature-based architecture using Riverpod for state management.
+## Project Structure
+
+The project follows a feature-based architecture using Riverpod for state management or MVVM style architecture.
 
 ```text
 lib/
 ├── components/
-├── constants/
+│   └── Reusable UI components
+│
 ├── models/
-├── pages/
-├── providers/
-├── repositories/
-├── services/
-├── utils/
-├── widgets/
+│   └── Data models
+│
+├── viewmodels/
+│   └── providers
+│   └── notifiers
+│
+├── core/
+│   └── utils
+│   └── services
+│   └── layouts
+│   └── themes
+│
+├── views/
+│   └── Application screens
+│
 └── main.dart
 ```
 
@@ -198,14 +216,6 @@ Create the required tables for:
 * Miscues
 * Scores
 
-### Storage
-
-Create storage buckets for:
-
-* Profile images
-* Reading materials
-* Generated reports
-
 ---
 
 ## Running the Application
@@ -272,12 +282,6 @@ flutter test --coverage
 * Components
 * User interactions
 
-#### Integration Tests
-
-* Authentication flow
-* Assessment workflow
-* Data synchronization
-
 ---
 
 ## Continuous Integration
@@ -327,34 +331,6 @@ dart fix --apply
 
 ---
 
-## Project Structure
-
-```text
-lib/
-├── components/
-│   └── Reusable UI components
-│
-├── models/
-│   └── Data models
-│
-├── viewmodels/
-│   └── providers
-│   └── notifiers
-│
-├── core/
-│   └── utils
-│   └── services
-│   └── layouts
-│   └── themes
-│
-├── views/
-│   └── Application screens
-│
-└── main.dart
-```
-
----
-
 ## Future Improvements
 
 * PDF report generation
@@ -363,39 +339,6 @@ lib/
 * Teacher performance insights
 * Student reading history visualization
 * Export assessment results
-
----
-
-## Contributing
-
-Contributions are welcome.
-
-1. Fork the repository.
-2. Create a feature branch.
-
-```bash
-git checkout -b feature/new-feature
-```
-
-3. Commit your changes.
-
-```bash
-git commit -m "Add new feature"
-```
-
-4. Push to your branch.
-
-```bash
-git push origin feature/new-feature
-```
-
-5. Open a Pull Request.
-
----
-
-## License
-
-This project is licensed under the MIT License.
 
 ---
 
