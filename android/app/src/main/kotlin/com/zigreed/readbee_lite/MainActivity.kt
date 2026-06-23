@@ -1,4 +1,4 @@
-package com.example.readbee_lite
+package com.zigreed.readbee_lite
 
 import io.flutter.embedding.android.FlutterActivity
 
