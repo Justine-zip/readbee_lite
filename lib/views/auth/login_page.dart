@@ -5,6 +5,7 @@ import 'package:readbee_lite/components/custom_button.dart';
 import 'package:readbee_lite/components/show_global_snack_bar.dart';
 import 'package:readbee_lite/core/layouts/main_layout.dart';
 import 'package:readbee_lite/core/services/auth_services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MobileLoginPage extends StatefulWidget {
   final AuthServices authServices;
@@ -45,33 +46,53 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
 
     try {
       final minimumDelay = Future.delayed(const Duration(seconds: 1));
+
       final loginFuture = widget.authServices.signInWithEmailPassword(
         emailController.text.trim(),
         passwordController.text.trim(),
       );
 
       final results = await Future.wait([loginFuture, minimumDelay]);
-      final response = results[0];
 
-      if (response.user != null) {
+      final response = results[0] as AuthResponse;
+
+      if (response.user == null) {
+        throw Exception('No user found');
+      }
+
+      final isEvaluator = await widget.authServices.isEvaluator(
+        response.user!.id,
+      );
+
+      if (!isEvaluator) {
+        await widget.authServices.signOut();
+
         if (mounted) {
-          Navigator.push(
-            context,
-            PageAnimationTransition(
-              page: const MobileMainLayout(),
-              pageAnimationType: RightToLeftFadedTransition(),
-            ),
+          showGlobalSnackBar(
+            'Only evaluators are allowed to access the mobile application.',
           );
         }
-      } else {
-        throw Exception('No user found.');
+
+        return;
+      }
+
+      if (mounted) {
+        Navigator.push(
+          context,
+          PageAnimationTransition(
+            page: const MobileMainLayout(),
+            pageAnimationType: RightToLeftFadedTransition(),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
         showGlobalSnackBar('Invalid login credentials');
       }
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 

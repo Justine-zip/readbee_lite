@@ -14,6 +14,15 @@ class AuthServices {
     );
   }
 
+  Future<bool> isEvaluator(String userId) async {
+    final result = await _supabase.rpc(
+      'is_evaluator',
+      params: {'p_user_id': userId},
+    );
+
+    return result == true;
+  }
+
   Future<AuthResponse> signUpWithEmailPassword(
     String email,
     String password,
